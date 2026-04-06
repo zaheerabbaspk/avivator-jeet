@@ -1,0 +1,7 @@
+{
+  "name": "avivator-jeet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
