@@ -1,0 +1,92 @@
+<ion-modal [isOpen]="isOpen" [backdropDismiss]="false" class="auth-modal">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="modal-container">
+        <!-- Logo & Yellow Text -->
+        <div class="modal-header">
+          <div class="logo-container">
+            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center shadow-[2px_2px_0px_#000]">
+              <span class="text-black font-black text-sm italic">AJ</span>
+            </div>
+            <div class="flex flex-col ml-2">
+              <span class="text-white font-black text-xl italic leading-none">AVIVATOR</span>
+              <span class="text-green-500 text-[11px] font-black tracking-widest leading-none">JEET</span>
+            </div>
+          </div>
+          <p class="yellow-text">Sign Up on AVIVATOR JEET. BET — Play instantly, Win Big!</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <div class="tab" [class.active]="authMode === 'register'" (click)="setAuthMode('register')">
+            Register
+            <div class="indicator" *ngIf="authMode === 'register'"></div>
+          </div>
+          <div class="tab" [class.active]="authMode === 'login'" (click)="setAuthMode('login')">
+            Login
+            <div class="indicator" *ngIf="authMode === 'login'"></div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="auth-form">
+          <p class="field-label">Support Phone number/Email/Profile Register</p>
+          
+          <div class="input-group">
+            <ion-icon name="person-outline" class="left-icon"></ion-icon>
+            <ion-input name="email" [(ngModel)]="email" type="email" placeholder="Please enter Email"></ion-input>
+          </div>
+
+          <div class="input-group">
+            <ion-icon name="lock-closed-outline" class="left-icon"></ion-icon>
+            <ion-input name="password" [(ngModel)]="password" [type]="passwordType" placeholder="Enter password"></ion-input>
+            <ion-icon [name]="passwordType === 'password' ? 'eye-outline' : 'eye-off-outline'" 
+                      (click)="togglePasswordVisibility()" 
+                      class="right-icon"></ion-icon>
+          </div>
+
+          <!-- Confirm Password (Register Only) -->
+          <div class="input-group" *ngIf="authMode === 'register'">
+            <ion-icon name="lock-closed-outline" class="left-icon"></ion-icon>
+            <ion-input name="confirmPassword" [(ngModel)]="confirmPassword" [type]="confirmPasswordType" placeholder="Confirm password"></ion-input>
+            <ion-icon [name]="confirmPasswordType === 'password' ? 'eye-outline' : 'eye-off-outline'" 
+                      (click)="toggleConfirmPasswordVisibility()" 
+                      class="right-icon"></ion-icon>
+          </div>
+
+          <!-- Checkbox -->
+          <div class="agree-container" *ngIf="authMode === 'register'">
+            <ion-checkbox [checked]="true" labelPlacement="end">
+              <span class="agree-text">I am over 18 years old and have read and agreed to <span class="link">User Agreement</span></span>
+            </ion-checkbox>
+            <div class="gift-badge">
+              <ion-icon name="gift" class="text-orange-400"></ion-icon>
+              <span class="text-[8px] font-bold">1-777</span>
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          <div class="error-container" *ngIf="errorMessage">
+            <p class="error-text">{{ errorMessage }}</p>
+          </div>
+
+          <!-- Action Button -->
+          <button class="action-btn" [disabled]="isLoading" (click)="handleAuthAction()">
+            {{ isLoading ? 'Processing...' : (authMode === 'register' ? 'Register' : 'Login') }}
+          </button>
+
+          <!-- Footer Links -->
+          <div class="modal-footer-links">
+            <span>Customer Service</span>
+            <span>Demo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <div class="close-btn-container" (click)="dismiss()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

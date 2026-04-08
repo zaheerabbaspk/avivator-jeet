@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true" class="ion-no-padding">
+  <div class="splash-container">
+    <!-- Main Background Image -->
+    <div class="bg-image shadow-bloom" style="background-image: url('assets/splashscreen.png');"></div>
+
+    <!-- Animated Light Streaks -->
+    <div class="light-streaks">
+      <div class="streak streak-1"></div>
+      <div class="streak streak-2"></div>
+      <div class="streak streak-3"></div>
+    </div>
+
+    <!-- Floating Anti-Gravity Elements (Chips/Coins Simulation) -->
+    <div class="particles">
+      <div class="chip chip-1"></div>
+      <div class="chip chip-2"></div>
+      <div class="chip chip-3"></div>
+      <div class="coin coin-1"></div>
+      <div class="coin coin-2"></div>
+    </div>
+
+    <!-- Holographic Scanning Line -->
+    <div class="scanner-container">
+      <div class="scanner"></div>
+    </div>
+
+    <!-- Cinematic Overlay (Soft Bloom & Lens Flare) -->
+    <div class="cinematic-overlay"></div>
+
+    <!-- Loading Interface -->
+    <div class="loading-footer">
+      <div class="holographic-card">
+        <div class="label-container flex justify-between items-end mb-2 px-1">
+          <div class="flex flex-col">
+            <span class="status-tag">INITIALIZING ENGINE</span>
+            <span class="sub-status">QUANTUM SYNC...</span>
+          </div>
+          <span class="percentage">{{ progress().toFixed(0) }}%</span>
+        </div>
+        
+        <!-- Premium Progress Bar -->
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="progress()">
+            <div class="glow-head"></div>
+          </div>
+        </div>
+        
+        <div class="footer-labels mt-2 flex justify-between text-[8px] font-black uppercase tracking-widest text-[#d2fe07]/40">
+          <span>SECURE_LINK_ESTABLISHED</span>
+          <span>VER: 4.2.0_JEET</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

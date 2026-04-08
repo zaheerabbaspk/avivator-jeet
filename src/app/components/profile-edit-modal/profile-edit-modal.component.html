@@ -1,0 +1,58 @@
+<ion-modal [isOpen]="isOpen" (didDismiss)="dismiss()" class="profile-edit-modal">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h1 class="modal-title italic uppercase font-black tracking-tighter">Edit Profile</h1>
+          <button class="close-btn" (click)="dismiss()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="modal-body space-y-6">
+          <p class="text-white/40 text-[10px] font-bold uppercase tracking-widest px-1">Update your personal information below</p>
+          
+          <!-- Inputs -->
+          <div class="input-container space-y-4">
+            <div class="input-group">
+              <div class="flex items-center gap-2 mb-2 px-1">
+                <ion-icon name="person-outline" class="text-[#00CFFF] text-xs"></ion-icon>
+                <label class="text-white/60 text-[10px] font-bold uppercase tracking-wider">Full Name</label>
+              </div>
+              <div class="input-wrapper">
+                <ion-input type="text" [(ngModel)]="tempData.fullName" placeholder="Enter full name" mode="md"></ion-input>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="flex items-center gap-2 mb-2 px-1">
+                <ion-icon name="call-outline" class="text-[#00CFFF] text-xs"></ion-icon>
+                <label class="text-white/60 text-[10px] font-bold uppercase tracking-wider">Phone Number</label>
+              </div>
+              <div class="input-wrapper">
+                <ion-input type="tel" [(ngModel)]="tempData.phone" placeholder="Enter phone number" mode="md"></ion-input>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="flex items-center gap-2 mb-2 px-1">
+                <ion-icon name="mail-outline" class="text-[#00CFFF] text-xs"></ion-icon>
+                <label class="text-white/60 text-[10px] font-bold uppercase tracking-wider">Email Address</label>
+              </div>
+              <div class="input-wrapper">
+                <ion-input type="email" [(ngModel)]="tempData.email" placeholder="Enter email address" mode="md"></ion-input>
+              </div>
+            </div>
+          </div>
+
+          <!-- Save Button -->
+          <button (click)="submit()" class="save-btn">
+            <ion-icon name="save-outline"></ion-icon>
+            <span>Save Changes</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

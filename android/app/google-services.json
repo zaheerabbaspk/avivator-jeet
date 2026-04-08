@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "205180824902",
+    "project_id": "avivatorjeet",
+    "storage_bucket": "avivatorjeet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205180824902:android:8aa89a1c795e6026cb0947",
+        "android_client_info": {
+          "package_name": "com.avivatorjeet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLQHsQ64gLnwrf_N1KKm9aVmTauIBxOsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

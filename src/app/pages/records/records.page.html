@@ -1,0 +1,103 @@
+<ion-header class="ion-no-border">
+  <div class="records-header bg-gradient-to-r from-[#1f2937]/90 to-[#374151]/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-white/10 sticky top-0 z-[100] shadow-md shadow-black/20">
+    <div class="flex items-center gap-3">
+      <button (click)="goBack()" class="w-8 h-8 flex items-center justify-center text-white/80 active:scale-90 transition-transform">
+        <ion-icon name="chevron-back-outline" class="text-2xl"></ion-icon>
+      </button>
+      <span class="text-white font-black text-lg tracking-tight uppercase italic">My Records</span>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <div class="relative active:scale-95 transition-transform" (click)="isDatePickerOpen = true">
+        <ion-icon name="calendar-outline" class="text-2xl text-[#00CFFF]"></ion-icon>
+        <div *ngIf="selectedDate" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#f7c04a] rounded-full border border-[#1f2937]"></div>
+      </div>
+      <ion-icon name="funnel-outline" class="text-2xl text-[#00CFFF] active:scale-90 transition-transform"></ion-icon>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding-bottom">
+  <div class="content-wrapper">
+    
+    <!-- Filter Segments -->
+    <div class="px-4 py-4 space-y-4">
+      <div *ngIf="selectedDate" class="flex items-center justify-between bg-[#00CFFF]/10 border border-[#00CFFF]/20 rounded-xl px-4 py-2 animate__animated animate__fadeIn">
+        <div class="flex items-center gap-2">
+          <ion-icon name="calendar-outline" class="text-[#00CFFF] text-xs"></ion-icon>
+          <span class="text-white text-[10px] font-black uppercase tracking-widest italic">Date: {{selectedDate | date:'mediumDate'}}</span>
+        </div>
+        <button (click)="clearDateFilter()" class="text-[#f7c04a] text-[10px] font-black uppercase tracking-widest italic">Clear</button>
+      </div>
+
+      <ion-segment [(ngModel)]="selectedSegment" mode="md" class="custom-segment p-1 bg-white/5 rounded-xl border border-white/5">
+        <ion-segment-button value="all" class="rounded-lg">
+          <ion-label>All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="deposit" class="rounded-lg">
+          <ion-label>Deposit</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="bet" class="rounded-lg">
+          <ion-label>Bet</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="withdraw" class="rounded-lg">
+          <ion-label>Withdraw</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- Records List -->
+    <div class="px-4 space-y-3 pb-20">
+      <div *ngFor="let record of filteredRecords" 
+           class="record-card bg-white/5 border border-white/5 rounded-2xl p-4 flex items-center justify-between active:scale-[0.98] transition-all">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" 
+               [style.backgroundColor]="record.color + '15'" 
+               [style.color]="record.color">
+            <ion-icon [name]="record.icon" class="text-2xl"></ion-icon>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-white font-black text-md tracking-tight">{{record.type}}</span>
+            <span class="text-white/40 text-[10px] uppercase font-bold tracking-widest">{{record.date}}</span>
+          </div>
+        </div>
+        
+        <div class="text-right flex flex-col items-end">
+          <span class="text-white font-black text-lg" 
+                [class.text-emerald-400]="record.amount.startsWith('') && !record.amount.startsWith('-')"
+                [class.text-red-400]="record.amount.startsWith('-')">
+            {{record.amount}}
+          </span>
+          <span class="text-[9px] font-black uppercase tracking-tighter italic" [style.color]="record.color">{{record.status}}</span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredRecords.length === 0" class="flex flex-col items-center justify-center py-20 opacity-20">
+        <ion-icon name="document-text-outline" class="text-6xl mb-4"></ion-icon>
+        <span class="text-white font-black uppercase italic">No records found</span>
+        <button *ngIf="selectedDate" (click)="clearDateFilter()" class="mt-4 text-[#00CFFF] text-xs font-bold underline">Clear filters</button>
+      </div>
+    </div>
+
+    <!-- Date Picker Modal -->
+    <ion-modal [isOpen]="isDatePickerOpen" (didDismiss)="isDatePickerOpen = false" class="date-picker-modal">
+      <ng-template>
+        <div class="p-4 bg-[#0f172a]">
+          <ion-datetime 
+            presentation="date" 
+            [value]="selectedDate || ''"
+            (ionChange)="onDateChange($event)"
+            size="cover"
+            mode="md"
+            class="custom-datetime">
+          </ion-datetime>
+          <button (click)="isDatePickerOpen = false" class="w-full mt-4 bg-[#1f2937] text-white font-black py-3 rounded-xl uppercase italic tracking-widest text-xs">Close</button>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+  </div>
+</ion-content>
+
+<app-footer-nav activeTab="profile"></app-footer-nav>

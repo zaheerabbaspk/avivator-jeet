@@ -1,0 +1,36 @@
+<ion-footer class="ion-no-border">
+  <div class="footer-nav">
+    <!-- Home -->
+    <div class="nav-item" [class.active]="activeTab === 'home'" (click)="navigateTo('/home')">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </div>
+
+    <!-- Offers -->
+    <div class="nav-item" [class.active]="activeTab === 'offers'" (click)="onOffersClick()">
+      <div class="relative">
+        <ion-icon name="gift-outline"></ion-icon>
+        <div class="badge">1</div>
+      </div>
+      <span>Offers</span>
+    </div>
+
+    <!-- Invite -->
+    <div class="nav-item" [class.active]="activeTab === 'invite'" (click)="navigateTo('/invite')">
+      <ion-icon name="people-outline"></ion-icon>
+      <span>Invite</span>
+    </div>
+
+    <!-- Support -->
+    <div class="nav-item" [class.active]="activeTab === 'support'" (click)="navigateTo('/support')">
+      <ion-icon name="headset-outline"></ion-icon>
+      <span>Support</span>
+    </div>
+
+    <!-- Profile -->
+    <div class="nav-item" [class.active]="activeTab === 'profile'" (click)="navigateTo('/profile')">
+      <ion-icon name="person-outline"></ion-icon>
+      <span>Profile</span>
+    </div>
+  </div>
+</ion-footer>

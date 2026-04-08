@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">avivator-jeet</string>
+    <string name="title_activity_main">avivator-jeet</string>
+    <string name="package_name">com.avivatorjeet</string>
+    <string name="custom_url_scheme">com.avivatorjeet</string>
+</resources>

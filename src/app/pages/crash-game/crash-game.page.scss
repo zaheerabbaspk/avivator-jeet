@@ -1,0 +1,383 @@
+:host {
+    --ion-background-color: #121212;
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}
+
+ion-content {
+    --background: #121212;
+    --overflow: hidden;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.scrollbar-hide {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Sunburst Effect - 3D Spotlight Style */
+.sunburst-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(circle at 30% 70%, #1c3d5a 0%, #0d1a25 40%, #050505 100%);
+    /* Angled spotlight glow */
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+}
+
+.sunburst {
+    position: absolute;
+    width: 400%;
+    height: 400%;
+    background: repeating-conic-gradient(from 0deg,
+            transparent 0deg 6deg,
+            rgba(255, 255, 255, 0.03) 6deg 12deg);
+    mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+    /* Fades rays at edges for depth */
+    -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+    animation: rotate-sunburst 240s linear infinite;
+}
+
+@keyframes rotate-sunburst {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Grid Lines background - Subtle dots to match screenshot */
+.grid-lines {
+    background-size: 50px 50px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Plane Animations */
+.plane-svg {
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+    animation: plane-shake 0.2s infinite ease-in-out;
+}
+
+@keyframes plane-shake {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-1px);
+    }
+}
+
+.propeller-anim {
+    transform-origin: center;
+    animation: propeller-spin 0.05s linear infinite;
+}
+
+@keyframes propeller-spin {
+    from {
+        transform: scaleY(1);
+    }
+
+    to {
+        transform: scaleY(-1);
+    }
+}
+
+/* Multiplier Growth Animation */
+.animate-pulse {
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+/* Custom Inputs */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Custom Scrollbar for side list */
+.custom-scrollbar {
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+}
+
+/* Button Active states */
+button:active {
+    filter: brightness(0.9);
+}
+
+/* =============================================
+   3D LOADING SCREEN
+   ============================================= */
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 999;
+    background: radial-gradient(ellipse at 50% 40%, #1a0a00 0%, #0a0a0f 60%, #000 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Floating star particles */
+.loading-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 15%, rgba(255,180,50,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 75%, rgba(255,100,50,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 10% 80%, rgba(255,200,50,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(2px 2px at 70% 85%, rgba(255,80,50,0.3) 0%, transparent 100%);
+    animation: twinkle 4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes twinkle {
+    0%   { opacity: 0.4; transform: scale(1); }
+    50%  { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.5; transform: scale(1); }
+}
+
+/* 3D Rotating Ring System */
+.loader-rings {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    perspective: 600px;
+    margin-bottom: 32px;
+}
+
+.ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid transparent;
+}
+
+.ring-1 {
+    border-top-color: #ef4444;
+    border-right-color: #ef4444;
+    box-shadow: 0 0 20px rgba(239,68,68,0.6), inset 0 0 20px rgba(239,68,68,0.1);
+    animation: spin3d-1 1.2s linear infinite;
+}
+
+.ring-2 {
+    inset: 14px;
+    border-top-color: #f97316;
+    border-left-color: #f97316;
+    box-shadow: 0 0 15px rgba(249,115,22,0.5), inset 0 0 15px rgba(249,115,22,0.1);
+    animation: spin3d-2 1.6s linear infinite reverse;
+}
+
+.ring-3 {
+    inset: 28px;
+    border-top-color: #fbbf24;
+    border-right-color: #fbbf24;
+    box-shadow: 0 0 12px rgba(251,191,36,0.5), inset 0 0 12px rgba(251,191,36,0.1);
+    animation: spin3d-3 2s linear infinite;
+}
+
+.ring-core {
+    position: absolute;
+    inset: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ff6a00, #ee0979);
+    box-shadow:
+        0 0 30px rgba(238,9,121,0.7),
+        0 0 60px rgba(238,9,121,0.3),
+        inset 0 0 20px rgba(255,255,255,0.2);
+    animation: core-pulse 1.5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes spin3d-1 {
+    from { transform: rotateX(60deg) rotateZ(0deg); }
+    to   { transform: rotateX(60deg) rotateZ(360deg); }
+}
+
+@keyframes spin3d-2 {
+    from { transform: rotateY(50deg) rotateZ(0deg); }
+    to   { transform: rotateY(50deg) rotateZ(360deg); }
+}
+
+@keyframes spin3d-3 {
+    from { transform: rotateX(-40deg) rotateY(20deg) rotateZ(0deg); }
+    to   { transform: rotateX(-40deg) rotateY(20deg) rotateZ(360deg); }
+}
+
+@keyframes core-pulse {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 30px rgba(238,9,121,0.7), 0 0 60px rgba(238,9,121,0.3); }
+    50%       { transform: scale(1.1); box-shadow: 0 0 50px rgba(238,9,121,1),   0 0 90px rgba(255,106,0,0.5); }
+}
+
+/* 3D Brand Text */
+.brand-3d {
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    color: #fff;
+    text-shadow:
+        1px 1px 0 #cc0000,
+        2px 2px 0 #aa0000,
+        3px 3px 0 #880000,
+        4px 4px 0 #660000,
+        5px 5px 10px rgba(0,0,0,0.8),
+        0 0 30px rgba(255,80,0,0.5);
+    animation: float-text 3s ease-in-out infinite;
+}
+
+.brand-sub-3d {
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #d2fe07;
+    text-shadow:
+        1px 1px 0 #7a9000,
+        2px 2px 4px rgba(0,0,0,0.5),
+        0 0 15px rgba(210,254,7,0.6);
+    margin-top: -6px;
+    animation: float-text 3s ease-in-out infinite 0.3s;
+}
+
+@keyframes float-text {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-4px); }
+}
+
+/* Neon Progress Bar */
+.neon-progress-track {
+    width: 240px;
+    height: 6px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    margin-top: 28px;
+}
+
+.neon-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ef4444, #f97316, #fbbf24);
+    box-shadow:
+        0 0 8px rgba(239,68,68,0.8),
+        0 0 20px rgba(249,115,22,0.5);
+    transition: width 150ms ease;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: -2px;
+        width: 10px;
+        height: calc(100% + 4px);
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 12px 4px rgba(255,255,255,0.8);
+        animation: sparkle-tip 0.6s ease-in-out infinite alternate;
+    }
+}
+
+@keyframes sparkle-tip {
+    from { opacity: 0.6; transform: scaleY(0.8); }
+    to   { opacity: 1;   transform: scaleY(1.2); }
+}
+
+.loading-label {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    width: 240px;
+    color: rgba(255,255,255,0.4);
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+/* =============================================
+   HEADER BALANCE CAPSULE
+   ============================================= */
+
+.balance-capsule {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 70, 0, 0.25);
+    border: 1px solid rgba(29, 253, 113, 0.15);
+    padding: 4px 16px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 10px rgba(29, 253, 113, 0.05);
+
+    .balance-value {
+        color: #1dfd71;
+        font-size: 15px;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 12px rgba(29, 253, 113, 0.4);
+        font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    .currency-label {
+        color: rgba(29, 253, 113, 0.4);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 1px;
+    }
+}

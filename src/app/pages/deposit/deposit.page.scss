@@ -1,0 +1,355 @@
+:host {
+    --primary-amber: #d4a017;
+    --bg-darker: #141418;
+    --bg-card: #1c1c22;
+    --text-dim: rgba(255, 255, 255, 0.45);
+    --gold-gradient: linear-gradient(135deg, #d4a017, #f0c040);
+  }
+  
+  .deposit-header {
+    height: 60px;
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 100;
+    position: relative; // Added for absolute positioning of children
+
+    .back-link {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 24px;
+        padding: 0;
+        z-index: 2; // Ensure it stays on top
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: 800;
+        color: #fff;
+        position: absolute; // Absolute to center
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+
+    .header-right {
+        z-index: 2; // Ensure it stays on top
+        .h-icon {
+            font-size: 20px;
+            color: var(--primary-amber);
+        }
+    }
+  }
+  
+  .deposit-container {
+    padding: 16px;
+  }
+  
+  .section-label {
+    span {
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff;
+    }
+    
+    .balance-badge {
+        background: #1e1e26;
+        padding: 4px 8px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(255,255,255,0.05);
+  
+        ion-icon { 
+            color: #fccc04; 
+            font-size: 14px;
+        }
+        .val { 
+            color: #fccc04; 
+            font-size: 13px; 
+            font-weight: 900;
+            margin-right: 4px;
+        }
+        .refresh-icon { 
+            color: var(--primary-amber);
+            font-size: 12px;
+        }
+    }
+  }
+  
+  .methods-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .method-tab {
+    background: #1e1e26;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  
+    &.active {
+        border-color: var(--primary-amber);
+        background: #252530;
+    }
+  
+    .logo-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        
+        .logo-img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+        
+        span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+    }
+  
+    .badge-red {
+        position: absolute;
+        top: -18px;
+        right: -6px;
+        background: #ef4444;
+        color: #fff;
+        padding: 0px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 900;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+  }
+  
+  .fast-btn {
+    background: #1e1e26;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    
+    &.active {
+        background: #252530;
+        border-color: var(--primary-amber);
+        color: var(--primary-amber);
+    }
+
+    &:active { background: #2a2a35; }
+  }
+  
+  .link-text {
+    color: #fccc04;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  
+  .amount-grid {
+    .amount-item {
+        background: #1e1e26;
+        border: 1.5px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 10px 4px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+  
+        &.active {
+            border-color: var(--primary-amber);
+            background: #252530;
+        }
+  
+        .val {
+            font-size: 14px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+        
+        .bonus {
+            font-size: 10px;
+            font-weight: 700;
+            color: #fccc04;
+        }
+    }
+  }
+  
+  .input-wrap {
+    background: #1e1e26;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  
+    .currency {
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff;
+        padding-right: 12px;
+        border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .amount-input, .wallet-input {
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        flex: 1;
+        &::placeholder { color: rgba(255,255,255,0.25); }
+    }
+  
+    .input-icon {
+        font-size: 20px;
+        color: rgba(255,255,255,0.3);
+    }
+  
+    .paste-btn {
+        background: transparent;
+        color: var(--primary-amber);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        border: none;
+    }
+  }
+  
+  .promotion-card {
+    background: #1e1e26;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 16px;
+  
+    .promo-title {
+        span { color: #fff; font-size: 14px; font-weight: 800; }
+        ion-icon { color: #fccc04; font-size: 18px; }
+    }
+  
+    .timer-badge {
+        display: flex;
+        align-items: center;
+        background: #ef4444;
+        padding: 4px 8px;
+        border-radius: 4px;
+        
+        ion-icon { color: #fff; font-size: 12px; }
+        .val { color: #fff; font-size: 12px; font-weight: 900; }
+    }
+  
+    .promo-info {
+        font-size: 10px;
+        color: rgba(255,255,255,0.3);
+        text-align: center;
+        margin-bottom: 12px;
+    }
+  
+    .promo-list {
+        max-height: 120px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        &.expanded { max-height: 500px; }
+    }
+  
+    .promo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+        
+        .gift-list-icon { color: rgba(255,255,255,0.4); font-size: 18px; }
+        .label { font-size: 12px; font-weight: 700; color: #fff; }
+        .desc { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; }
+    }
+  
+    .expand-btn {
+        background: transparent;
+        color: #fff;
+        width: 100%;
+        padding-top: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        opacity: 0.6;
+    }
+  }
+  
+  .payer-section {
+    .section-title {
+        font-size: 11px;
+        color: #fff;
+        font-weight: 800;
+        text-align: center;
+        opacity: 0.8;
+    }
+    
+    .label-row {
+        font-size: 11px;
+        color: #fff;
+        font-weight: 800;
+        .required { color: #ef4444; margin-right: 4px; }
+    }
+  }
+  
+  .footer-wrap {
+    padding: 12px 16px 20px;
+    background: var(--bg-darker);
+    position: relative;
+  
+    .deposit-now-btn {
+        width: 100%;
+        padding: 16px;
+        background: #444;
+        color: #777;
+        font-size: 15px;
+        font-weight: 900;
+        border: none;
+        border-radius: 12px;
+        cursor: not-allowed;
+        
+        &:not(:disabled) {
+            background: var(--gold-gradient);
+            color: #1a1000;
+            cursor: pointer;
+        }
+    }
+  
+    .bottom-float-btn {
+        position: absolute;
+        bottom: 80px;
+        right: 16px;
+        background: rgba(30, 30, 38, 0.9);
+        border: 1.5px solid rgba(255,255,255,0.15);
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        font-size: 11px;
+        font-weight: 800;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        opacity: 0.8;
+        
+        ion-icon { color: #fccc04; font-size: 14px; }
+    }
+  }

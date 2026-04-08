@@ -1,0 +1,144 @@
+<ion-header class="ion-no-border">
+  <div class="deposit-header">
+    <button class="back-link" (click)="goBack()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+    <span class="title">Deposit</span>
+    <div class="header-right">
+      <ion-icon name="headset-outline" class="h-icon"></ion-icon>
+      <ion-icon name="document-text-outline" class="h-icon ml-3"></ion-icon>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content style="--background: #141418">
+  <div class="deposit-container">
+
+    <!-- Payment Method Section -->
+    <div class="section-label flex justify-between items-center mb-3">
+      <span>Payment method</span>
+      <div class="balance-badge">
+        <ion-icon name="time-outline" class="mr-1"></ion-icon>
+        <span class="val">0.00</span>
+        <ion-icon name="refresh-outline" class="refresh-icon ml-1"></ion-icon>
+      </div>
+    </div>
+
+    <div class="methods-grid">
+      <div class="method-tab" [class.active]="selectedMethod === 'jazzcash'" (click)="selectedMethod = 'jazzcash'">
+        <div class="relative">
+          <div class="badge-red">+2%</div>
+          <div class="logo-box">
+            <img src="/assets/new-jazz-seeklogo.png" class="logo-img" />
+            <span>Jazzcash1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="method-tab" [class.active]="selectedMethod === 'easypaisa'" (click)="selectedMethod = 'easypaisa'">
+        <div class="relative">
+          <div class="badge-red">+2%</div>
+          <div class="logo-box">
+            <img src="/assets/easypaisa-seeklogo.png" class="logo-img" />
+            <span>Easypaisa1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fast-buttons grid grid-cols-2 gap-3 mt-4">
+      <button class="fast-btn" [class.active]="selectedMethod === 'jazzcash'" (click)="selectedMethod = 'jazzcash'">
+        FAST
+      </button>
+      <button class="fast-btn" [class.active]="selectedMethod === 'easypaisa'" (click)="selectedMethod = 'easypaisa'">
+        FAST
+      </button>
+    </div>
+
+    <!-- Deposit Amount Section -->
+    <div class="section-label flex justify-between items-center mt-6 mb-3">
+      <span>Deposit amount</span>
+      <span class="link-text">Bonus event explanation</span>
+    </div>
+
+    <div class="amount-grid grid grid-cols-4 gap-2 mb-4">
+      @for (item of amounts; track item.val) {
+      <div class="amount-item" [class.active]="selectedAmount === item.val" (click)="selectAmount(item.val)">
+        <div class="val">{{ item.val }}</div>
+        <div class="bonus">{{ item.bonus }}</div>
+      </div>
+      }
+    </div>
+
+    <div class="input-wrap mb-6">
+      <span class="currency">Rs</span>
+      <input type="tel" [(ngModel)]="customAmount" (input)="onCustomAmountChange()" placeholder="Min 100~Max 50,000"
+        class="amount-input" />
+    </div>
+
+    <!-- Deposit Promotion Section -->
+    <div class="promotion-card">
+      <div class="flex justify-between items-center mb-4">
+        <div class="promo-title flex items-center">
+          <ion-icon name="gift-outline" class="mr-2"></ion-icon>
+          <span>Deposit promotion</span>
+        </div>
+        <div class="timer-badge">
+          <ion-icon name="time-outline" class="mr-1"></ion-icon>
+          <span class="val">{{ timer }}</span>
+        </div>
+      </div>
+
+      <p class="promo-info">----- Automatically participated in the following activities -----</p>
+
+      <div class="promo-list" [class.expanded]="isPromotionsExpanded">
+        @for (promo of promotions; track promo.label) {
+        <div class="promo-item">
+          <div class="flex items-center">
+            <ion-icon name="gift-outline" class="gift-list-icon"></ion-icon>
+            <span class="label ml-3">{{ promo.label }}</span>
+          </div>
+          <span class="desc">{{ promo.desc }}</span>
+        </div>
+        }
+      </div>
+
+      <button class="expand-btn flex items-center justify-center"
+        (click)="isPromotionsExpanded = !isPromotionsExpanded">
+        <span>Expand</span>
+        <ion-icon [name]="isPromotionsExpanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="ml-1"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Payer Info Section -->
+    <div class="payer-section mt-8">
+      <p class="section-title">Enter payer info for proper crediting</p>
+      <div class="label-row mt-3">
+        <span class="required">*</span>
+        Payer's mobile wallet number
+      </div>
+      <div class="input-wrap mt-2">
+        <ion-icon name="phone-portrait-outline" class="input-icon"></ion-icon>
+        <input type="tel" [(ngModel)]="walletNumber" placeholder="11-digit wallet number (03XXXXXXXXXX)"
+          class="wallet-input" />
+        <button class="paste-btn" (click)="pasteNumber()">Paste</button>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
+
+
+
+
+<ion-footer class="ion-no-border">
+  <div class="footer-wrap">
+    <button class="deposit-now-btn" [disabled]="!canDeposit" (click)="submitDeposit()">
+      Deposit Now
+    </button>
+    <div class="bottom-float-btn">
+      <ion-icon name="chevron-down-outline" class="mr-1"></ion-icon>
+      <span>Bottom</span>
+    </div>
+  </div>
+</ion-footer>

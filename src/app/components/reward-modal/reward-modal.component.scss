@@ -1,0 +1,216 @@
+:host {
+  background: transparent !important;
+  display: block;
+}
+
+.modal-wrapper {
+  width: 90%;
+  max-width: 360px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-height: 94vh;
+  margin: auto;
+  overflow-y: auto;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 100%;
+  background: linear-gradient(180deg, #242933 0%, #1a1e26 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.02);
+  position: relative;
+}
+
+.modal-title {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.task-info {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.reward-list {
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+}
+
+.reward-card {
+  background: #272d37;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wallet-icon-container {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+
+  .wallet-icon {
+    font-size: 24px;
+    color: #fff;
+  }
+
+  .coin-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 20px;
+    height: 20px;
+    background: #f7c04a;
+    border-radius: 50%;
+    border: 3px solid #272d37;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.progress-container {
+  margin-top: 6px;
+  position: relative;
+  width: 100%;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #4b5563;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: bold;
+}
+
+.deposit-btn {
+  background: linear-gradient(135deg, #f7c04a 0%, #d9a02a 100%);
+  color: #3e2b00;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(247, 192, 74, 0.3);
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.footer-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 14px;
+  transition: filter 0.2s;
+
+  &:active {
+    filter: brightness(0.8);
+  }
+}
+
+.history-btn {
+  background: transparent;
+  color: #f7c04a;
+  border: 1px solid #f7c04a;
+}
+
+.details-btn {
+  background: #f7c04a;
+  color: #3e2b00;
+}
+
+.checkbox-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+
+  div {
+    font-size: 10px;
+    color: #6b7280;
+  }
+
+  ion-checkbox {
+    --size: 14px;
+    --background-checked: #3b82f6;
+    --border-color-checked: #3b82f6;
+  }
+}
+
+.external-close {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+  }
+}

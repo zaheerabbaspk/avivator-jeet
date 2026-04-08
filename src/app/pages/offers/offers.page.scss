@@ -1,0 +1,60 @@
+ion-content {
+  --background: #141418;
+  
+  .content-wrapper {
+    background: radial-gradient(circle at top right, rgba(210, 254, 7, 0.05) 0%, transparent 70%);
+    min-height: 100%;
+  }
+}
+
+.hero-card {
+  background-image: url('../../../assets/box.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #141418 0%, transparent 100%);
+    z-index: 1;
+  }
+
+  h2, p {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.reward-card {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background 0.2s;
+  
+  &:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.badge-yellow {
+  background: #f7c04a;
+  color: #3e2600;
+  box-shadow: 0 2px 8px rgba(247, 192, 74, 0.4);
+}
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+}

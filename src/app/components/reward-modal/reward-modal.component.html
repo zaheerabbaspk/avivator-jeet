@@ -1,0 +1,79 @@
+<ion-modal [isOpen]="isOpen" (didDismiss)="dismiss()" class="reward-modal">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="modal-content">
+        <!-- Header -->
+        <h1 class="modal-title">First Deposit Extra Reward</h1>
+
+        <div class="task-info">
+          <div class="flex items-center justify-between w-full mb-1">
+            <span class="text-white font-bold text-sm">First recharge task</span>
+            <div class="flex items-center gap-1 text-[#f7c04a] text-xs cursor-pointer">
+              <ion-icon name="refresh-outline"></ion-icon>
+              <span>Refresh rewards</span>
+            </div>
+          </div>
+          <p class="text-gray-400 text-[10px]">Only the first deposit after sign up is eligible for a reward</p>
+        </div>
+
+        <!-- Reward List -->
+        <div class="reward-list custom-scrollbar">
+          <div *ngFor="let item of rewards" class="reward-card">
+            <div class="flex items-center gap-3 flex-1">
+              <!-- Wallet Icon -->
+              <div class="wallet-icon-container">
+                <ion-icon name="wallet-outline" class="wallet-icon"></ion-icon>
+                <div class="coin-badge"></div>
+              </div>
+
+              <!-- Reward Details -->
+              <div class="flex-1">
+                <div class="flex flex-col">
+                  <span class="text-white text-xs font-bold">First Deposit ≥ {{item.target}}, Reward</span>
+                  <span class="text-[#f7c04a] text-sm font-bold">{{item.reward | number:'1.2-2'}}</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                  <div class="progress-bar" [style.width.%]="(item.progress / item.target) * 100"></div>
+                  <span class="progress-text">{{item.progress}}/{{item.target}}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Deposit Button -->
+            <button class="deposit-btn" (click)="onDeposit(item.target)">
+              Deposit
+            </button>
+          </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="modal-footer">
+          <button class="footer-btn history-btn" (click)="dismiss()">
+            History
+          </button>
+          <button class="footer-btn details-btn" (click)="dismiss()">
+            Details
+          </button>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="checkbox-container">
+          <div class="flex items-center gap-1">
+            <ion-checkbox mode="md" [(ngModel)]="dontShowToday"></ion-checkbox>
+            <span>Don't show again today</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <ion-checkbox mode="md" [(ngModel)]="neverRemind"></ion-checkbox>
+            <span>Never remind</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- External Close Button -->
+      <div class="external-close" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

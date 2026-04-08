@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <div class="support-header bg-gradient-to-r from-[#1f2937]/90 to-[#374151]/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-white/10 sticky top-0 z-[100] shadow-md shadow-black/20">
+    <div class="flex items-center gap-3">
+      <button (click)="goBack()" class="w-8 h-8 flex items-center justify-center text-white/80 active:scale-90 transition-transform">
+        <ion-icon name="chevron-back-outline" class="text-2xl"></ion-icon>
+      </button>
+      <span class="text-white font-black text-lg tracking-tight uppercase italic">Support</span>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <ion-icon name="document-text-outline" (click)="handleRecords()" class="text-2xl text-[#00CFFF] active:scale-90 transition-transform"></ion-icon>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding-bottom">
+  <div class="content-wrapper p-4 space-y-8">
+    
+    <!-- Hero Section -->
+    <div class="hero-section text-center py-6 space-y-2">
+      <div class="w-20 h-20 bg-gradient-to-br from-[#00CFFF] to-[#0088CC] rounded-full mx-auto flex items-center justify-center shadow-xl shadow-blue-500/20">
+        <ion-icon name="headset-outline" class="text-4xl text-white"></ion-icon>
+      </div>
+      <h2 class="text-white text-2xl font-black uppercase tracking-tight italic">How can we help?</h2>
+      <p class="text-white/60 text-sm font-medium">Our support team is available 24/7 to assist you</p>
+    </div>
+
+    <!-- Support Channels -->
+    <div class="grid grid-cols-1 gap-4">
+      <div *ngFor="let channel of supportChannels" 
+           (click)="channel.action()"
+           class="support-card bg-white/5 border border-white/5 rounded-2xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all cursor-pointer">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" [style.backgroundColor]="channel.color + '20'" [style.color]="channel.color">
+            <ion-icon [name]="channel.icon" class="text-2xl"></ion-icon>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-white font-black text-md tracking-tight">{{channel.name}}</span>
+            <span class="text-white/40 text-[11px] font-medium">{{channel.desc}}</span>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="text-white/20 group-hover:text-white transition-colors"></ion-icon>
+      </div>
+    </div>
+
+    <!-- FAQs -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-2 px-1">
+        <ion-icon name="help-circle-outline" class="text-[#f7c04a]"></ion-icon>
+        <h3 class="text-white font-black text-sm uppercase tracking-widest italic">Common Questions</h3>
+      </div>
+      
+      <div class="space-y-3">
+        <div *ngFor="let faq of faqs" class="faq-card bg-white/5 border border-white/5 rounded-2xl p-5 space-y-2">
+          <h4 class="text-white font-bold text-sm tracking-tight">{{faq.q}}</h4>
+          <p class="text-white/40 text-[11px] leading-relaxed">{{faq.a}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Office Hours / Email -->
+    <div class="footer-info flex items-center justify-center gap-6 py-4">
+      <div class="flex items-center gap-2 opacity-60">
+        <ion-icon name="time-outline" class="text-[#d2fe07]"></ion-icon>
+        <span class="text-white text-[10px] font-bold uppercase tracking-widest">24/7 Support</span>
+      </div>
+      <div class="w-px h-4 bg-white/10"></div>
+      <div class="flex items-center gap-2 opacity-60">
+        <ion-icon name="mail-outline" class="text-[#d2fe07]"></ion-icon>
+        <span class="text-white text-[10px] font-bold uppercase tracking-widest">support@aviatorjeet.com</span>
+      </div>
+    </div>
+
+    <!-- Extra Space for Footer -->
+    <div class="h-20"></div>
+
+  </div>
+</ion-content>
+
+<app-footer-nav activeTab="support"></app-footer-nav>

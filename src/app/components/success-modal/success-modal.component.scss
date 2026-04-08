@@ -1,0 +1,72 @@
+:host {
+  ion-modal {
+    --background: transparent;
+    --box-shadow: none;
+    --overflow: visible;
+
+    &::part(content) {
+      background: transparent;
+      box-shadow: none;
+      overflow: visible;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    &::part(backdrop) {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      opacity: 1;
+    }
+  }
+}
+
+.modal-wrapper {
+  box-shadow: 0 0 40px rgba(0, 59, 142, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.success-icon-container {
+  filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.5));
+}
+
+.offer-card {
+  background: linear-gradient(135deg, #0B2050 0%, #162B5E 100%);
+  border-left: 4px solid #F4BF2C;
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left-width: 4px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.03));
+    pointer-events: none;
+  }
+}
+
+h1 {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.02em;
+}
+
+button {
+  &:active {
+    filter: brightness(0.9);
+  }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-bounce {
+    animation: bounce 2s infinite ease-in-out;
+}

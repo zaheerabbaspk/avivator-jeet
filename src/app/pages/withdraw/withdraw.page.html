@@ -1,0 +1,123 @@
+<ion-header class="ion-no-border">
+  <div class="withdraw-header">
+    <!-- Back -->
+    <button class="back-btn" (click)="goBack()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+
+    <!-- Tabs (Segment - Scrollable) -->
+    <ion-segment [(ngModel)]="activeTab" mode="md" [scrollable]="true" class="withdraw-segment">
+      <ion-segment-button value="request">
+        <ion-label>Request withdrawal</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="account">
+        <ion-label>Receiving account</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="record">
+        <ion-label>Withdrawal</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Headset (Removed as requested) -->
+  </div>
+</ion-header>
+
+<ion-content style="--background: #141418">
+
+  <!-- ============ PASSWORD SETUP FLOW ============ -->
+  @if (!isPasswordSet) {
+    <app-withdrawal-password 
+      (onBack)="goBack()" 
+      (onConfirm)="isPasswordSet = true">
+    </app-withdrawal-password>
+  } @else {
+
+    <!-- ============ TAB 1: Request Withdrawal ============ -->
+    @if (activeTab === 'request') {
+    <div class="tab-content">
+      <!-- Balance -->
+      <div class="balance-row">
+        <span class="label">Balance</span>
+        <span class="amount">
+          0.00
+          <ion-icon name="refresh-outline" class="refresh-icon"></ion-icon>
+        </span>
+      </div>
+
+      <!-- Add Withdrawal Account -->
+      <div class="account-card" (click)="setTab('account')">
+        <div class="account-card-left">
+          <div class="folder-icon">
+            <ion-icon name="wallet-outline"></ion-icon>
+          </div>
+          <span>Add withdrawal account</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="chev"></ion-icon>
+      </div>
+
+      <!-- Info Row -->
+      <div class="info-row">
+        <span class="rs-badge">Rs</span>
+        <span class="info-text">Add a withdrawal account before withdrawing</span>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="actions-row">
+        <div class="earn-wrap">
+          <span class="apr-badge">APR 100%</span>
+          <button class="earn-btn">Earn interest</button>
+        </div>
+        <button class="confirm-btn-disabled">Confirm withdrawal</button>
+      </div>
+    </div>
+    }
+
+    <!-- ============ TAB 2: Receiving Account ============ -->
+    @if (activeTab === 'account') {
+    <div class="tab-content">
+      <!-- Sub Header -->
+      <div class="account-header-row">
+        <span class="account-label">Receiving account <span class="count">(0/15)</span></span>
+        <ion-icon name="refresh-outline" class="refresh-icon"></ion-icon>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="methods-list">
+        @for (m of paymentMethods; track m.key) {
+        <div class="method-row" (click)="openAddModal(m)">
+          <div class="method-icon">
+            <img [src]="m.icon" [alt]="m.name" />
+          </div>
+          <span class="method-name">{{ m.name }}</span>
+          <div class="method-add">
+            <span>Add</span>
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- ============ TAB 3: Withdrawal Record ============ -->
+    @if (activeTab === 'record') {
+    <div class="tab-content empty-state">
+      <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
+      <span class="empty-label">No withdrawal records yet</span>
+    </div>
+    }
+  }
+
+  <!-- ============ ADD ACCOUNT MODAL COMPONENT ============ -->
+  @if (showAddModal && selectedMethod) {
+    <app-add-account-modal
+      [method]="selectedMethod"
+      (onClose)="closeModal()"
+      (onConfirm)="confirmAdd()">
+    </app-add-account-modal>
+  }
+
+</ion-content>
+
+<app-footer-nav activeTab="profile"></app-footer-nav>
+

@@ -1,0 +1,71 @@
+<ion-modal [isOpen]="isOpen" (didDismiss)="dismiss()" class="treasure-modal">
+  <ng-template>
+    <div class="modal-wrapper">
+      <!-- Falling Coins "Rain" Background -->
+      <div class="coins-container">
+        <div *ngFor="let coin of coins" 
+             class="coin" 
+             [style.--delay]="coin.delay" 
+             [style.--left]="coin.left"
+             [style.--size]="coin.size">
+        </div>
+      </div>
+
+      <div class="modal-content">
+        <!-- Info Header -->
+        <div class="info-header" *ngIf="!isOpened">
+          <span>RS.277777(LV 0) - 8:00 12:00 18:00 and 22:00</span>
+        </div>
+
+        <!-- Fully 3D CSS Treasure Chest -->
+        <div class="chest-container" [class.is-opened]="isOpened" (click)="openChest()">
+          <div class="chest-glow"></div>
+          
+          <div class="chest-box">
+            <!-- Lid Structure -->
+            <div class="chest-lid">
+              <div class="lid-top"></div>
+              <div class="lid-inner"></div>
+              <div class="chest-lock">
+                <div class="gem"></div>
+              </div>
+            </div>
+            
+            <!-- Base Structure -->
+            <div class="chest-base">
+              <!-- Inside the box (Revealed when open) -->
+              <div class="chest-inside" *ngIf="isOpened">
+                <div class="gold-pile"></div>
+                <!-- Mini coins coming out -->
+                <div class="burst-coins-container">
+                  <div *ngFor="let coin of burstCoins" 
+                       class="burst-coin" 
+                       [style.--delay]="coin.delay" 
+                       [style.--left]="coin.left"
+                       [style.--angle]="coin.angle">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Base Faces -->
+              <div class="base-front">
+                <!-- Open Button Overlay -->
+                <button class="open-chest-btn" *ngIf="!isOpened">
+                  OPEN
+                </button>
+              </div>
+              <div class="base-back"></div>
+              <div class="base-left"></div>
+              <div class="base-right"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Button below chest -->
+        <div class="close-btn" (click)="dismiss()">
+          <ion-icon name="close-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

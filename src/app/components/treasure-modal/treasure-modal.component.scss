@@ -1,0 +1,428 @@
+.treasure-modal {
+  --background: transparent;
+  --backdrop-opacity: 0.8;
+}
+
+.modal-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Falling Coins Background - "Rain" style from Screenshot 2 */
+.coins-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.coin {
+  position: absolute;
+  top: -60px;
+  left: var(--left);
+  width: var(--size, 30px);
+  height: var(--size, 30px);
+  background: radial-gradient(circle at 35% 35%, #ffd700, #daa520 40%, #8b6508 80%);
+  border-radius: 50%;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4);
+  animation: coin-rain 3s linear infinite;
+  animation-delay: var(--delay);
+  opacity: 0.9;
+  z-index: 1;
+
+  &::before {
+    content: '$';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: calc(var(--size, 30px) * 0.5);
+    font-weight: 900;
+  }
+}
+
+@keyframes coin-rain {
+  0% {
+    transform: translateY(0) rotateX(0deg) rotateY(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh) rotateX(360deg) rotateY(720deg);
+    opacity: 0;
+  }
+}
+
+.modal-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Info Header - Precise matching to Screenshot 2 */
+.info-header {
+  background: rgba(20, 20, 20, 0.85);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.5px;
+}
+
+/* Bursting Coins Animation from Inside Chest */
+.burst-coins-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.burst-coin {
+  position: absolute;
+  bottom: 0;
+  left: var(--left);
+  width: 25px;
+  height: 25px;
+  background: radial-gradient(circle at 35% 35%, #ffd700, #daa520 40%, #8b6508 80%);
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  animation: coin-burst-fly calc(var(--delay) + 1s) cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: var(--delay);
+  opacity: 0;
+
+  &::before {
+    content: '$';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-weight: 900;
+  }
+}
+
+@keyframes coin-burst-fly {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(0, -20px) rotate(0deg) scale(1.2);
+  }
+
+  100% {
+    transform: translate(calc(sin(var(--angle)) * 200px), -300px) rotate(720deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* 3D Chest Depth Refinements */
+.chest-container {
+  perspective: 1000px;
+  cursor: pointer;
+  position: relative;
+  width: 280px;
+  height: 220px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  &.is-opened {
+    .chest-lid {
+      transform: translateY(-80px) rotateX(-110deg);
+    }
+
+    .chest-glow {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.8);
+    }
+  }
+}
+
+.chest-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: chest-subtle-bounce 3s ease-in-out infinite;
+}
+
+.chest-base {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 130px;
+  background: linear-gradient(to right, #2e1065, #4c1d95, #2e1065);
+  border: 6px solid #f7c04a;
+  border-radius: 4px 4px 20px 20px;
+  box-shadow:
+    inset 0 15px 40px rgba(0, 0, 0, 0.8),
+    0 30px 60px rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+
+  .base-side {
+    position: absolute;
+    width: 25px;
+    height: 100%;
+    background: #1e0b3f;
+    top: 0;
+
+    &.left {
+      left: -12.5px;
+      transform: rotateY(-90deg);
+    }
+
+    &.right {
+      right: -12.5px;
+      transform: rotateY(90deg);
+    }
+  }
+
+  .base-front {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+}
+
+.chest-lid {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to right, #4c1d95, #7e22ce, #4c1d95);
+  border: 6px solid #f7c04a;
+  border-bottom: 8px solid #b45309;
+  border-radius: 100px 100px 0 0;
+  transform-origin: center bottom;
+  transform: rotateX(0deg);
+  transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 10;
+  box-shadow: inset 0 25px 50px rgba(255, 255, 255, 0.2);
+
+  .lid-inner {
+    position: absolute;
+    inset: 12px;
+    border-radius: 90px 90px 0 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.reward-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.reward-inner-coins {
+  width: 120px;
+  height: 50px;
+  background: radial-gradient(ellipse at center, #ffd700 0%, #b45309 80%);
+  border-radius: 50%;
+  box-shadow: 0 -15px 30px rgba(255, 215, 0, 0.5);
+  filter: blur(2px);
+  position: absolute;
+  bottom: 15px;
+  animation: reward-glow 2s infinite alternate;
+}
+
+@keyframes reward-glow {
+  from {
+    opacity: 0.6;
+    filter: blur(2px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(4px);
+  }
+}
+
+.chest-lock {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 45px;
+  background: #f7c04a;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+  z-index: 15;
+
+  .gem {
+    width: 28px;
+    height: 28px;
+    background: #f472b6;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    box-shadow: 0 0 20px #f472b6;
+    animation: jewel-sparkle 2s infinite alternate;
+  }
+}
+
+.chest-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(247, 192, 74, 0.5) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: all 1s ease;
+  z-index: 2;
+}
+
+.chest-image-open {
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(247, 192, 74, 0.4));
+  animation: chest-reveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes chest-reveal {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.open-chest-btn {
+  background: #fff;
+  padding: 12px 30px;
+  border-radius: 8px;
+  color: #581c87;
+  font-weight: 900;
+  font-size: 20px;
+  text-transform: uppercase;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+  animation: btn-pulse 2s infinite;
+  border: none;
+  z-index: 20;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+@keyframes chest-subtle-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes jewel-sparkle {
+  from {
+    filter: brightness(1) drop-shadow(0 0 4px #f472b6);
+  }
+
+  to {
+    filter: brightness(1.7) drop-shadow(0 0 15px #f472b6);
+  }
+}
+
+@keyframes btn-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.close-btn {
+  margin-top: 60px;
+  /* Push it down from the chest */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 34px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+    transform: scale(1.1);
+  }
+}

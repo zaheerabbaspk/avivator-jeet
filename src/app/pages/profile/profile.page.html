@@ -1,0 +1,200 @@
+<ion-content>
+  <div class="profile-container relative">
+    <!-- Header Background Pattern (CSS-based) -->
+    <div class="absolute inset-0 bg-pattern opacity-[0.05] pointer-events-none"></div>
+
+    <!-- Header Navigation -->
+    <div class="px-4 pt-10 pb-2 flex items-center justify-between z-10 relative">
+      <button (click)="goBack()"
+        class="w-10 h-10 flex items-center justify-start text-white/80 active:scale-95 transition-transform">
+        <ion-icon name="chevron-back-outline" class="text-3xl"></ion-icon>
+      </button>
+      <div class="flex items-center gap-4">
+        <ion-icon name="headset-outline"
+          class="text-2xl text-[#00CFFF] active:scale-90 transition-transform"></ion-icon>
+        <ion-icon name="chatbubble-ellipses-outline"
+          class="text-2xl text-[#00CFFF] active:scale-90 transition-transform"></ion-icon>
+      </div>
+    </div>
+
+    <!-- User Information Header -->
+    <div class="px-5 pb-6 flex items-center gap-4 z-10 relative">
+      <div class="relative group">
+        <div
+          class="avatar-container w-20 h-20 rounded-full border-2 border-white/20 overflow-hidden shadow-xl shadow-black/30 flex items-center justify-center bg-gradient-to-br from-[#00CFFF]/20 to-[#0099FF]/20">
+          <span class="text-white text-3xl font-black uppercase italic tracking-tighter italic leading-none drop-shadow-lg avatar-text">
+            {{ user.username.slice(0, 2) }}
+          </span>
+        </div>
+        <div
+          class="absolute bottom-0 right-0 w-6 h-6 bg-[#00CFFF] text-white rounded-full flex items-center justify-center border-2 border-[#002244] shadow-lg">
+          <ion-icon name="pencil-outline" class="text-xs"></ion-icon>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-2">
+          <ion-icon name="chevron-back-outline" class="text-xs text-blue-300 transform scale-[-1]"></ion-icon>
+          <span class="text-white text-md font-black italic tracking-tight">{{ user.username }}</span>
+          <ion-icon name="copy-outline" (click)="copyToClipboard(user.username)"
+            class="text-sm text-[#00CFFF]/80 active:scale-90 transition-transform"></ion-icon>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-blue-200/80 text-sm font-black italic uppercase">ID: {{ user.id }}</span>
+          <ion-icon name="copy-outline" (click)="copyToClipboard(user.id)"
+            class="text-sm text-[#00CFFF]/80 active:scale-90 transition-transform"></ion-icon>
+        </div>
+        <div class="flex items-center gap-3 mt-1">
+          <div class="flex items-center gap-1.5 px-2 py-0.5 bg-white/10 rounded-full border border-white/10">
+            <div class="w-4 h-4 bg-emerald-600 rounded-full flex items-center justify-center overflow-hidden">
+              <span class="text-[8px] font-bold text-white uppercase leading-none">PK</span>
+            </div>
+            <span
+              class="text-white font-black text-xs italic tracking-tighter decoration-1 underline decoration-white/30 underline-offset-4">0.00</span>
+          </div>
+          <ion-icon name="refresh-outline"
+            class="text-md text-[#00CFFF] animate-spin-once active:animate-spin-slow"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Row -->
+    <div class="grid grid-cols-4 gap-2 px-5 pb-6">
+      <div class="quick-action group" (click)="navigateTo('/withdraw')">
+        <div class="icon-box">
+          <ion-icon name="wallet-outline"></ion-icon>
+        </div>
+        <span class="label">Withdraw</span>
+      </div>
+      <div class="quick-action group" (click)="navigateTo('/deposit')">
+        <div class="icon-box relative overflow-visible">
+          <div class="badge-red">+7%</div>
+          <ion-icon name="cash-outline"></ion-icon>
+        </div>
+        <span class="label">Deposit</span>
+      </div>
+      <div class="quick-action group">
+        <div class="icon-box relative overflow-visible">
+          <div class="badge-red">200%</div>
+          <ion-icon name="trending-up-outline"></ion-icon>
+        </div>
+        <span class="label">Interest</span>
+      </div>
+      <div class="quick-action group">
+        <div class="icon-box relative overflow-visible">
+          <div class="badge-yellow">50%</div>
+          <ion-icon name="briefcase-outline"></ion-icon>
+        </div>
+        <span class="label">Fund</span>
+      </div>
+    </div>
+
+    <!-- VIP Status Card -->
+    <div class="px-4 pb-6">
+      <div
+        class="vip-card p-5 relative overflow-hidden flex flex-col group active:scale-[0.98] transition-transform cursor-pointer">
+        <div class="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent"></div>
+        <div class="flex items-start justify-between z-10">
+          <div class="flex items-center gap-4">
+            <div
+              class="vip-shield w-12 h-12 flex items-center justify-center bg-white/20 rounded-xl border border-white/30 shadow-lg">
+              <ion-icon name="shield-half-outline" class="text-3xl text-white drop-shadow-md"></ion-icon>
+            </div>
+            <div class="flex flex-col">
+              <span
+                class="text-white text-2xl font-black italic tracking-tighter italic leading-none drop-shadow-md">V0</span>
+            </div>
+          </div>
+          <div class="text-right flex flex-col items-end">
+            <span
+              class="text-white/90 text-[10px] font-black uppercase italic tracking-widest leading-none mb-1 opacity-80">Bonus</span>
+            <span
+              class="text-white text-lg font-black italic tracking-tighter leading-none flex items-baseline">1.80</span>
+          </div>
+        </div>
+        <div class="mt-6 z-10 w-full space-y-2">
+          <div class="relative w-full h-1.5 bg-black/20 rounded-full overflow-hidden border border-white/5">
+            <div class="absolute top-0 left-0 h-full bg-white transition-all duration-1000" style="width: 2%"></div>
+          </div>
+          <div class="flex justify-between items-center w-full mt-1">
+            <span class="text-[10px] font-black text-white italic opacity-80">0.00/100.00</span>
+            <div class="flex items-center gap-1">
+              <span class="text-[8px] font-black text-white/60 uppercase">VIP requires</span>
+              <span
+                class="text-[8px] font-black text-white underline decoration-white/30 decoration-1 underline-offset-2 uppercase">Deposit</span>
+              <span class="text-[10px] font-black text-white/80">100.00</span>
+              <ion-icon name="chevron-forward-outline"
+                class="text-[10px] text-white/60 group-hover:translate-x-1 transition-transform"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions List -->
+    <div class="px-5 pb-10 space-y-2">
+      <div class="list-item group" (click)="navigateTo('/records')">
+        <div class="flex items-center gap-4">
+          <ion-icon name="document-text-outline" class="text-xl text-[#FFB100]"></ion-icon>
+          <span class="title">My records</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="sub-label">Details, bets, reports, recover balance</span>
+          <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+        </div>
+      </div>
+      <div class="h-px w-full bg-white/5 my-2"></div>
+      <div class="list-item group">
+        <div class="flex items-center gap-4">
+          <ion-icon name="people-outline" class="text-xl text-[#00CFFF]"></ion-icon>
+          <span class="title">Invite</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="sub-label whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]">agent and earn millions a day</span>
+          <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+        </div>
+      </div>
+      <div class="list-item group" (click)="isProfileEditModalOpen = true">
+        <div class="flex items-center gap-4">
+          <ion-icon name="person-outline" class="text-xl text-[#00CFFF]"></ion-icon>
+          <span class="title">Profile</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+      </div>
+
+
+      <!-- Quit/Logout Button -->
+      <div class="pt-6">
+        <button (click)="logout()"
+          class="w-full py-4 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center gap-3 transition-all active:scale-[0.98] active:bg-white/10 group">
+          <ion-icon name="log-out-outline"
+            class="text-xl text-red-500 group-hover:scale-110 transition-transform"></ion-icon>
+          <span class="text-white text-md font-black italic tracking-tighter uppercase">Quit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<app-footer-nav activeTab="profile"></app-footer-nav>
+
+<!-- Success Modal & Auth Modal -->
+<app-auth-modal [isOpen]="isAuthModalOpen" (close)="isAuthModalOpen = false"></app-auth-modal>
+
+<!-- Copy Toast Notification -->
+<ion-toast [isOpen]="showCopyToast" [message]="toastMessage" [duration]="2000" (didDismiss)="showCopyToast = false"
+  position="top" class="copy-toast"></ion-toast>
+
+<!-- Reward Modal Component -->
+<app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false" (depositClick)="handleRewardDeposit($event)">
+</app-reward-modal>
+
+<!-- Profile Edit Modal -->
+<app-profile-edit-modal
+  [isOpen]="isProfileEditModalOpen"
+  [fullName]="user.fullName"
+  [phone]="user.phone"
+  [email]="user.email"
+  (close)="isProfileEditModalOpen = false"
+  (save)="saveProfile($event)">
+</app-profile-edit-modal>

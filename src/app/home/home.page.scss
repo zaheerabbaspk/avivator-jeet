@@ -1,27 +1,153 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.rounded-24 {
+    border-radius: 24px;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.animate-spin-slow {
+    animation: rotate 8s linear infinite;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
 
-  color: #8c8c8c;
-
-  margin: 0;
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-#container a {
-  text-decoration: none;
+.backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+}
+
+// Hide scrollbar but keep functionality
+ion-content {
+    --offset-top: 0px !important;
+    --offset-bottom: 0px !important;
+    --background: radial-gradient(circle at top, #374151 0%, #111827 100%);
+}
+
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.text-3d-main {
+    color: #fff;
+    text-shadow:
+        1px 1px 0px #000,
+        2px 2px 0px #000,
+        3px 3px 0px rgba(0, 0, 0, 0.3);
+    letter-spacing: -1px;
+}
+
+.text-3d-sub {
+    color: #d2fe07;
+    text-shadow:
+        1px 1px 0px #000,
+        2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+// Game Card Design Refinement (Matching Screenshot)
+.game-grid-card {
+    background: #09090b; // Darker background for the bar
+    border: 2px solid rgba(212, 160, 23, 0.7); // Thicker Gold border
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px; // Standardized radius
+    overflow: hidden;
+    
+    .image-area {
+        position: relative;
+        flex: 1; // Takes up remaining space
+        overflow: hidden;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .provider-badge {
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 1px 12px;
+            border-radius: 4px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            
+            span {
+                font-size: 8px;
+                font-weight: 900;
+                color: #fff;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    .title-bar {
+        height: 28px; // Fixed height for title
+        background: #09090b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+        
+        span {
+            font-size: 10px;
+            font-weight: 800;
+            color: #d1d5db;
+            text-transform: capitalize;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.hot-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    font-size: 7px;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.fav-star {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    z-index: 10;
+    
+    ion-icon {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.6);
+    }
 }
