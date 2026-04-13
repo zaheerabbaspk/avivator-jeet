@@ -85,6 +85,17 @@
             color: rgba(255, 255, 255, 0.7);
             font-size: 10px;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sub-disclaimer {
+            font-size: 10px;
+            font-weight: 700;
+            color: #ea580c; /* Gold accent from ref */
+            margin: -4px 0 12px;
+            line-height: 1.2;
         }
 
         .input-group {
@@ -98,7 +109,7 @@
             height: 48px;
 
             .left-icon {
-                color: #00ccff;
+                color: rgba(255, 255, 255, 0.5); /* Neutral grey icons per ref */
                 font-size: 18px;
                 margin-right: 10px;
             }

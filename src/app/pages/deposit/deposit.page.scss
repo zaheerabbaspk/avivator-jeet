@@ -1,355 +1,587 @@
+/* ====================================================
+   TOKENS
+   ==================================================== */
 :host {
-    --primary-amber: #d4a017;
-    --bg-darker: #141418;
-    --bg-card: #1c1c22;
-    --text-dim: rgba(255, 255, 255, 0.45);
-    --gold-gradient: linear-gradient(135deg, #d4a017, #f0c040);
-  }
-  
-  .deposit-header {
-    height: 60px;
-    background: var(--bg-card);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 30px 16px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    z-index: 100;
-    position: relative; // Added for absolute positioning of children
+  --bg-page:    #0f0f12;   /* near-black — matches screenshot */
+  --bg-card:    #1c1c22;   /* slightly elevated card surface */
+  --bg-card-hi: #252530;   /* selected / hover state */
+  --border-dim: rgba(255,255,255,0.07);
+  --gold:       #f0a500;
+  --gold-lt:    #fccc04;
+  --text-white: #ffffff;
+  --text-dim:   rgba(255,255,255,0.45);
+  --text-muted: rgba(255,255,255,0.25);
+  --red:        #ef4444;
+  --green:      #22c55e;
+}
 
-    .back-link {
-        background: none;
-        border: none;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 24px;
-        padding: 0;
-        z-index: 2; // Ensure it stays on top
-    }
+ion-content {
+  --background: #0f0f12;
+  --padding-bottom: 80px;
+}
 
-    .title {
-        font-size: 16px;
-        font-weight: 800;
-        color: #fff;
-        position: absolute; // Absolute to center
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
-    }
+/* ====================================================
+   HEADER
+   ==================================================== */
+.dep-header {
+  background: #0f0f12;   /* same as page — no visible header break */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 14px) 14px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+}
 
-    .header-right {
-        z-index: 2; // Ensure it stays on top
-        .h-icon {
-            font-size: 20px;
-            color: var(--primary-amber);
-        }
-    }
-  }
-  
-  .deposit-container {
-    padding: 16px;
-  }
-  
-  .section-label {
-    span {
-        font-size: 14px;
-        font-weight: 800;
-        color: #fff;
-    }
-    
-    .balance-badge {
-        background: #1e1e26;
-        padding: 4px 8px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        border: 1px solid rgba(255,255,255,0.05);
-  
-        ion-icon { 
-            color: #fccc04; 
-            font-size: 14px;
-        }
-        .val { 
-            color: #fccc04; 
-            font-size: 13px; 
-            font-weight: 900;
-            margin-right: 4px;
-        }
-        .refresh-icon { 
-            color: var(--primary-amber);
-            font-size: 12px;
-        }
-    }
-  }
-  
-  .methods-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  
-  .method-tab {
-    background: #1e1e26;
-    border: 1.5px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 12px;
-    position: relative;
+.dep-back {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 22px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+
+  &:active { opacity: 0.6; }
+}
+
+.dep-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-white);
+  font-family: 'Inter', system-ui, sans-serif;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.dep-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 2;
+
+  .dh-icon {
+    font-size: 22px;
+    color: rgba(255,255,255,0.7);
     cursor: pointer;
-    transition: all 0.2s ease;
-  
-    &.active {
-        border-color: var(--primary-amber);
-        background: #252530;
-    }
-  
-    .logo-box {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        
-        .logo-img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-        }
-        
-        span {
-            font-size: 12px;
-            font-weight: 700;
-            color: #fff;
-        }
-    }
-  
-    .badge-red {
-        position: absolute;
-        top: -18px;
-        right: -6px;
-        background: #ef4444;
-        color: #fff;
-        padding: 0px 6px;
-        border-radius: 4px;
-        font-size: 10px;
-        font-weight: 900;
-        z-index: 10;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    position: relative;
+
+    &.notify::after {
+      content: '1';
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--red);
+      color: #fff;
+      font-size: 8px;
+      font-weight: 900;
+      border-radius: 99px;
+      padding: 1px 4px;
+      line-height: 1.4;
     }
   }
-  
-  .fast-btn {
-    background: #1e1e26;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
+}
+
+/* ====================================================
+   BODY CONTAINER
+   ==================================================== */
+.dep-body {
+  padding: 16px 14px 20px;
+}
+
+/* ── Section Row (label + right widget) ── */
+.sec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.mt-sec { margin-top: 20px; }
+
+.sec-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-white);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Gold 'Bonus event explanation' right link */
+.bonus-explain-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold-lt);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Balance Pill ── */
+.balance-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #1c1c22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 4px 10px;
+
+  .wa-icon {
+    font-size: 16px;
+    color: var(--green);
+  }
+
+  .pill-val {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--gold-lt);
+  }
+
+  .pill-reload {
+    font-size: 13px;
+    color: var(--gold);
+    --ionicon-stroke-width: 56px;
+  }
+}
+
+/* ====================================================
+   PAYMENT METHODS
+   ==================================================== */
+.methods-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.method-card {
+  position: relative;
+  background: #1c1c22;   /* card surface — lighter than page */
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+
+  &.selected {
+    border-color: var(--gold);
+    background: #25200a;   /* warm gold tint when selected */
+  }
+
+  &:active { transform: scale(0.97); }
+}
+
+/* +0.5% badge — top right, orange pill with arrow */
+.method-badge {
+  position: absolute;
+  top: -1px;
+  right: 8px;
+  background: linear-gradient(135deg, #e07b00, #f5a623);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 0 0 6px 6px;
+  z-index: 5;
+  letter-spacing: 0.2px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(135deg, #e07b00, #f5a623);
+    border-radius: 4px 4px 0 0;
+  }
+}
+
+.method-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.method-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.ep-logo {
+  background: #fff;
+  padding: 2px;
+  border-radius: 6px;
+}
+
+.method-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-white);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ====================================================
+   AMOUNT GRID  — 4 columns
+   ==================================================== */
+.amount-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.amount-cell {
+  background: #1c1c22;   /* same card surface */
+  border: 1.5px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 9px 4px 7px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  &.active {
+    border-color: var(--gold);
+    background: #25200a;
+
+    .cell-val { color: var(--gold-lt); }
+  }
+
+  &:active { transform: scale(0.96); }
+
+  .cell-val {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--text-white);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1;
+  }
+
+  .cell-bonus {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gold-lt);
+    line-height: 1;
+  }
+}
+
+/* ====================================================
+   RS INPUT
+   ==================================================== */
+.rs-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #1c1c22;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 13px 14px;
+  gap: 10px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+
+  /* Green glow when amount entered — matches screenshot */
+  &.has-value {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.12);
+  }
+}
+
+.rs-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-white);
+  padding-right: 10px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  white-space: nowrap;
+}
+
+.rs-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-white);
+  font-size: 16px;
+  font-weight: 700;
+
+  &::placeholder {
+    color: rgba(255,255,255,0.22);
+    font-size: 13px;
+    font-weight: 400;
+  }
+}
+
+/* ====================================================
+   RECEIVE INFO BOX  (appears after amount selected)
+   ==================================================== */
+.receive-info-box {
+  background: #1c1c22;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+
+  .receive-line {
     font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    margin: 0 0 3px;
+    line-height: 1.5;
+  }
+
+  .receive-amount {
+    font-weight: 900;
+    color: var(--text-white);
+  }
+
+  .receive-hint {
+    color: var(--red);
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .event-bonus {
+    font-weight: 900;
+    color: var(--red);
+  }
+
+  .payment-bonus {
+    font-weight: 900;
+    color: var(--red);
+  }
+}
+
+/* ====================================================
+   DEPOSIT PROMOTION CARD
+   ==================================================== */
+.promo-card {
+  background: #1c1c22;   /* card surface */
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 12px 14px 4px;
+  margin-bottom: 14px;
+}
+
+.promo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.promo-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .promo-gift {
+    font-size: 16px;
+  }
+
+  .promo-text {
+    font-size: 13px;
     font-weight: 800;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    
-    &.active {
-        background: #252530;
-        border-color: var(--primary-amber);
-        color: var(--primary-amber);
+    color: var(--text-white);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Timer pill: red "LT" label + time */
+.timer-pill {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #ef4444;
+  border-radius: 5px;
+  overflow: hidden;
+
+  .timer-lt {
+    background: #b91c1c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 3px 5px;
+    letter-spacing: 0.3px;
+  }
+
+  .timer-val {
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 3px 7px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+  }
+}
+
+.promo-divider {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+/* Promo list — collapsed shows ~3 rows */
+.promo-list {
+  max-height: 130px;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+
+  &.expanded {
+    max-height: 600px;
+  }
+}
+
+.promo-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+
+  /* Highlighted promo row (with badge) */
+  &.promo-highlight .promo-label-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .promo-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
+    .promo-chest { font-size: 16px; opacity: 0.55; flex-shrink: 0; margin-top: 1px; }
+
+    .promo-label-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    &:active { background: #2a2a35; }
-  }
-  
-  .link-text {
-    color: #fccc04;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: underline;
-  }
-  
-  .amount-grid {
-    .amount-item {
-        background: #1e1e26;
-        border: 1.5px solid rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        padding: 10px 4px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s;
-  
-        &.active {
-            border-color: var(--primary-amber);
-            background: #252530;
-        }
-  
-        .val {
-            font-size: 14px;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-        
-        .bonus {
-            font-size: 10px;
-            font-weight: 700;
-            color: #fccc04;
-        }
+    .promo-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-white);
+
+      &.promo-label-gold {
+        color: var(--gold-lt);
+      }
     }
-  }
-  
-  .input-wrap {
-    background: #1e1e26;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  
-    .currency {
-        font-size: 14px;
-        font-weight: 800;
+
+    /* Red + Green badges on highlight row */
+    .promo-row-badge {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .promo-badge-red {
+        background: var(--red);
         color: #fff;
-        padding-right: 12px;
-        border-right: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .amount-input, .wallet-input {
-        background: transparent;
-        border: none;
-        outline: none;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
-        flex: 1;
-        &::placeholder { color: rgba(255,255,255,0.25); }
-    }
-  
-    .input-icon {
-        font-size: 20px;
-        color: rgba(255,255,255,0.3);
-    }
-  
-    .paste-btn {
-        background: transparent;
-        color: var(--primary-amber);
-        font-size: 11px;
+        font-size: 9px;
         font-weight: 900;
-        text-transform: uppercase;
-        border: none;
-    }
-  }
-  
-  .promotion-card {
-    background: #1e1e26;
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 16px;
-    padding: 16px;
-  
-    .promo-title {
-        span { color: #fff; font-size: 14px; font-weight: 800; }
-        ion-icon { color: #fccc04; font-size: 18px; }
-    }
-  
-    .timer-badge {
-        display: flex;
-        align-items: center;
-        background: #ef4444;
-        padding: 4px 8px;
+        padding: 2px 6px;
         border-radius: 4px;
-        
-        ion-icon { color: #fff; font-size: 12px; }
-        .val { color: #fff; font-size: 12px; font-weight: 900; }
-    }
-  
-    .promo-info {
+        white-space: nowrap;
+        display: inline-block;
+      }
+
+      .promo-badge-green {
+        color: #22c55e;
         font-size: 10px;
-        color: rgba(255,255,255,0.3);
-        text-align: center;
-        margin-bottom: 12px;
-    }
-  
-    .promo-list {
-        max-height: 120px;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        &.expanded { max-height: 500px; }
-    }
-  
-    .promo-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.03);
-        
-        .gift-list-icon { color: rgba(255,255,255,0.4); font-size: 18px; }
-        .label { font-size: 12px; font-weight: 700; color: #fff; }
-        .desc { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; }
-    }
-  
-    .expand-btn {
-        background: transparent;
-        color: #fff;
-        width: 100%;
-        padding-top: 12px;
-        font-size: 12px;
-        font-weight: 700;
-        opacity: 0.6;
+        font-weight: 800;
+        white-space: nowrap;
+      }
     }
   }
-  
-  .payer-section {
-    .section-title {
-        font-size: 11px;
-        color: #fff;
-        font-weight: 800;
-        text-align: center;
-        opacity: 0.8;
-    }
-    
-    .label-row {
-        font-size: 11px;
-        color: #fff;
-        font-weight: 800;
-        .required { color: #ef4444; margin-right: 4px; }
-    }
+
+  .promo-desc {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+    margin-left: 8px;
+    flex-shrink: 0;
   }
-  
-  .footer-wrap {
-    padding: 12px 16px 20px;
-    background: var(--bg-darker);
-    position: relative;
-  
-    .deposit-now-btn {
-        width: 100%;
-        padding: 16px;
-        background: #444;
-        color: #777;
-        font-size: 15px;
-        font-weight: 900;
-        border: none;
-        border-radius: 12px;
-        cursor: not-allowed;
-        
-        &:not(:disabled) {
-            background: var(--gold-gradient);
-            color: #1a1000;
-            cursor: pointer;
-        }
-    }
-  
-    .bottom-float-btn {
-        position: absolute;
-        bottom: 80px;
-        right: 16px;
-        background: rgba(30, 30, 38, 0.9);
-        border: 1.5px solid rgba(255,255,255,0.15);
-        color: #fff;
-        padding: 6px 14px;
-        border-radius: 30px;
-        display: flex;
-        align-items: center;
-        font-size: 11px;
-        font-weight: 800;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        opacity: 0.8;
-        
-        ion-icon { color: #fccc04; font-size: 14px; }
-    }
+}
+
+/* Fold / Expand toggle — gold color, centered, matches screenshot */
+.fold-toggle {
+  background: transparent;
+  border: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 0 8px;
+  color: var(--gold-lt);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.2px;
+  transition: opacity 0.15s;
+
+  ion-icon {
+    font-size: 15px;
+    color: var(--gold-lt);
   }
+
+  &:active { opacity: 0.7; }
+}
+
+/* ====================================================
+   REMINDER TEXT
+   ==================================================== */
+.reminder-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+/* ====================================================
+   FOOTER — Deposit Now Button
+   ==================================================== */
+.dep-footer {
+  padding: 10px 14px calc(env(safe-area-inset-bottom, 0px) + 10px);
+  background: #0f0f12;   /* same as page bg — seamless */
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.deposit-now-btn {
+  width: 100%;
+  padding: 15px;
+  background: #2a2a32;   /* matches screenshot disabled grey */
+  color: rgba(255,255,255,0.3);
+  font-size: 15px;
+  font-weight: 900;
+  border: none;
+  border-radius: 10px;
+  cursor: not-allowed;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.3px;
+  transition: background 0.2s, color 0.2s;
+
+  &.enabled {
+    background: linear-gradient(135deg, #d4a017, #f0c040);
+    color: #1a0e00;
+    cursor: pointer;
+
+    &:active { transform: scale(0.98); }
+  }
+}

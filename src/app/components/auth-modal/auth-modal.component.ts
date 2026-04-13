@@ -24,9 +24,10 @@ export class AuthModalComponent {
   passwordType: 'password' | 'text' = 'password';
   confirmPasswordType: 'password' | 'text' = 'password';
 
-  email = '';
+  account = '';
   password = '';
   confirmPassword = '';
+  realName = '';
   errorMessage = '';
   isLoading = false;
 
@@ -46,11 +47,25 @@ export class AuthModalComponent {
     this.confirmPasswordType = this.confirmPasswordType === 'password' ? 'text' : 'password';
   }
 
+  private sanitizeAccount(input: string): string {
+    const trimmed = input.trim();
+    // If numeric, it's likely a phone number, map to virtual email for Firebase compatibility
+    if (/^\d+$/.test(trimmed)) {
+      return `${trimmed}@sk804.com`;
+    }
+    return trimmed;
+  }
+
   async handleAuthAction() {
     this.errorMessage = '';
     
-    if (!this.email || !this.password) {
+    if (!this.account || !this.password) {
       this.errorMessage = 'Please fill in all fields';
+      return;
+    }
+
+    if (this.authMode === 'register' && !this.realName) {
+      this.errorMessage = 'Please enter your real name';
       return;
     }
 
@@ -61,10 +76,12 @@ export class AuthModalComponent {
 
     try {
       this.isLoading = true;
+      const sanitizedAccount = this.sanitizeAccount(this.account);
+      
       if (this.authMode === 'register') {
-        await this.authService.signUp(this.email, this.password);
+        await this.authService.signUp(sanitizedAccount, this.password);
       } else {
-        await this.authService.signIn(this.email, this.password);
+        await this.authService.signIn(sanitizedAccount, this.password);
       }
       this.authSuccess.emit();
     } catch (error: any) {

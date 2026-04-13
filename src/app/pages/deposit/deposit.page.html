@@ -1,144 +1,155 @@
 <ion-header class="ion-no-border">
-  <div class="deposit-header">
-    <button class="back-link" (click)="goBack()">
+  <div class="dep-header">
+    <button class="dep-back" (click)="goBack()">
       <ion-icon name="chevron-back-outline"></ion-icon>
     </button>
-    <span class="title">Deposit</span>
-    <div class="header-right">
-      <ion-icon name="headset-outline" class="h-icon"></ion-icon>
-      <ion-icon name="document-text-outline" class="h-icon ml-3"></ion-icon>
+    <span class="dep-title">Deposit</span>
+    <div class="dep-header-right">
+      <ion-icon name="headset-outline" class="dh-icon"></ion-icon>
+      <div class="dh-icon-wrap">
+        <ion-icon name="document-text-outline" class="dh-icon"></ion-icon>
+        <span class="notify-badge">1</span>
+      </div>
     </div>
   </div>
 </ion-header>
 
-<ion-content style="--background: #141418">
-  <div class="deposit-container">
+<ion-content style="--background: #0f0f12">
+  <div class="dep-body">
 
-    <!-- Payment Method Section -->
-    <div class="section-label flex justify-between items-center mb-3">
-      <span>Payment method</span>
-      <div class="balance-badge">
-        <ion-icon name="time-outline" class="mr-1"></ion-icon>
-        <span class="val">0.00</span>
-        <ion-icon name="refresh-outline" class="refresh-icon ml-1"></ion-icon>
+    <!-- ── Payment Method ── -->
+    <div class="sec-row">
+      <span class="sec-label">Payment method</span>
+      <div class="balance-pill">
+        <ion-icon name="logo-whatsapp" class="wa-icon"></ion-icon>
+        <span class="pill-val">{{ userBalance | number:'1.2-2' }}</span>
+        <ion-icon name="reload-outline" class="pill-reload"></ion-icon>
       </div>
     </div>
 
     <div class="methods-grid">
-      <div class="method-tab" [class.active]="selectedMethod === 'jazzcash'" (click)="selectedMethod = 'jazzcash'">
-        <div class="relative">
-          <div class="badge-red">+2%</div>
-          <div class="logo-box">
-            <img src="/assets/new-jazz-seeklogo.png" class="logo-img" />
-            <span>Jazzcash1</span>
-          </div>
+      <!-- JazzCash -->
+      <div class="method-card" [class.selected]="selectedMethod === 'jazzcash'"
+           (click)="selectedMethod = 'jazzcash'">
+        <div class="method-badge">+0.5%</div>
+        <div class="method-inner">
+          <img src="/assets/new-jazz-seeklogo.png" class="method-logo" alt="JazzCash" />
+          <span class="method-name">JazzCash</span>
         </div>
       </div>
 
-      <div class="method-tab" [class.active]="selectedMethod === 'easypaisa'" (click)="selectedMethod = 'easypaisa'">
-        <div class="relative">
-          <div class="badge-red">+2%</div>
-          <div class="logo-box">
-            <img src="/assets/easypaisa-seeklogo.png" class="logo-img" />
-            <span>Easypaisa1</span>
-          </div>
+      <!-- EasyPaisa -->
+      <div class="method-card" [class.selected]="selectedMethod === 'easypaisa'"
+           (click)="selectedMethod = 'easypaisa'">
+        <div class="method-badge">+0.5%</div>
+        <div class="method-inner">
+          <img src="/assets/easypaisa-seeklogo.png" class="method-logo ep-logo" alt="EasyPaisa" />
+          <span class="method-name">EasyPaisa</span>
         </div>
       </div>
     </div>
 
-    <div class="fast-buttons grid grid-cols-2 gap-3 mt-4">
-      <button class="fast-btn" [class.active]="selectedMethod === 'jazzcash'" (click)="selectedMethod = 'jazzcash'">
-        FAST
-      </button>
-      <button class="fast-btn" [class.active]="selectedMethod === 'easypaisa'" (click)="selectedMethod = 'easypaisa'">
-        FAST
-      </button>
+    <!-- ── Deposit Amount ── -->
+    <div class="sec-row mt-sec">
+      <span class="sec-label">Deposit amount</span>
+      <span class="bonus-explain-link">Bonus event explanation</span>
     </div>
 
-    <!-- Deposit Amount Section -->
-    <div class="section-label flex justify-between items-center mt-6 mb-3">
-      <span>Deposit amount</span>
-      <span class="link-text">Bonus event explanation</span>
-    </div>
-
-    <div class="amount-grid grid grid-cols-4 gap-2 mb-4">
+    <div class="amount-grid">
       @for (item of amounts; track item.val) {
-      <div class="amount-item" [class.active]="selectedAmount === item.val" (click)="selectAmount(item.val)">
-        <div class="val">{{ item.val }}</div>
-        <div class="bonus">{{ item.bonus }}</div>
+      <div class="amount-cell" [class.active]="selectedAmount === item.val"
+           (click)="selectAmount(item.val)">
+        <span class="cell-val">{{ item.val | number }}</span>
+        <span class="cell-bonus">{{ item.bonus }}</span>
       </div>
       }
     </div>
 
-    <div class="input-wrap mb-6">
-      <span class="currency">Rs</span>
-      <input type="tel" [(ngModel)]="customAmount" (input)="onCustomAmountChange()" placeholder="Min 100~Max 50,000"
-        class="amount-input" />
+    <!-- Rs Input -->
+    <div class="rs-input-wrap" [class.has-value]="selectedAmount || customAmount">
+      <span class="rs-label">Rs</span>
+      <input
+        type="tel"
+        [value]="selectedAmount || customAmount"
+        (input)="onInputChange($event)"
+        placeholder="Min 100~Max 100,000"
+        class="rs-input"
+      />
     </div>
 
-    <!-- Deposit Promotion Section -->
-    <div class="promotion-card">
-      <div class="flex justify-between items-center mb-4">
-        <div class="promo-title flex items-center">
-          <ion-icon name="gift-outline" class="mr-2"></ion-icon>
-          <span>Deposit promotion</span>
+    <!-- Receive Info Box (shows when amount selected) -->
+    @if (selectedAmount || customAmount) {
+    <div class="receive-info-box">
+      <p class="receive-line">
+        Actually receive
+        <span class="receive-amount">{{ getActualReceive() | number:'1.2-2' }}</span>
+        <span class="receive-hint">(don't forget)</span>,
+        Event bonus
+        <span class="event-bonus">+{{ getEventBonus() | number:'1.2-2' }}</span>
+      </p>
+      <p class="receive-line">
+        Payment bonus
+        <span class="payment-bonus">+{{ getPaymentBonus() | number:'1.2-2' }}</span>
+      </p>
+    </div>
+    }
+
+    <!-- ── Deposit Promotion ── -->
+    <div class="promo-card">
+      <div class="promo-header">
+        <div class="promo-title">
+          <span class="promo-gift">🎁</span>
+          <span class="promo-text">Deposit promotion</span>
         </div>
-        <div class="timer-badge">
-          <ion-icon name="time-outline" class="mr-1"></ion-icon>
-          <span class="val">{{ timer }}</span>
+        <div class="timer-pill">
+          <span class="timer-lt">LT</span>
+          <span class="timer-val">{{ timer }}</span>
         </div>
       </div>
 
-      <p class="promo-info">----- Automatically participated in the following activities -----</p>
+      <p class="promo-divider">—— Automatically participated in the following activities ——</p>
 
       <div class="promo-list" [class.expanded]="isPromotionsExpanded">
-        @for (promo of promotions; track promo.label) {
-        <div class="promo-item">
-          <div class="flex items-center">
-            <ion-icon name="gift-outline" class="gift-list-icon"></ion-icon>
-            <span class="label ml-3">{{ promo.label }}</span>
+        @for (promo of promotions; track $index) {
+        <div class="promo-row" [class.promo-highlight]="promo.highlight">
+          <div class="promo-left">
+            <span class="promo-chest">{{ promo.highlight ? '🎁' : '🎁' }}</span>
+            <div class="promo-label-wrap">
+              <span class="promo-label" [class.promo-label-gold]="promo.highlight">{{ promo.label }}</span>
+              @if (promo.badge) {
+              <div class="promo-row-badge">
+                <span class="promo-badge-red">{{ promo.badge }}</span>
+                <span class="promo-badge-green">{{ promo.badgeDesc }} ✓</span>
+              </div>
+              }
+            </div>
           </div>
-          <span class="desc">{{ promo.desc }}</span>
+          <span class="promo-desc">{{ promo.desc }}</span>
         </div>
         }
       </div>
 
-      <button class="expand-btn flex items-center justify-center"
-        (click)="isPromotionsExpanded = !isPromotionsExpanded">
-        <span>Expand</span>
-        <ion-icon [name]="isPromotionsExpanded ? 'chevron-up-outline' : 'chevron-down-outline'" class="ml-1"></ion-icon>
+      <!-- Fold / Expand toggle -->
+      <button class="fold-toggle" (click)="isPromotionsExpanded = !isPromotionsExpanded">
+        <span>{{ isPromotionsExpanded ? 'Fold' : 'Expand' }}</span>
+        <ion-icon [name]="isPromotionsExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
       </button>
     </div>
 
-    <!-- Payer Info Section -->
-    <div class="payer-section mt-8">
-      <p class="section-title">Enter payer info for proper crediting</p>
-      <div class="label-row mt-3">
-        <span class="required">*</span>
-        Payer's mobile wallet number
-      </div>
-      <div class="input-wrap mt-2">
-        <ion-icon name="phone-portrait-outline" class="input-icon"></ion-icon>
-        <input type="tel" [(ngModel)]="walletNumber" placeholder="11-digit wallet number (03XXXXXXXXXX)"
-          class="wallet-input" />
-        <button class="paste-btn" (click)="pasteNumber()">Paste</button>
-      </div>
-    </div>
+    <!-- ── Reminder ── -->
+    <p class="reminder-text">
+      Reminder: If the recharge is unsuccessful, please choose another channel.
+    </p>
 
   </div>
 </ion-content>
 
-
-
-
+<!-- ── Footer: Deposit Now ── -->
 <ion-footer class="ion-no-border">
-  <div class="footer-wrap">
-    <button class="deposit-now-btn" [disabled]="!canDeposit" (click)="submitDeposit()">
+  <div class="dep-footer">
+    <button class="deposit-now-btn" [class.enabled]="canDeposit" [disabled]="!canDeposit"
+            (click)="submitDeposit()">
       Deposit Now
     </button>
-    <div class="bottom-float-btn">
-      <ion-icon name="chevron-down-outline" class="mr-1"></ion-icon>
-      <span>Bottom</span>
-    </div>
   </div>
 </ion-footer>

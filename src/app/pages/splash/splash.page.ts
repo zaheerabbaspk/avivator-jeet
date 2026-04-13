@@ -19,26 +19,38 @@ export class SplashPage implements OnInit {
   }
 
   private startLoading() {
-    const duration = 4000; // 4 seconds
-    const interval = 40; // update every 40ms
-    const step = 100 / (duration / interval);
+    let current = 0;
+    
+    const tick = () => {
+      // Logic for "hitch and jump" progress
+      // pauses at certain levels to simulate real loading
+      let push = Math.random() * 2;
+      
+      if (current < 10) push = Math.random() * 5;
+      else if (current > 30 && current < 40) push = Math.random() * 0.5; // Simulate slow sync
+      else if (current > 80 && current < 85) push = 0.1; // Simulate finalize
+      else if (current > 85) push = Math.random() * 8; // Burst to finish
+      
+      current += push;
+      
+      if (current >= 100) {
+        current = 100;
+        this.progress.set(100);
+        this.navigateToHome();
+        return;
+      }
+      
+      this.progress.set(current);
+      setTimeout(tick, Math.random() * 100 + 20);
+    };
 
-    const timer = setInterval(() => {
-      this.progress.update(p => {
-        if (p >= 100) {
-          clearInterval(timer);
-          this.navigateToHome();
-          return 100;
-        }
-        return p + step;
-      });
-    }, interval);
+    tick();
   }
 
   private navigateToHome() {
-    // Add a small delay for the "Complete" state before transition
+    // Slight pause at 100% for "Complete" feel
     setTimeout(() => {
       this.router.navigate(['/home'], { replaceUrl: true });
-    }, 500);
+    }, 800);
   }
 }

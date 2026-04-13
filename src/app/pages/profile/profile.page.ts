@@ -30,7 +30,10 @@ import {
   logInOutline,
   personAddOutline,
   mailOutline,
-  logOutOutline
+  logOutOutline,
+  syncOutline,
+  caretDownOutline,
+  notificationsOutline
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -58,6 +61,7 @@ export class ProfilePage {
   isProfileEditModalOpen = false;
   showCopyToast = false;
   toastMessage = '';
+  isLoadingBalance = false;
 
   user = {
     username: 'pwrt1287',
@@ -101,7 +105,10 @@ export class ProfilePage {
       logInOutline,
       personAddOutline,
       mailOutline,
-      logOutOutline
+      logOutOutline,
+      syncOutline,
+      caretDownOutline,
+      notificationsOutline
     });
 
     this.authService.isLoggedIn$.subscribe(loggedIn => {
@@ -129,16 +136,24 @@ export class ProfilePage {
     this.navigateTo(`/deposit?amount=${amount}`);
   }
 
-  saveProfile(data: {fullName: string, phone: string, email: string}) {
+  saveProfile(data: { fullName: string, phone: string, email: string }) {
     this.user.fullName = data.fullName;
     this.user.phone = data.phone;
     this.user.email = data.email;
-    
+
     // Potentially save to backend here
     this.toastMessage = 'Profile updated successfully!';
     this.showCopyToast = true;
   }
 
+  refreshBalance() {
+    if (this.isLoadingBalance) return;
+    this.isLoadingBalance = true;
+    setTimeout(() => {
+      this.isLoadingBalance = false;
+    }, 1500);
+  }
+ 
   logout() {
     this.authService.logout();
     this.navigateTo('/home');

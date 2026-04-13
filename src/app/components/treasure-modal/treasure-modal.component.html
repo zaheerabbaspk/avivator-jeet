@@ -3,65 +3,57 @@
     <div class="modal-wrapper">
       <!-- Falling Coins "Rain" Background -->
       <div class="coins-container">
-        <div *ngFor="let coin of coins" 
-             class="coin" 
-             [style.--delay]="coin.delay" 
-             [style.--left]="coin.left"
-             [style.--size]="coin.size">
+        <div *ngFor="let coin of coins" class="coin" [style.--delay]="coin.delay" [style.--left]="coin.left"
+          [style.--size]="coin.size">
         </div>
       </div>
 
       <div class="modal-content">
+        <!-- Close Button moved to bottom per screenshot -->
+
         <!-- Info Header -->
         <div class="info-header" *ngIf="!isOpened">
           <span>RS.277777(LV 0) - 8:00 12:00 18:00 and 22:00</span>
         </div>
 
-        <!-- Fully 3D CSS Treasure Chest -->
+        <!-- Treasure Chest -->
         <div class="chest-container" [class.is-opened]="isOpened" (click)="openChest()">
           <div class="chest-glow"></div>
-          
-          <div class="chest-box">
-            <!-- Lid Structure -->
+
+          <!-- Bursting Coins -->
+          <div class="burst-coins-container" *ngIf="isOpened">
+            <div *ngFor="let coin of burstCoins" class="burst-coin" [style.--delay]="coin.delay"
+              [style.--left]="coin.left" [style.--angle]="coin.angle">
+            </div>
+          </div>
+
+          <!-- Open State Image (box.png) -->
+          <img src="" class="chest-image-open" *ngIf="isOpened" alt="Open Treasure Chest" style="margin-top: 10px;">
+
+          <div class="chest-box" *ngIf="!isOpened">
+            <!-- 3D Lid -->
             <div class="chest-lid">
-              <div class="lid-top"></div>
               <div class="lid-inner"></div>
               <div class="chest-lock">
                 <div class="gem"></div>
               </div>
             </div>
-            
-            <!-- Base Structure -->
-            <div class="chest-base">
-              <!-- Inside the box (Revealed when open) -->
-              <div class="chest-inside" *ngIf="isOpened">
-                <div class="gold-pile"></div>
-                <!-- Mini coins coming out -->
-                <div class="burst-coins-container">
-                  <div *ngFor="let coin of burstCoins" 
-                       class="burst-coin" 
-                       [style.--delay]="coin.delay" 
-                       [style.--left]="coin.left"
-                       [style.--angle]="coin.angle">
-                  </div>
-                </div>
-              </div>
 
-              <!-- Base Faces -->
+            <!-- Base -->
+            <div class="chest-base">
               <div class="base-front">
-                <!-- Open Button Overlay -->
-                <button class="open-chest-btn" *ngIf="!isOpened">
+                <!-- Open Button Overlay on the chest -->
+                <button class="open-chest-btn">
                   OPEN
                 </button>
               </div>
-              <div class="base-back"></div>
-              <div class="base-left"></div>
-              <div class="base-right"></div>
+              <div class="base-side left"></div>
+              <div class="base-side right"></div>
             </div>
           </div>
         </div>
 
-        <!-- Action Button below chest -->
+        <!-- Final Close Button at the bottom -->
         <div class="close-btn" (click)="dismiss()">
           <ion-icon name="close-outline"></ion-icon>
         </div>

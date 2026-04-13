@@ -1,60 +1,69 @@
-ion-content {
-  --background: #141418;
-  
-  .content-wrapper {
-    background: radial-gradient(circle at top right, rgba(210, 254, 7, 0.05) 0%, transparent 70%);
-    min-height: 100%;
-  }
+// --- Top Header Tabs ---
+.top-tab-btn {
+  @apply bg-transparent border-none text-[13px] font-bold px-4 pb-2.5 whitespace-nowrap cursor-pointer relative shrink-0 transition-colors duration-200 active:opacity-70 font-sans h-full flex items-center;
 }
 
-.hero-card {
-  background-image: url('../../../assets/box.png');
+.active-tab-indicator {
+  @apply absolute bottom-0 left-1/2 -translate-x-1/2 h-[2.5px] bg-[#F0C059] rounded-t-full transition-all duration-300;
+  width: calc(100% - 24px);
+}
+
+.tab-badge {
+  @apply absolute -top-1 -right-0.5 bg-[#FF4D4F] text-white text-[9px] font-black min-w-[14px] h-[14px] flex items-center justify-center rounded-full px-1 border border-white/20 shadow-md;
+}
+
+// --- Sidebar Tabs (Reference assets) ---
+.sidebar-tab-item {
+  @apply w-full flex flex-col items-center justify-center rounded-lg transition-all duration-200 cursor-pointer overflow-hidden;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 1;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, #141418 0%, transparent 100%);
-    z-index: 1;
-  }
-
-  h2, p {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-.reward-card {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, background 0.2s;
+  aspect-ratio: 1/1;
   
-  &:active {
-    transform: scale(0.98);
-    background: rgba(255, 255, 255, 0.08);
+  &.active {
+    background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/2-1-7/web/common/btn_zc1_1.avif?manualVersion=1&version=ff933d0296');
+  }
+  
+  &:not(.active) {
+    background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/2-1-7/web/common/btn_zc1_2.avif?manualVersion=1&version=19d009e724');
   }
 }
 
-.badge-yellow {
-  background: #f7c04a;
-  color: #3e2600;
-  box-shadow: 0 2px 8px rgba(247, 192, 74, 0.4);
+.sidebar-icon-box {
+  @apply w-5 h-5 flex items-center justify-center mb-0.5;
+  svg { @apply w-full h-full; }
 }
 
-.custom-scrollbar {
-  &::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
+// --- Control Bar ---
+.control-bar {
+  @apply flex items-center justify-between p-2 pt-0 gap-2 mb-1;
+}
+
+.utility-btn {
+  @apply flex items-center gap-1.5 px-3 py-1.5 border border-[#F0C059]/10 bg-white/5 rounded-md cursor-pointer transition-all duration-200 active:scale-95;
+  
+  .btn-text {
+    @apply text-[10px] font-bold text-[#ADB6C3]/80;
   }
+  
+  ion-icon { 
+    @apply text-[14px] text-[#F0C059]; 
+  }
+}
+
+.refresh-btn-wrap {
+  @apply flex items-center gap-2;
+}
+
+// --- Banner List ---
+.banner-card {
+  @apply relative rounded-xl overflow-hidden shadow-xl active:scale-[0.98] transition-all;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.banner-red-badge {
+  @apply absolute top-1.5 right-1.5 bg-[#FF4D4F] text-white text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center z-10 border border-white/20;
+}
+
+:host {
+  --ion-safe-area-top: 0px;
 }

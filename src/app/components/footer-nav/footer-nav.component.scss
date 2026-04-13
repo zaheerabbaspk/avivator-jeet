@@ -1,7 +1,6 @@
-// Footer Styles
 ion-footer {
-    background: transparent;
-    padding-bottom: env(safe-area-inset-bottom);
+    background: #0f1520; /* Solid background for footer area */
+    padding-bottom: var(--ion-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 
 .footer-nav {
@@ -13,11 +12,10 @@ ion-footer {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 65px;
-    background: rgba(9, 9, 11, 0.85);
-    backdrop-filter: blur(24px);
+    height: 60px; /* Adjusted to match ref height */
+    background: #0f1520; /* Matching reference dark blue background */
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .nav-item {
@@ -25,32 +23,32 @@ ion-footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 2px;
     flex: 1;
     position: relative;
     cursor: pointer;
     transition: all 0.2s ease;
 
     ion-icon {
-        font-size: 24px;
-        color: #666;
+        font-size: 28px; /* Matched icons height */
+        color: #71717a;
     }
 
     span {
         font-size: 10px;
         font-weight: 700;
-        color: #666;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        color: #71717a;
+        text-transform: none;
+        letter-spacing: -0.1px;
     }
 
     &.active {
         ion-icon {
-            color: #d2fe07;
+            color: #fbbf24; /* Match gold/yellow theme from ref */
         }
 
         span {
-            color: #d2fe07;
+            color: #fbbf24;
         }
     }
 }

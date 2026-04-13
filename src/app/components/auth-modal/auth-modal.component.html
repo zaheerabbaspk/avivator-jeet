@@ -30,16 +30,21 @@
 
         <!-- Form -->
         <div class="auth-form">
-          <p class="field-label">Support Phone number/Email/Profile Register</p>
+          <p class="field-label">Support Phone number/Profile Register</p>
           
           <div class="input-group">
             <ion-icon name="person-outline" class="left-icon"></ion-icon>
-            <ion-input name="email" [(ngModel)]="email" type="email" placeholder="Please enter Email"></ion-input>
+            <ion-input name="account" [(ngModel)]="account" type="text" placeholder="*Please enter Phone number/Profile"></ion-input>
           </div>
+
+          <p class="field-label" *ngIf="authMode === 'register'">
+            <ion-icon name="lock-closed" style="color: #ea580c; font-size: 14px;"></ion-icon>
+            Password registration
+          </p>
 
           <div class="input-group">
             <ion-icon name="lock-closed-outline" class="left-icon"></ion-icon>
-            <ion-input name="password" [(ngModel)]="password" [type]="passwordType" placeholder="Enter password"></ion-input>
+            <ion-input name="password" [(ngModel)]="password" [type]="passwordType" placeholder="*Enter password"></ion-input>
             <ion-icon [name]="passwordType === 'password' ? 'eye-outline' : 'eye-off-outline'" 
                       (click)="togglePasswordVisibility()" 
                       class="right-icon"></ion-icon>
@@ -48,21 +53,26 @@
           <!-- Confirm Password (Register Only) -->
           <div class="input-group" *ngIf="authMode === 'register'">
             <ion-icon name="lock-closed-outline" class="left-icon"></ion-icon>
-            <ion-input name="confirmPassword" [(ngModel)]="confirmPassword" [type]="confirmPasswordType" placeholder="Confirm password"></ion-input>
+            <ion-input name="confirmPassword" [(ngModel)]="confirmPassword" [type]="confirmPasswordType" placeholder="*Enter password again"></ion-input>
             <ion-icon [name]="confirmPasswordType === 'password' ? 'eye-outline' : 'eye-off-outline'" 
                       (click)="toggleConfirmPasswordVisibility()" 
                       class="right-icon"></ion-icon>
           </div>
+
+          <!-- Real Name (Register Only) -->
+          <div class="input-group" *ngIf="authMode === 'register'">
+            <ion-icon name="person-circle-outline" class="left-icon"></ion-icon>
+            <ion-input name="realName" [(ngModel)]="realName" type="text" placeholder="*Please enter your real name"></ion-input>
+          </div>
+          <p class="sub-disclaimer" *ngIf="authMode === 'register'">
+            Must have the same name as your withdrawal bank account
+          </p>
 
           <!-- Checkbox -->
           <div class="agree-container" *ngIf="authMode === 'register'">
             <ion-checkbox [checked]="true" labelPlacement="end">
               <span class="agree-text">I am over 18 years old and have read and agreed to <span class="link">User Agreement</span></span>
             </ion-checkbox>
-            <div class="gift-badge">
-              <ion-icon name="gift" class="text-orange-400"></ion-icon>
-              <span class="text-[8px] font-bold">1-777</span>
-            </div>
           </div>
 
           <!-- Error Message -->
