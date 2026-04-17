@@ -16,7 +16,7 @@ export class HomeHeaderComponent {
   @Input() userBalance = 0;
   @Input() isLoadingBalance = false;
 
-  @Output() login = new EventEmitter<void>();
+  @Output() login = new EventEmitter<'login' | 'register'>();
   @Output() deposit = new EventEmitter<void>();
   @Output() refresh = new EventEmitter<void>();
 
@@ -24,8 +24,8 @@ export class HomeHeaderComponent {
     addIcons({ reloadOutline, caretDown });
   }
 
-  onLogin() {
-    this.login.emit();
+  onLogin(mode: 'login' | 'register') {
+    this.login.emit(mode);
   }
 
   onDeposit() {

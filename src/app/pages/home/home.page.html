@@ -3,7 +3,7 @@
     [isLoggedIn]="isLoggedIn" 
     [userBalance]="userBalance" 
     [isLoadingBalance]="isLoadingBalance"
-    (login)="isAuthModalOpen = true"
+    (login)="handleLogin($event)"
     (deposit)="handleDeposit()"
     (refresh)="refreshBalance()">
   </app-home-header>
@@ -59,6 +59,6 @@
 <app-footer-nav activeTab="home"></app-footer-nav>
 
 <!-- Modals -->
-<app-auth-modal [isOpen]="isAuthModalOpen" (close)="isAuthModalOpen = false" (authSuccess)="handleAuthSuccess()"></app-auth-modal>
+<app-auth-modal [isOpen]="isAuthModalOpen" [authMode]="authMode" (close)="isAuthModalOpen = false" (authSuccess)="handleAuthSuccess()"></app-auth-modal>
 <app-success-modal [isOpen]="isSuccessModalOpen" (close)="isSuccessModalOpen = false" (deposit)="handleDeposit()"></app-success-modal>
 <app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false" (depositClick)="handleRewardDeposit($event)"></app-reward-modal>

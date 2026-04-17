@@ -1,142 +1,84 @@
 <ion-modal [isOpen]="isOpen" class="success-modal" (didDismiss)="dismiss()">
   <ng-template>
-    <div class="modal-wrapper flex flex-col items-center justify-center p-6 bg-gradient-to-b from-[#003B8E] to-[#001F4D] rounded-xl relative overflow-hidden">
-      
-      <!-- Decorations (Confetti/Sparkles) -->
-      <div class="absolute top-10 left-4 text-2xl animate-bounce">🎉</div>
-      <div class="absolute top-10 right-4 text-2xl animate-bounce" style="animation-delay: 0.5s">🎉</div>
+    <div class="sm-overlay">
 
-      <!-- Success Icon -->
-      <div class="success-icon-container mb-4">
-        <ion-icon name="checkmark-circle" class="text-6xl text-green-500 bg-white rounded-full"></ion-icon>
-      </div>
+      <!-- Modal Card -->
+      <div class="sm-card">
 
-      <!-- Header Content -->
-      <h1 class="text-2xl font-black text-[#00FF00] text-center mb-2 drop-shadow-lg leading-tight uppercase italic px-4">
-        Congrats On Successful Registration!
-      </h1>
-      
-      <p class="text-[12px] font-bold text-[#FFD700] text-center mb-6 px-4">
-        🎁 Welcome aboard! Make your first deposit and unlock extra bonus.
-      </p>
-
-      <!-- Offer Cards Section -->
-      <div class="offers-container w-full space-y-3 mb-8">
-        
-        <!-- Card 1 -->
-        <div class="offer-card group transition-all active:scale-[0.98]">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center shadow-lg">
-                    <ion-icon name="gift" class="text-2xl text-white"></ion-icon>
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-sm font-black text-white">First Deposit≥100</h3>
-                    <div class="flex items-center gap-1.5 mt-0.5">
-                        <span class="bg-orange-600/20 text-orange-400 text-[9px] font-black px-1.5 py-0.5 rounded border border-orange-500/30 flex items-center gap-1">
-                            ⚡ LT <span class="text-white">18:27:30</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="text-xs font-black text-white italic">MAX <span class="text-yellow-400">2%</span></span>
-                    <ion-icon name="chevron-forward-outline" class="text-gray-400"></ion-icon>
-                </div>
-            </div>
+        <!-- Floating Green Check -->
+        <div class="sm-check-wrap">
+          <div class="sm-check-circle">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="offer-card group transition-all active:scale-[0.98]">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                    <div class="relative">
-                        <ion-icon name="gift" class="text-2xl text-white"></ion-icon>
-                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
-                            <span class="text-[8px] font-black text-black">Rs</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-sm font-black text-white">First Deposit≥200</h3>
-                    <div class="flex items-center gap-1.5 mt-0.5">
-                        <span class="bg-orange-600/20 text-orange-400 text-[9px] font-black px-1.5 py-0.5 rounded border border-orange-500/30 flex items-center gap-1">
-                            ⚡ LT <span class="text-white">18:27:31</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-1 text-right">
-                    <div class="flex flex-col items-end">
-                        <span class="text-[10px] font-black text-white italic uppercase leading-none">MAX</span>
-                        <span class="text-[14px] font-black text-yellow-400 italic leading-none">Rs 30,000.00</span>
-                    </div>
-                    <ion-icon name="chevron-forward-outline" class="text-gray-400"></ion-icon>
-                </div>
-            </div>
+        <!-- 🎉 Sparkles left/right of title area -->
+        <div class="sm-sparkle sm-sparkle--left">🎉</div>
+        <div class="sm-sparkle sm-sparkle--right">🎉</div>
+
+        <!-- Title -->
+        <h1 class="sm-title">Congrats On Successful Registration!</h1>
+
+        <!-- Subtitle -->
+        <div class="sm-subtitle">
+          <p>🎁 New member benefits! 🎉</p>
+          <p>👉 Receive an <strong>8888 reward</strong> on your first recharge! 🚀 ✨</p>
         </div>
 
-        <!-- Card 3 -->
-        <div class="offer-card group transition-all active:scale-[0.98]">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg">
-                    <ion-icon name="gift" class="text-2xl text-white"></ion-icon>
+        <!-- Reward Cards -->
+        <div class="sm-rewards">
+          @for (reward of rewards; track reward.id) {
+            <div class="sm-reward-card">
+              <div class="sm-reward-strip"></div>
+              <div class="sm-reward-body">
+                <img src="assets/gift-box-coins.png" class="sm-reward-img" alt="">
+                <div class="sm-reward-info">
+                  <span class="sm-reward-name">{{ reward.title }}</span>
+                  <div class="sm-lt-badge">
+                    <span class="sm-lt-text">⚡ LT</span>
+                    <span class="sm-lt-time">{{ reward.timer }}</span>
+                  </div>
                 </div>
-                <div class="flex-1">
-                    <h3 class="text-sm font-black text-white">Total Deposits≥100</h3>
-                    <div class="flex items-center gap-1.5 mt-0.5">
-                        <span class="bg-orange-600/20 text-orange-400 text-[9px] font-black px-1.5 py-0.5 rounded border border-orange-500/30 flex items-center gap-1">
-                            ⚡ LT <span class="text-white">18:27:31</span>
-                        </span>
-                    </div>
+                <div class="sm-reward-max">
+                  <span class="sm-max-label">MAX</span>
+                  <div class="sm-max-row">
+                    <span class="sm-rs-circle">Rs</span>
+                    <span class="sm-max-amt">{{ reward.maxBonus | number:'1.2-2' }}</span>
+                  </div>
                 </div>
-                <div class="flex items-center gap-1 text-right">
-                    <div class="flex flex-col items-end">
-                        <span class="text-[10px] font-black text-white italic uppercase leading-none">MAX</span>
-                        <span class="text-[14px] font-black text-yellow-500 italic leading-none">Rs 777,777.00</span>
-                    </div>
-                    <ion-icon name="chevron-forward-outline" class="text-gray-400"></ion-icon>
-                </div>
+                <ion-icon name="chevron-forward-outline" class="sm-chevron"></ion-icon>
+              </div>
             </div>
+          }
         </div>
 
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="grid grid-cols-2 gap-4 w-full">
-        <!-- Download APP -->
-        <div class="relative group">
-            <button class="w-full bg-gradient-to-r from-[#FF4081] to-[#E91E63] text-white font-black py-4 rounded-xl shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2">
-                <ion-icon name="download-outline" class="text-xl"></ion-icon>
-                <div class="flex flex-col items-start leading-none">
-                    <span class="text-[8px] uppercase tracking-tighter opacity-80">Get the app</span>
-                    <span class="text-sm italic">Download APP</span>
-                </div>
+        <!-- Badges + Buttons row -->
+        <div class="sm-btn-section">
+          <!-- Badge row -->
+          <div class="sm-badge-row">
+            <div class="sm-badge">🎁 Earn bonus</div>
+            <div class="sm-badge">🎁 8888 bonus</div>
+          </div>
+          <!-- Button row -->
+          <div class="sm-btn-row">
+            <button class="sm-btn sm-btn--purple">
+              <ion-icon name="gift-outline" class="sm-btn-ion-icon"></ion-icon>
+              <span class="sm-btn-text">Download APP</span>
             </button>
-            <div class="absolute -top-3 right-0 bg-green-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-white flex items-center gap-1 shadow-md">
-                <span class="w-2 h-2">🎁</span> Earn bonus
-            </div>
+            <button class="sm-btn sm-btn--orange" (click)="onDeposit()">
+              <ion-icon name="wallet-outline" class="sm-btn-ion-icon"></ion-icon>
+              <span class="sm-btn-text">Deposit Now</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Deposit Now -->
-        <div class="relative group">
-            <button (click)="onDeposit()" class="w-full bg-gradient-to-r from-[#FFB300] to-[#E65100] text-white font-black py-4 rounded-xl shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2">
-                <ion-icon name="wallet-outline" class="text-xl"></ion-icon>
-                <div class="flex flex-col items-start leading-none">
-                    <span class="text-[8px] uppercase tracking-tighter opacity-80">Quick start</span>
-                    <span class="text-sm italic">Deposit Now</span>
-                </div>
-            </button>
-            <div class="absolute -top-3 right-0 bg-green-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-white flex items-center gap-1 shadow-md">
-                <span class="w-2 h-2">🎁</span> 7777 Bonus
-            </div>
-        </div>
       </div>
 
-    </div>
+      <!-- Close X -->
+      <button class="sm-close" (click)="dismiss()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </button>
 
-    <!-- Separate Close Button at Bottom -->
-    <div class="flex justify-center mt-6">
-        <button (click)="dismiss()" class="text-white/60 hover:text-white transition-colors">
-            <ion-icon name="close-circle-outline" class="text-5xl"></ion-icon>
-        </button>
     </div>
   </ng-template>
 </ion-modal>

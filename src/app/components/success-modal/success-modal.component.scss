@@ -1,72 +1,403 @@
+// ──────────────────────────────────────────────────────────────────
+//  ION-MODAL SHELL — transparent, full-screen, centered
+// ──────────────────────────────────────────────────────────────────
 :host {
   ion-modal {
     --background: transparent;
     --box-shadow: none;
     --overflow: visible;
+    --height: 100%;
+    --width: 100%;
+    --border-radius: 0;
 
     &::part(content) {
-      background: transparent;
-      box-shadow: none;
-      overflow: visible;
-      width: 90%;
-      max-width: 400px;
+      background: transparent !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
     &::part(backdrop) {
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      opacity: 1;
+      background: rgba(0, 0, 0, 0.75) !important;
+      backdrop-filter: blur(6px) !important;
+      -webkit-backdrop-filter: blur(6px) !important;
+      opacity: 1 !important;
     }
   }
 }
 
-.modal-wrapper {
-  box-shadow: 0 0 40px rgba(0, 59, 142, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+// ──────────────────────────────────────────────────────────────────
+//  OVERLAY — full-viewport flex column, vertically centered
+// ──────────────────────────────────────────────────────────────────
+.sm-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 40px 16px 24px;
+  box-sizing: border-box;
 }
 
-.success-icon-container {
-  filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.5));
-}
-
-.offer-card {
-  background: linear-gradient(135deg, #0B2050 0%, #162B5E 100%);
-  border-left: 4px solid #F4BF2C;
-  border-radius: 8px;
-  padding: 12px;
+// ──────────────────────────────────────────────────────────────────
+//  CARD
+// ──────────────────────────────────────────────────────────────────
+.sm-card {
   position: relative;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: #1e1f23;
+  border-radius: 22px;
+  width: 100%;
+  max-width: 360px;
+  // 54px top padding = space for the floating checkmark (36px above card)
+  padding: 54px 18px 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  animation: smPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes smPop {
+  from { transform: scale(0.72); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  FLOATING CHECK
+// ──────────────────────────────────────────────────────────────────
+.sm-check-wrap {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.sm-check-circle {
+  width: 76px;
+  height: 76px;
+  background: #00cc57;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // dark ring between circle and card edge
+  box-shadow: 0 0 0 6px #1e1f23, 0 8px 24px rgba(0, 200, 83, 0.55);
+
+  ion-icon {
+    font-size: 48px;
+    color: #fff;
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  SPARKLES
+// ──────────────────────────────────────────────────────────────────
+.sm-sparkle {
+  position: absolute;
+  top: 30px;
+  font-size: 22px;
+  animation: smPulse 2.2s ease-in-out infinite;
+
+  &--left  { left: 14px; }
+  &--right { right: 14px; animation-delay: 0.5s; }
+}
+
+@keyframes smPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.75; }
+  50%       { transform: scale(1.18); opacity: 1;   }
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  TITLE  — reference: green, bold, normal casing, ~22px
+// ──────────────────────────────────────────────────────────────────
+.sm-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #00e676;
+  text-align: center;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  padding: 0 10px;
+  text-shadow: 0 2px 12px rgba(0, 230, 118, 0.35);
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  SUBTITLE
+// ──────────────────────────────────────────────────────────────────
+.sm-subtitle {
+  text-align: center;
+  margin-bottom: 18px;
+
+  p {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 3px 0;
+    line-height: 1.4;
+  }
+
+  strong {
+    color: #ffd600;
+    font-weight: 800;
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  REWARD CARDS
+// ──────────────────────────────────────────────────────────────────
+.sm-rewards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sm-reward-card {
+  position: relative;
+  background: #2c2c30;
+  border-radius: 12px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-left-width: 4px;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30px;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.03));
-    pointer-events: none;
-  }
+  transition: transform 0.15s;
+  &:active { transform: scale(0.98); }
 }
 
-h1 {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: -0.02em;
+.sm-reward-strip {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: #f5b800;
 }
 
-button {
+.sm-reward-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 10px 11px 16px;
+}
+
+.sm-reward-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sm-reward-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sm-reward-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.sm-lt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #d32f2f;
+  border-radius: 4px;
+  padding: 2px 7px;
+  width: fit-content;
+}
+
+.sm-lt-text {
+  font-size: 8px;
+  font-weight: 900;
+  color: #fff;
+  font-style: italic;
+}
+
+.sm-lt-time {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.sm-reward-max {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin-right: 2px;
+}
+
+.sm-max-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.3px;
+}
+
+.sm-max-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sm-rs-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: #f5b800;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 900;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.sm-max-amt {
+  font-size: 16px;
+  font-weight: 900;
+  color: #f5b800;
+  font-style: italic;
+  white-space: nowrap;
+  letter-spacing: -0.3px;
+}
+
+.sm-chevron {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  BUTTON SECTION
+// ──────────────────────────────────────────────────────────────────
+.sm-btn-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sm-badge-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 6px;
+  margin-bottom: 10px;
+}
+
+.sm-badge {
+  background: #2e7d32;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  letter-spacing: 0.2px;
+}
+
+.sm-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.sm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 56px;
+  border-radius: 16px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 900;
+  color: #fff;
+  width: 100%;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 0.12s, transform 0.12s;
+  padding: 0 10px;
+  box-sizing: border-box;
+
   &:active {
-    filter: brightness(0.9);
+    filter: brightness(0.88);
+    transform: scale(0.96);
   }
 }
 
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.sm-btn-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-.animate-bounce {
-    animation: bounce 2s infinite ease-in-out;
+.sm-btn-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sm-btn-ion-icon {
+  font-size: 26px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.sm-btn-text {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// "Download APP" — hot pink → purple  (matches reference EXACTLY)
+.sm-btn--purple {
+  background: linear-gradient(135deg, #f4529e 0%, #d92fa0 35%, #9c27b0 100%);
+  box-shadow: 0 6px 20px rgba(194, 24, 91, 0.5);
+}
+
+// "Deposit Now" — amber → deep orange  (matches reference EXACTLY, NO red)
+.sm-btn--orange {
+  background: linear-gradient(135deg, #ffb700 0%, #ff8c00 55%, #ff5e00 100%);
+  box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5);
+}
+
+// ──────────────────────────────────────────────────────────────────
+//  CLOSE BUTTON
+// ──────────────────────────────────────────────────────────────────
+.sm-close {
+  margin-top: 22px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s;
+  &:active { transform: scale(0.88); }
+
+  ion-icon {
+    font-size: 30px;
+    color: rgba(255, 255, 255, 0.85);
+  }
 }

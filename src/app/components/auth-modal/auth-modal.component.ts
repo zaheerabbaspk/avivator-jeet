@@ -17,10 +17,10 @@ export class AuthModalComponent {
   private authService = inject(AuthService);
   
   @Input() isOpen = false;
+  @Input() authMode: 'login' | 'register' = 'register';
   @Output() close = new EventEmitter<void>();
   @Output() authSuccess = new EventEmitter<void>();
 
-  authMode: 'login' | 'register' = 'register';
   passwordType: 'password' | 'text' = 'password';
   confirmPasswordType: 'password' | 'text' = 'password';
 

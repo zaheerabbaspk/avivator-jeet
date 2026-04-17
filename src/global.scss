@@ -63,3 +63,31 @@
     }
 }
 
+/* Success Modal — needs full height to center properly */
+.success-modal {
+    --background: transparent !important;
+    --box-shadow: none !important;
+    --overflow: visible !important;
+    --height: 100% !important;
+    --width: 100% !important;
+    --border-radius: 0 !important;
+
+    &::part(content) {
+        background: transparent !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    &::part(backdrop) {
+        background: rgba(0, 0, 0, 0.78) !important;
+        backdrop-filter: blur(6px) !important;
+        -webkit-backdrop-filter: blur(6px) !important;
+        opacity: 1 !important;
+    }
+}
+

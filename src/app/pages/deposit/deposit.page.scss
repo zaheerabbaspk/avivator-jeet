@@ -154,7 +154,7 @@ ion-content {
    ==================================================== */
 .methods-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
   margin-bottom: 4px;
 }
@@ -236,6 +236,11 @@ ion-content {
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   margin-bottom: 12px;
+
+  /* On smaller screens, switch to 3 columns to prevent text crowding */
+  @media (max-width: 360px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .amount-cell {
@@ -511,9 +516,15 @@ ion-content {
     font-size: 11px;
     font-weight: 600;
     color: rgba(255,255,255,0.4);
-    white-space: nowrap;
+    text-align: right;
     margin-left: 8px;
     flex-shrink: 0;
+    
+    /* Allow wrapping on extra small devices */
+    @media (max-width: 340px) {
+       white-space: normal;
+       max-width: 80px;
+    }
   }
 }
 

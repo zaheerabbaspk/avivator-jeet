@@ -119,7 +119,7 @@ export class InvitePage implements OnInit {
 
   ngOnInit() {
     this.loadData();
-    this.isSpinModalOpen = true; // Auto-open the lucky draw modal
+    // Removed auto-open for cleaner mobile entry
   }
 
   loadData() {

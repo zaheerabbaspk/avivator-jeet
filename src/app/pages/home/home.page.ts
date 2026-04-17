@@ -41,6 +41,7 @@ export class HomePage implements OnInit, OnDestroy {
   private homeService = inject(HomeService);
 
   isAuthModalOpen = false;
+  authMode: 'login' | 'register' = 'register';
   isSuccessModalOpen = false;
   isRewardModalOpen = false;
   isLoggedIn = false;
@@ -98,9 +99,14 @@ export class HomePage implements OnInit, OnDestroy {
     this.activeCategory.set(catId);
   }
 
+  handleLogin(mode: 'login' | 'register') {
+    this.authMode = mode;
+    this.isAuthModalOpen = true;
+  }
+
   handleAuthSuccess() {
     this.isAuthModalOpen = false;
-    setTimeout(() => { this.isRewardModalOpen = true; }, 500);
+    setTimeout(() => { this.isSuccessModalOpen = true; }, 500);
   }
 
   handleRewardDeposit(amount: number) {

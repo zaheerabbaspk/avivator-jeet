@@ -4,12 +4,7 @@
     <div class="header-menu-icon" *ngIf="isLoggedIn">
       <span></span><span></span><span></span>
     </div>
-    @if (isLoggedIn) {
-      <span class="logo-aviator">Aviator</span>
-    } @else {
-      <span class="header-arrow">⇒</span>
-      <span class="logo-text">No<span class="logo-777">777</span>.com</span>
-    }
+    <span class="logo-aviator">Aviator</span>
   </div>
 
   <!-- Conditional Right -->
@@ -37,8 +32,8 @@
         <div class="bonus-badge">+7%</div>
       </div>
     } @else {
-      <button class="login-btn" (click)="onLogin()">Login</button>
-      <button class="register-btn" (click)="onLogin()">
+      <button class="login-btn" (click)="onLogin('login')">Login</button>
+      <button class="register-btn" (click)="onLogin('register')">
         <span class="reg-badge">+1777</span>
         Register
       </button>
