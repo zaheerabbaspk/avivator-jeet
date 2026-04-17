@@ -1,0 +1,31 @@
+<div class="card-container" [style.border-color]="offer.brandColor" (click)="onCardClick()">
+  <!-- Notification Badge -->
+  @if (offer.badgeCount) {
+    <div class="notification-badge">
+      {{ offer.badgeCount }}
+    </div>
+  }
+
+  <!-- Background Banner -->
+  <div class="banner-wrapper">
+    <img [src]="offer.bannerImg" class="banner-img" [alt]="offer.title">
+  </div>
+
+  <!-- Content Overlay (Optional if text is not baked in) -->
+  <div class="content-overlay">
+    <!-- These can be toggled if the text is baked into the banner -->
+    <!-- <h2 class="offer-title">{{ offer.title }}</h2>
+    <p class="offer-subtitle">{{ offer.subtitle }}</p>
+    <div class="offer-amount">{{ offer.amount }}</div> -->
+  </div>
+
+  <!-- Share Button -->
+  @if (offer.hasShareButton) {
+    <div class="share-btn-container" (click)="onShareClick($event)">
+      <div class="share-btn-glow"></div>
+      <div class="share-btn-inner">
+        <ion-icon name="arrow-redo" class="share-icon"></ion-icon>
+      </div>
+    </div>
+  }
+</div>

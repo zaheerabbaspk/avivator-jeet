@@ -1,0 +1,21 @@
+<div class="brand-swiper">
+  <div class="brand-track" [style.transform]="'translateX(-' + (currentBrandSlide * 33.333) + '%)'">
+    @for (brand of brands; track brand.name) {
+      <div class="brand-slide">
+        <div class="brand-card">
+          <img [src]="brand.image" [alt]="brand.name" class="brand-img">
+          <div class="brand-overlay">
+            <div class="brand-tag">Brand<br>Alliance</div>
+            <div class="brand-name" [style.color]="brand.color">{{ brand.name }}</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  <!-- Dots -->
+  <div class="brand-dots">
+    @for (i of [].constructor(brands.length - 2); track $index) {
+      <div class="brand-dot" [class.active]="currentBrandSlide === $index" (click)="goBrandSlide($index)"></div>
+    }
+  </div>
+</div>

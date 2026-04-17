@@ -1,0 +1,91 @@
+.brand-swiper {
+  position: relative;
+  width: 95%;
+  margin: 10px auto;
+  overflow: hidden;
+
+  .brand-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .brand-slide {
+    min-width: 33.333%;
+    width: 33.333%;
+    flex-shrink: 0;
+    padding: 0 4px;
+  }
+
+  .brand-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 8px;
+    align-items: center;
+  }
+
+  .brand-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.active {
+      width: 12px;
+      border-radius: 3px;
+      background: #4ade80;
+    }
+  }
+}
+
+.brand-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 65px;
+  border: 1.5px solid #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.25);
+  transition: transform 0.12s ease;
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  .brand-img {
+    width: 100%;
+    height: 65px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .brand-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.1) 100%);
+    padding: 6px 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .brand-tag {
+    font-size: 7.5px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  }
+
+  .brand-name {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  }
+}

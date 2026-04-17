@@ -1,0 +1,91 @@
+<div class="bg-[#1A1C22]/95 backdrop-blur-md border border-white/[0.04] rounded-xl shadow-2xl p-4 flex flex-col min-w-[320px] max-w-[360px]">
+  
+  <!-- Quick Filters -->
+  <div class="grid grid-cols-3 gap-2 mb-5">
+    @for (filter of filters; track filter) {
+      <button 
+        (click)="selectFilter(filter)"
+        [ngClass]="{
+          'border-[#F1C15A] text-[#F1C15A] shadow-[0_2px_8px_rgba(241,193,90,0.15)]': activeFilter === filter,
+          'border-white/[0.05] text-white hover:bg-white/[0.02]': activeFilter !== filter,
+          'col-span-1': filter !== 'All',
+          'col-span-1 w-full max-w-[90px]': filter === 'All'
+        }"
+        class="rounded-[8px] border bg-transparent py-2.5 text-[11px] font-bold transition-all flex items-center justify-center outline-none">
+        {{ filter }}
+      </button>
+    }
+  </div>
+
+  <!-- Custom Date Title -->
+  <span class="text-white text-[13px] font-bold mb-3">Custom</span>
+
+  <!-- Date Wheels Structure -->
+  <div class="grid grid-cols-2 gap-2 mb-4 relative" style="height: 180px;">
+    
+    <!-- Start Date -->
+    <div class="flex flex-col items-center flex-1 min-w-0 pointer-events-auto h-full">
+      <span class="text-[#8E99A7] text-[12px] font-medium mb-2">Start Date</span>
+      <div class="relative w-full h-full overflow-hidden">
+        <ion-picker class="w-full h-full picker-container absolute inset-0">
+          <ion-picker-column [value]="startYear">
+            @for (y of years; track y) {
+              <ion-picker-column-option [value]="y">{{ y }}</ion-picker-column-option>
+            }
+          </ion-picker-column>
+          <ion-picker-column [value]="startMonth">
+            @for (m of months; track m) {
+              <ion-picker-column-option [value]="m">{{ m }}</ion-picker-column-option>
+            }
+          </ion-picker-column>
+          <ion-picker-column [value]="startDay">
+            @for (d of days; track d) {
+              <ion-picker-column-option [value]="d">{{ d }}</ion-picker-column-option>
+            }
+          </ion-picker-column>
+        </ion-picker>
+      </div>
+    </div>
+
+    <!-- End Date -->
+    <div class="flex flex-col items-center flex-1 min-w-0 pointer-events-auto h-full">
+      <span class="text-[#8E99A7] text-[12px] font-medium mb-2">End Date</span>
+      <div class="relative w-full h-full overflow-hidden">
+        <ion-picker class="w-full h-full picker-container absolute inset-0">
+          <ion-picker-column [value]="endYear">
+            @for (y of years; track y) {
+              <ion-picker-column-option [value]="y">{{ y }}</ion-picker-column-option>
+            }
+          </ion-picker-column>
+          <ion-picker-column [value]="endMonth">
+            @for (m of months; track m) {
+              <ion-picker-column-option [value]="m">{{ m }}</ion-picker-column-option>
+            }
+          </ion-picker-column>
+          <ion-picker-column [value]="endDay">
+            @for (d of days; track d) {
+              <ion-picker-column-option [value]="d">{{ d }}</ion-picker-column-option>
+            }
+          </ion-picker-column>
+        </ion-picker>
+      </div>
+    </div>
+    
+    <!-- Custom overlay line to span perfectly through the middle -->
+    <div class="absolute inset-x-4 top-[56%] -translate-y-1/2 h-[34px] border-t border-b border-white/[0.05] pointer-events-none z-10"></div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="grid grid-cols-2 gap-3 mt-1">
+    <button 
+      (click)="onCancel()"
+      class="bg-transparent border border-white/[0.08] text-white py-[12px] rounded-[8px] text-[13px] font-medium active:bg-white/[0.05] transition-colors">
+      Cancel
+    </button>
+    <button 
+      (click)="onConfirm()"
+      class="bg-[#F1C15A] text-[#1A1C22] py-[12px] rounded-[8px] text-[14px] font-bold active:brightness-90 transition-all shadow-[0_4px_12px_rgba(241,193,90,0.2)]">
+      Confirm
+    </button>
+  </div>
+</div>

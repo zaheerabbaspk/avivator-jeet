@@ -1,0 +1,76 @@
+<div class="px-3.5 space-y-4">
+  <div class="flex items-center justify-between mt-1 mb-6">
+    <div class="flex gap-2 items-center">
+      <button (click)="setMissionTab('daily')"
+        [class]="activeMissionTab === 'daily' ? 'active' : 'inactive'" class="mission-pill-btn">Daily
+        Mission</button>
+      <button (click)="setMissionTab('weekly')"
+        [class]="activeMissionTab === 'weekly' ? 'active' : 'inactive'" class="mission-pill-btn">Weekly
+        Mission</button>
+    </div>
+    <button class="flex items-center gap-1.5 active:opacity-60" (click)="refreshMissions.emit()">
+      <ion-icon name="refresh" [class.animate-spin]="isLoadingMissions" class="text-[14px] text-[#F0A500]"></ion-icon>
+      <span class="text-[#F0A500] font-bold text-[11px]">Refresh</span>
+    </button>
+  </div>
+
+  <!-- Dynamic Mission List -->
+  @if (missions.length > 0) {
+    <div class="space-y-3">
+      @for (mission of missions; track mission.id) {
+        <div class="bg-[#252830]/50 p-3.5 rounded-xl border border-white/[0.05] flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 flex-1">
+            <div class="w-10 h-10 rounded-full bg-[#111419] flex items-center justify-center border border-[#F1C15A]/20">
+              <ion-icon [name]="mission.icon" class="text-[#F1C15A] text-[20px]"></ion-icon>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-white text-[13px] font-black leading-none">{{ mission.title }}</span>
+                <span class="text-[#F1C15A] text-[11px] font-black leading-none">{{ mission.reward }}</span>
+              </div>
+              <p class="text-[#6B7280] text-[10px] font-bold mb-2">{{ mission.description }}</p>
+              <!-- Progress Bar -->
+              <div class="w-full h-1.5 bg-black/40 rounded-full overflow-hidden relative">
+                <div class="h-full bg-gradient-to-r from-[#F1C15A] to-[#EAB258] transition-all duration-500" 
+                     [style.width.%]="(mission.progress / mission.target) * 100"></div>
+                <span class="absolute right-2 top-0 text-[8px] font-black text-white/60 leading-none h-full flex items-center">
+                  {{mission.progress}}/{{mission.target}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <button class="bg-[#F1C15A] text-[#111419] px-4 py-1.5 rounded-md text-[11px] font-black shadow-md active:scale-95 transition-all"
+                  [class.opacity-40]="mission.progress < mission.target"
+                  (click)="claimMission.emit(mission)">
+            Claim
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center pt-24">
+      <div class="mb-4 opacity-50">
+        <svg width="100" height="95" viewBox="0 0 100 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(55, 2) rotate(30)">
+            <polygon points="0,0 24,10 10,14" fill="#6B7280" />
+            <polygon points="0,0 10,14 4,22" fill="#9CA3AF" />
+            <line x1="10" y1="14" x2="5" y2="10" stroke="#4B5563" stroke-width="1" />
+          </g>
+          <path d="M18 42 L50 35 L50 52 L18 52 Z" fill="#374151" />
+          <path d="M50 35 L82 42 L82 52 L50 52 Z" fill="#2D3748" />
+          <rect x="18" y="52" width="64" height="38" rx="2" fill="#374151" />
+          <rect x="18" y="52" width="64" height="38" rx="2" fill="url(#boxGradMission)" />
+          <rect x="46" y="52" width="8" height="38" fill="#2D3748" opacity="0.5" />
+          <line x1="18" y1="71" x2="82" y2="71" stroke="#2D3748" stroke-width="1.5" opacity="0.4" />
+          <defs>
+            <linearGradient id="boxGradMission" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4B5563" stop-opacity="0.2" />
+              <stop offset="100%" stop-color="#1F2937" stop-opacity="0.4" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="text-[#6B7280] text-[13px] font-semibold">No Records</span>
+    </div>
+  }
+</div>

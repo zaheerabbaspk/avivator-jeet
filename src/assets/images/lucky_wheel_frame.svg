@@ -1,0 +1,25 @@
+<svg width="340" height="340" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="170" cy="170" r="165" stroke="url(#gold_grad)" stroke-width="10"/>
+  <circle cx="170" cy="170" r="160" stroke="#002B22" stroke-width="2" opacity="0.5"/>
+  
+  <defs>
+    <linearGradient id="gold_grad" x1="0" y1="0" x2="340" y2="340" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7E08B"/>
+      <stop offset="0.5" stop-color="#B8860B"/>
+      <stop offset="1" stop-color="#F7E08B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Studded dots around the rim -->
+  <g id="dots">
+    <circle cx="170" cy="10" r="3" fill="#002B22"/>
+    <circle cx="170" cy="330" r="3" fill="#002B22"/>
+    <circle cx="10" cy="170" r="3" fill="#002B22"/>
+    <circle cx="330" cy="170" r="3" fill="#002B22"/>
+    
+    <circle cx="58" cy="58" r="3" fill="#002B22"/>
+    <circle cx="282" cy="58" r="3" fill="#002B22"/>
+    <circle cx="58" cy="282" r="3" fill="#002B22"/>
+    <circle cx="282" cy="282" r="3" fill="#002B22"/>
+  </g>
+</svg>

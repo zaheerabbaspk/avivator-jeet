@@ -1,0 +1,215 @@
+import { Injectable } from '@angular/core';
+
+export interface AgentStats {
+  account: string;
+  auditNumber: string;
+  mode: string;
+  settlementDate: string;
+}
+
+export interface InviteStats {
+  totalEarnings: string;
+  cumulativeInvitees: number;
+}
+
+export interface CommissionCard {
+  title: string;
+  subtitle?: string;
+  stats: { label: string; value: string }[];
+  reward: string;
+  claimedBalance: string;
+  unclaimedBalance: string;
+}
+
+export interface StatItem {
+  label: string;
+  value: string;
+  isYellow?: boolean;
+}
+
+export interface MyDataStats {
+  subordinateStats: StatItem[];
+  revenueStats: StatItem[];
+  allDataStats: StatItem[][];
+  totalIncomeStats: StatItem[][];
+}
+
+export interface InviteBanner {
+  id: string;
+  title: string;
+  subtitle: string;
+  amount: string;
+  imgUrl: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class InviteService {
+  private agentStats: AgentStats = {
+    account: '126406886',
+    auditNumber: '1.00',
+    mode: 'Infinite range',
+    settlementDate: '14/04/2026'
+  };
+
+  private inviteStats: InviteStats = {
+    totalEarnings: '0.00',
+    cumulativeInvitees: 0
+  };
+
+  private banners: InviteBanner[] = [
+    {
+      id: 'b0',
+      title: 'Invitation Bonus 1',
+      subtitle: 'Invite friends bonus',
+      amount: 'Rs 5,000',
+      imgUrl: 'assets/invite1.png'
+    },
+    {
+      id: 'b1',
+      title: 'Invitation Bonus 2',
+      subtitle: 'Cards/Fishing/live/Sports Special invitation reward',
+      amount: 'Rs 1,000',
+      imgUrl: 'assets/invite4.png'
+    },
+    {
+      id: 'b3',
+      title: 'Invitation Bonus 4',
+      subtitle: 'Cricket/Sports Special promotion',
+      amount: 'Rs 5,000',
+      imgUrl: 'assets/invite2.png'
+    },
+    {
+      id: 'b2',
+      title: 'Invite Friends',
+      subtitle: 'Share your code and get rewards',
+      amount: 'Rs 2,000',
+      imgUrl: 'assets/invite3.png' // Fallback to pilot for generic invite
+    },
+
+    {
+      id: 'b2',
+      title: 'Invite Friends',
+      subtitle: 'Share your code and get rewards',
+      amount: 'Rs 2,000',
+      imgUrl: 'assets/invite.png' // Fallback to pilot for generic invite
+    },
+    {
+      id: 'b2',
+      title: 'Invite Friends',
+      subtitle: 'Share your code and get rewards',
+      amount: 'Rs 2,000',
+      imgUrl: 'assets/invite6.png' // Fallback to pilot for generic invite
+    },
+    {
+      id: 'b2',
+      title: 'Invite Friends',
+      subtitle: 'Share your code and get rewards',
+      amount: 'Rs 2,000',
+      imgUrl: 'assets/invite7.png' // Fallback to pilot for generic invite
+    },
+  ];
+
+  private commissions: CommissionCard[] = [
+    {
+      title: 'Commission',
+      subtitle: '(Time until next settlement 0 day(s) 00:45:01)',
+      stats: [
+        { label: "Yesterday's direct results", value: '0.00' },
+        { label: 'Total Commission', value: '0.00' }
+      ],
+      reward: '0.00',
+      claimedBalance: '0.00',
+      unclaimedBalance: '0.00'
+    },
+    {
+      title: 'Invite 1 friends bonus Rs 5,000',
+      stats: [
+        { label: 'Invite valid number of people', value: '0' },
+        { label: 'Reward', value: '0.00' }
+      ],
+      reward: '5000.00',
+      claimedBalance: '0.00',
+      unclaimedBalance: '0.00'
+    }
+  ];
+
+  constructor() { }
+
+  getAgentStats() { return this.agentStats; }
+  getInviteStats() { return this.inviteStats; }
+  getBanners() { return this.banners; }
+  getCommissions() { return this.commissions; }
+
+  getMyDataStats(): MyDataStats {
+    return {
+      subordinateStats: [
+        { label: 'New subordinates', value: '0' },
+        { label: 'Number of deposits', value: '0' },
+        { label: 'Number of first deposit players', value: '0' },
+        { label: 'Register & 1st-deposit users', value: '0' },
+        { label: 'Deposit amount', value: '0.00' },
+        { label: 'First deposit amount', value: '0.00' },
+        { label: 'Register & first deposit', value: '0.00' },
+        { label: 'Withdrawal Amount', value: '0.00' },
+        { label: 'Withdrawal times', value: '0' },
+        { label: 'Receive rewards', value: '0.00' },
+        { label: 'Number of recipients', value: '0' },
+        { label: 'Valid Bets', value: '0.00' },
+        { label: 'Number of bettors', value: '0' },
+        { label: 'Direct wins/losses', value: '0.00' },
+        { label: 'Sub\'s Perf.', value: '0.00' }
+      ],
+       revenueStats: [
+        { label: 'Direct commission', value: '0.00', isYellow: true },
+        { label: 'Other commission', value: '0.00', isYellow: true },
+        { label: 'Total commission', value: '0.00', isYellow: true },
+        { label: 'Get commission', value: '0.00', isYellow: true }, // The screenshot actually labels the 4th item "Get commission"
+        { label: 'Promotional event rewards', value: '0.00', isYellow: false },
+        { label: 'Agent activity rewards', value: '0.00', isYellow: false }
+      ],
+      allDataStats: [
+        [
+          { label: 'Total subordinates', value: '0' },
+          { label: 'Direct subordinates', value: '0' },
+          { label: 'Other subordinates', value: '0' }
+        ],
+        [
+          { label: 'Sub\'s Perf.', value: '0.00' },
+          { label: 'Others\' Perf.', value: '0.00' },
+          { label: 'Total Perf.', value: '0.00' }
+        ],
+        [
+          { label: 'Total direct sub\'s deposit', value: '0.00' },
+          { label: 'Total direct sub\'s withdrawls', value: '0.00' },
+          { label: 'Total direct sub\'s claim', value: '0.00' }
+        ],
+        [
+          { label: 'Total direct sub\'s valid bet', value: '0.00' },
+          { label: 'Total direct sub\'s win/loss', value: '0.00' }
+        ]
+      ],
+      totalIncomeStats: [
+        [
+          { label: 'Direct commission', value: '0.00', isYellow: true },
+          { label: 'Other commission', value: '0.00', isYellow: true },
+          { label: 'Total commission', value: '0.00', isYellow: true }
+        ],
+        [
+          { label: 'Unclaimed', value: '0.00', isYellow: true },
+          { label: 'Claimed', value: '0.00', isYellow: true },
+          { label: 'Total commission', value: '0.00', isYellow: true }
+        ],
+        [
+          { label: 'Cumulative rewards for promotional activities', value: '0.00', isYellow: false },
+          { label: 'Cumulative rewards for agency activities', value: '0.00', isYellow: false }
+        ]
+      ]
+    };
+  }
+
+  getReferralLink(account: string) {
+    return `https://5no777.com/?id=${account}`;
+  }
+}

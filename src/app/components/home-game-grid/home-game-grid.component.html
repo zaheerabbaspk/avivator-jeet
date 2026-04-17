@@ -1,0 +1,16 @@
+<div class="game-grid">
+  @for (game of games; track game.id) {
+    <div class="game-card" (click)="onGameClick(game)">
+      <div class="card-img-wrap">
+        <img [src]="game.image" [alt]="game.title" loading="lazy">
+        @if (game.badge) {
+          <div class="card-center-badge">{{ game.badge }}</div>
+        }
+        <!-- Bottom Title Overlay -->
+        <div class="card-title-overlay">
+          {{ game.title }}
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -8,12 +8,20 @@
             </span>
         </div>
 
-        <!-- RIGHT: Balance + Hamburger only -->
+        <!-- RIGHT: Balance + Sound + Hamburger -->
         <div class="flex items-center gap-2">
+            @if (!isLoading) {
             <span class="text-[#1dfd71] font-black text-sm tabular-nums"
                 style="text-shadow: 0 0 10px rgba(29,253,113,0.4);">
                 {{ gameEngine.balance() | number:'1.2-2' }} PKR
             </span>
+            }
+            <div class="w-7 h-7 flex items-center justify-center rounded-md cursor-pointer"
+                style="background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.08);"
+                (click)="toggleSound()">
+                <ion-icon [name]="isMuted ? 'volume-mute-outline' : 'volume-medium-outline'" 
+                    style="color:rgba(255,255,255,0.6); font-size:16px;"></ion-icon>
+            </div>
             <div class="w-7 h-7 flex items-center justify-center rounded-md"
                 style="background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.08);">
                 <ion-icon name="menu-outline" style="color:rgba(255,255,255,0.6); font-size:16px;"></ion-icon>
@@ -22,6 +30,7 @@
     </div>
 
     <!-- Multiplier History Strip -->
+    @if (!isLoading) {
     <div class="flex gap-2.5 overflow-x-auto px-4 py-1.5 no-scrollbar items-center border-b border-white/5"
         style="background:#0d0d0d;">
         @for (m of gameEngine.history(); track $index) {
@@ -35,6 +44,7 @@
             <ion-icon name="ellipsis-horizontal" style="color:rgba(255,255,255,0.6); font-size:10px;"></ion-icon>
         </div>
     </div>
+    }
 </ion-header>
 
 

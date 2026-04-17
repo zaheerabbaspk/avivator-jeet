@@ -1,0 +1,182 @@
+.vip-card-wrapper {
+  @apply flex flex-col w-full bg-[#111419];
+}
+
+.vip-level-btn {
+  @apply px-4 py-1.5 rounded-full text-[10px] font-black whitespace-nowrap transition-all bg-[#252830] text-[#ADB6C3] min-w-[70px];
+  &.active { @apply bg-[#F1C15A] text-[#111419] shadow-lg scale-105; }
+}
+
+.vip-scroll-area {
+  @apply px-4 pb-20 space-y-2 mt-4;
+}
+
+.vip-bonus-item-compact {
+  @apply flex items-center justify-between bg-[#252830]/50 p-2 rounded-xl border border-white/[0.03] transition-all active:scale-[0.98];
+  
+  .item-left {
+    @apply flex items-center gap-2.5;
+    
+    .icon-box {
+      @apply w-8 h-8 rounded-full flex items-center justify-center shadow-sm shrink-0;
+      ion-icon { @apply text-[16px]; font-weight: bold; }
+    }
+    
+    .text-content {
+      @apply flex flex-col justify-center gap-0;
+      
+      .title { @apply text-white text-[11px] font-black leading-tight; }
+      .subtitle { @apply text-[#5B626C] text-[9px] font-bold leading-tight; }
+    }
+  }
+  
+  .claim-btn-compact {
+    @apply bg-[#4A4C54] text-[#ADB6C3] px-4 py-1.5 rounded-md text-[10px] font-black shadow-md active:bg-[#F1C15A] active:text-[#111419] transition-colors;
+  }
+}
+
+.compact-action-bar {
+  @apply flex items-center justify-between p-2.5 bg-[#111419]/50 border-b border-white/5;
+  
+  .unclaimed-info {
+    @apply flex items-center gap-1;
+    .label { @apply text-[#ADB6C3] text-[10px] font-bold; }
+    .value { @apply text-[#F1C15A] text-[12px] font-black; }
+  }
+  
+  .bar-btns {
+    @apply flex gap-1.5;
+    button { 
+      @apply px-3 py-[7px] rounded-md text-[10px] font-black transition-all;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-receive { @apply bg-[#2B2E36] text-[#ADB6C3]; }
+    .btn-history { @apply bg-[#F1C15A] text-[#111419]; }
+  }
+}
+
+.vip-carousel-container {
+  @apply relative w-full overflow-hidden py-1;
+  background-color: #252830;
+  background-image: linear-gradient(135deg, #2b2e36 25%, transparent 25%), 
+                    linear-gradient(225deg, #2b2e36 25%, transparent 25%), 
+                    linear-gradient(45deg, #2b2e36 25%, transparent 25%), 
+                    linear-gradient(315deg, #2b2e36 25%, #252830 25%);
+  background-position: 4px 0, 4px 0, 0 0, 0 0;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+  
+  .carousel-viewport {
+    @apply flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden w-full py-5;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    padding-left: 16vw; 
+    padding-right: 16vw;
+    gap: 2px;
+  }
+  
+  .carousel-slide {
+    @apply min-w-[68vw] snap-center shrink-0 transition-all duration-500 opacity-50 scale-[0.85] z-0;
+    
+    &.active-slide {
+      @apply opacity-100 scale-100 z-10;
+    }
+  }
+}
+
+.nav-arrow {
+  @apply absolute top-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-md w-6 h-6 rounded-full flex items-center justify-center text-white z-20 active:scale-90 transition-all border border-white/10;
+  &.left { @apply left-4; }
+  &.right { @apply right-4; }
+  ion-icon { @apply text-[14px]; }
+  background: rgba(0,0,0,0.6);
+  border: none;
+  cursor: pointer;
+}
+
+.vip-card-header-gradient {
+  @apply relative aspect-[2.7/1] rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.3)] p-4 text-white transition-all duration-500;
+  background: #189D91; 
+  
+  &.active-card {
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 1.0), 
+                0 30px 60px -15px rgba(0, 0, 0, 0.8),
+                inset 0 0 15px rgba(255, 255, 255, 0.08);
+  }
+  
+  .card-badge-unlocked {
+    @apply bg-black/40 backdrop-blur-md text-[11px] font-bold px-3 py-1 rounded-br-2xl rounded-tl-xl absolute top-0 left-0 flex items-center gap-1.5 border-b border-r border-white/5;
+    ion-icon { @apply text-[12px]; }
+  }
+  
+  .card-content-left {
+    @apply flex flex-col pt-5 pl-2;
+    .card-lvl { @apply text-[26px] font-black italic leading-none tracking-tight shadow-sm; }
+    .card-promo { @apply text-[10px] font-bold opacity-100 mt-2 text-white/80; }
+  }
+  
+  .rank-badge-elaborate {
+    @apply absolute right-2 top-1/2 -translate-y-1/2 w-[110px] h-[110px] flex items-center justify-center;
+    
+    &::before {
+      content: '';
+      @apply absolute inset-0 rounded-full bg-white opacity-5 blur-2xl scale-125;
+    }
+
+    .badge-outer-ring {
+      @apply w-[85px] h-[85px] rounded-full border-[3px] border-white/10 flex items-center justify-center relative p-1.5;
+      background: radial-gradient(circle, #2E8B83 0%, #179B92 100%);
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.4);
+      
+      &::after {
+        content: '';
+        @apply absolute inset-0 rounded-full border-[1.5px] border-dotted border-[#F1C15A]/70 scale-95;
+      }
+    }
+
+    .badge-inner {
+      @apply w-full h-full rounded-full flex flex-col items-center justify-center relative overflow-hidden;
+      background-color: #179B92;
+      background-image: 
+        linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05)), 
+        linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05));
+      background-size: 8px 8px;
+      background-position: 0 0, 4px 4px; 
+      
+      .crown-box {
+        @apply -mt-1.5 mb-0.5 flex items-center justify-center gap-0.5;
+        ion-icon { @apply text-[10px] text-[#F1C15A] drop-shadow-md; }
+        &.multi-icons { ion-icon { @apply text-[8px]; } }
+      }
+      .lvl-num { @apply text-[32px] font-black text-[#F1C15A] leading-none drop-shadow-lg; }
+      .vip-label { @apply text-[8px] font-black tracking-widest text-[#F1C15A]/90 uppercase -mt-0.5; }
+    }
+
+    .wreath-left, .wreath-right {
+      @apply absolute w-14 h-20 pointer-events-none opacity-40;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F1C15A' %3E%3Cpath d='M21,11C21,16.52 16.52,21 11,21C5.48,21 1,16.52 1,11C1,5.48 5.48,1 11,1C12.57,1 14.06,1.37 15.37,2.03L16.82,2.83C15.07,1.66 13.11,1 11,1C5.48,1 1,5.48 1,11C1,16.52 5.48,21 11,21C16.52,21 21,16.52 21,11C21,9.08 20.46,7.29 19.5,5.77L20.94,4.97C22.25,6.63 23,8.73 23,11C23,17.63 17.63,23 11,23C4.37,23 -1,17.63 -1,11C-1,4.37 4.37,-1 11,-1C14.03,-1 16.82,0.12 18.96,2.04L17.51,2.84C15.71,1.66 13.44,1 11,1C5.48,1 1,5.48 1,11C1,16.52 5.48,21 11,21C16.52,21 21,16.52 21,11C21,10.27 20.92,9.55 20.77,8.86L22.21,8.06C22.72,9 23,10 23,11Z'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .wreath-left { @apply -left-6 top-1/2 -translate-y-1/2; transform: scaleX(-1) translateY(-50%); }
+    .wreath-right { @apply -right-6 top-1/2 -translate-y-1/2; }
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+button {
+  outline: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

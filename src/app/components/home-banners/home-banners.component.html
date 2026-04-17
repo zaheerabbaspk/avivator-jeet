@@ -1,0 +1,15 @@
+<div class="banner-swiper">
+  <div class="swiper-track" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+    @for (slide of slides; track slide) {
+      <div class="swiper-slide">
+        <img [src]="slide" alt="banner" loading="lazy">
+      </div>
+    }
+  </div>
+  <!-- Dot Indicators -->
+  <div class="swiper-dots">
+    @for (slide of slides; track $index) {
+      <div class="swiper-dot" [class.active]="currentSlide === $index" (click)="goToSlide($index)"></div>
+    }
+  </div>
+</div>

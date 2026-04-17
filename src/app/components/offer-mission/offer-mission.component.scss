@@ -1,0 +1,27 @@
+.mission-pill-btn {
+  @apply px-2.5 py-1 rounded-full text-[10px] font-bold transition-all flex items-center justify-center;
+  
+  &.active {
+    @apply bg-[#F1C15A] text-[#111419];
+  }
+  
+  &.inactive {
+    @apply bg-transparent text-[#ADB6C3];
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+button {
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}

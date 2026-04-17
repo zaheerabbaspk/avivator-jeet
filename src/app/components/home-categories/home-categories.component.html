@@ -1,0 +1,12 @@
+<div class="category-tabs">
+  @for (cat of categories; track cat.id) {
+    <div class="cat-tab" [class.active]="activeCategory === cat.id" (click)="selectCategory(cat.id)">
+      <div class="cat-icon-wrap">
+        <div class="cat-icon">
+          <img [src]="cat.icon" [alt]="cat.label" loading="lazy" class="cat-img-icon">
+        </div>
+      </div>
+      <span class="cat-label">{{ cat.label }}</span>
+    </div>
+  }
+</div>

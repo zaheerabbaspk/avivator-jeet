@@ -1,0 +1,34 @@
+<div class="min-h-full flex flex-col relative w-full pt-3 px-3">
+  
+  <!-- Filter Dropdown Trigger -->
+  <div class="relative z-50 inline-block">
+    <button 
+      (click)="toggleDropdown()" 
+      [class.border-[#F1C15A]]="isDropdownOpen"
+      [class.text-[#F1C15A]]="isDropdownOpen"
+      [class.border-white_08]="!isDropdownOpen"
+      [class.text-[#8E99A7]]="!isDropdownOpen"
+      class="bg-transparent border border-white/[0.08] rounded-full px-4 py-1.5 flex items-center justify-between min-w-[90px] transition-colors relative z-[60]">
+      <span class="text-[11px] font-medium tracking-wide">{{ activeFilter }}</span>
+      <ion-icon [name]="isDropdownOpen ? 'chevron-up' : 'chevron-down'" class="text-[12px] ml-1"></ion-icon>
+    </button>
+  </div>
+
+  <!-- Background overlay & Modal -->
+  @if (isDropdownOpen) {
+     <div class="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]" (click)="toggleDropdown()" style="margin-top: 0;"></div>
+     <div class="absolute top-[65px] left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-[360px] z-[60]">
+        <app-custom-date-picker 
+          [activeFilter]="activeFilter" 
+          (confirm)="handleConfirm($event)" 
+          (cancel)="handleCancel()">
+        </app-custom-date-picker>
+     </div>
+  }
+
+  <!-- Empty State -->
+  <div class="flex-1 flex flex-col items-center justify-center -mt-10 relative z-30 pointer-events-none">
+     <app-empty-record></app-empty-record>
+  </div>
+  
+</div>

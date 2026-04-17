@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <div
+    class="flex flex-col bg-[#111419] pt-[calc(var(--ion-safe-area-top,env(safe-area-inset-top,0px))+5px)] border-b border-white/5">
+    <div class="flex items-center h-[42px]">
+      <button
+        class="bg-transparent border-none text-[#ADB6C3] text-[22px] px-3 flex items-center cursor-pointer shrink-0 active:opacity-60"
+        (click)="back.emit()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+
+      <!-- Tabs (Scrollable & Natural Width) -->
+      <div class="flex-1 flex items-center h-full overflow-x-auto no-scrollbar">
+        <div class="flex items-center h-full px-2 gap-6">
+          @for (tab of tabs; track tab.id) {
+          <button (click)="selectTab(tab.id)"
+            class="relative flex flex-col items-center justify-center h-full transition-all duration-300 active:opacity-60 shrink-0 px-2"
+            [class.text-[#F1C15A]]="activeTab === tab.id" [class.text-[#ADB6C3]]="activeTab !== tab.id">
+
+            <div class="flex items-center gap-1">
+              <span class="text-[13px] font-bold whitespace-nowrap tracking-tight">{{ tab.label }}</span>
+              @if (tab.badge) {
+              <div
+                class="flex items-center justify-center bg-[#E64242] text-white text-[8px] font-black w-3.5 h-3.5 rounded-full shadow-sm">
+                {{ tab.badge }}
+              </div>
+              }
+            </div>
+
+            @if (activeTab === tab.id) {
+            <div class="active-tab-indicator"></div>
+            }
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-header>

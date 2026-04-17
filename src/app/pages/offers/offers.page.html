@@ -1,124 +1,91 @@
-<ion-header class="ion-no-border">
-  <div
-    class="flex flex-col bg-[#1A1C22] pt-[calc(var(--ion-safe-area-top,env(safe-area-inset-top,0px))+5px)] border-b border-white/5">
-    <div class="flex items-center h-[44px]">
-      <button
-        class="bg-transparent border-none text-[#ADB6C3] text-[22px] px-3 flex items-center cursor-pointer shrink-0 active:opacity-60"
-        (click)="goBack()">
-        <ion-icon name="chevron-back-outline"></ion-icon>
-      </button>
+<app-offer-header 
+  [tabs]="tabs" 
+  [activeTab]="activeTab" 
+  (tabChange)="activeTab = $event" 
+  (back)="goBack()">
+</app-offer-header>
 
-      <!-- Top Tab Bar -->
-      <div class="flex-1 overflow-x-auto flex items-center h-full [&::-webkit-scrollbar]:hidden"
-        style="scrollbar-width: none;">
-        <div class="flex h-full">
-          @for (tab of tabs; track tab.id) {
-          <button
-            class="bg-transparent border-none text-[13px] font-medium px-4 pb-2.5 whitespace-nowrap cursor-pointer relative shrink-0 transition-colors duration-200 active:opacity-70 font-sans h-full flex items-center"
-            [ngClass]="activeTab === tab.id ? 'text-[#F1C15A]' : 'text-white'" (click)="activeTab = tab.id">
-            <div class="relative flex items-center">
-              {{ tab.label }}
-              @if (tab.badge) {
-              <div
-                class="absolute -top-2.5 -right-4 bg-[#E64242] text-white text-[10px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full px-0.5 border border-transparent shadow-sm transform scale-90">
-                {{ tab.badge }}</div>
-              }
-            </div>
-            @if (activeTab === tab.id) {
-            <div
-              class="absolute bottom-0 left-[20%] right-[20%] h-[2px] bg-[#F1C15A] rounded-t-full transition-all duration-300">
-            </div>
-            }
-          </button>
+<ion-content class="[--background:#111419] [--padding-bottom:10px] offers-list-scroll">
+  <div class="flex h-full">
+
+    <!-- Sidebar (Only on Event tab) -->
+    @if (activeTab === 'event') {
+      <app-offer-sidebar 
+        [activeSidebar]="activeSidebar"
+        [isLoadingRewards]="isLoadingRewards"
+        (sidebarChange)="activeSidebar = $event"
+        (navigateToHistory)="activeTab = 'history'"
+        (refreshRewards)="refreshRewards()"
+        (openRedemption)="openRedemption()">
+      </app-offer-sidebar>
+    }
+
+    <!-- Right Content Area -->
+    <div class="flex-1 h-full overflow-y-auto pt-4 pb-14 relative bg-[#111419] offers-list-scroll">
+      <div>
+        @switch (activeTab) {
+          @case ('event') {
+            <app-offer-event 
+              [offers]="offers" 
+              (offerClick)="openOffer($event)">
+            </app-offer-event>
           }
-        </div>
+
+          @case ('mission') {
+            <app-offer-mission 
+              [activeMissionTab]="activeMissionTab"
+              [missions]="missions"
+              [isLoadingMissions]="isLoadingMissions"
+              (missionChannelChange)="setMissionTab($event)"
+              (refreshMissions)="refreshMissions()"
+              (claimMission)="loadAllData()">
+            </app-offer-mission>
+          }
+
+          @case ('vip') {
+            <app-offer-vip 
+              [vipTiers]="vipTiers"
+              [activeVipLevel]="activeVipLevel"
+              [activeVipData]="activeVipData"
+              [unclaimed]="unclaimed"
+              [isLoadingUnclaimed]="isLoadingUnclaimed"
+              (levelChange)="onVipLevelScrollChange($event)"
+              (refreshUnclaimed)="refreshUnclaimed()"
+              (viewHistory)="activeTab = 'history'"
+              (claimBonus)="loadAllData()">
+            </app-offer-vip>
+          }
+
+          @case ('unclaimed') {
+            <app-offer-unclaimed 
+              [unclaimed]="unclaimed"
+              [isLoadingUnclaimed]="isLoadingUnclaimed"
+              (refreshUnclaimed)="refreshUnclaimed()"
+              (claimCategory)="loadAllData()">
+            </app-offer-unclaimed>
+          }
+
+          @case ('history') {
+            <app-offer-history 
+              [activeHistoryFilter]="activeHistoryFilter"
+              [activeStatusFilter]="activeStatusFilter"
+              [isHistoryFilterOpen]="isHistoryFilterOpen"
+              [isStatusFilterOpen]="isStatusFilterOpen"
+              [historyPeriods]="historyPeriods"
+              [statusOptions]="statusOptions"
+              [historyRecords]="historyRecords"
+              [pendingHistoryFilter]="pendingHistoryFilter"
+              (toggleHistory)="toggleHistoryFilter()"
+              (confirmHistory)="confirmHistoryFilter()"
+              (toggleStatus)="toggleStatusFilter()"
+              (setStatus)="setStatusFilter($event)"
+              (setPendingFilter)="pendingHistoryFilter = $event">
+            </app-offer-history>
+          }
+        }
       </div>
-    </div>
-  </div>
-</ion-header>
-
-<ion-content class="[--background:#1A1C22] [--padding-bottom:70px]">
-  <div class="flex h-full min-h-[calc(100vh-[100px])]">
-
-    <!-- ── Left Sidebar ── -->
-    <div class="w-[96px] shrink-0 bg-[#1A1C22] flex flex-col items-center py-4 px-2.5 gap-4">
-
-      <!-- All -->
-      <div
-        class="w-full relative bg-[#F1C15A] text-[#111419] rounded-lg h-[38px] flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-transform"
-        (click)="activeSidebar = 'all'">
-        <ion-icon name="grid-outline" class="text-[16px] font-bold"></ion-icon>
-        <span class="text-[12px] font-medium font-sans">All</span>
-        <div
-          class="absolute -top-1.5 -right-1.5 bg-[#E64242] text-white text-[10px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full px-0.5 border border-[#1A1C22] shadow-sm transform scale-90 z-10">
-          3</div>
-      </div>
-
-      <!-- cooperate -->
-      <div
-        class="w-full relative bg-[#2A2E38] text-[#ADB6C3] rounded-lg h-[38px] flex items-center justify-center cursor-pointer shadow-sm border border-transparent active:scale-95 transition-transform"
-        (click)="activeSidebar = 'cooperate'">
-        <span class="text-[11px] font-medium font-sans">cooperate</span>
-        <div
-          class="absolute -top-1.5 -right-1.5 bg-[#E64242] text-white text-[10px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full px-0.5 border border-[#1A1C22] shadow-sm transform scale-90 z-10">
-          3</div>
-      </div>
-
-      <!-- History button -->
-      <div
-        class="w-[85%] rounded-full border border-[#F1C15A]/80 text-[#F1C15A] h-[28px] flex items-center justify-center cursor-pointer active:bg-white/5 transition-colors mt-[2px]"
-        (click)="activeTab = 'history'">
-        <span class="text-[11px] font-sans font-medium">History</span>
-      </div>
-
-      <!-- Refresh rewards button -->
-      <div
-        class="w-[95%] rounded-[10px] border border-[#F1C15A]/80 text-[#F1C15A] py-1 px-1.5 flex items-center justify-center gap-1 cursor-pointer active:bg-white/5 transition-colors mt-[2px]"
-        (click)="refreshRewards()">
-        <ion-icon name="reload-outline" class="text-[14px] shrink-0" [class.animate-spin]="isLoadingRewards"></ion-icon>
-        <div class="flex flex-col items-start leading-[1.1] pt-0.5">
-          <span class="text-[8px] font-sans font-medium">Refresh</span>
-          <span class="text-[8px] font-sans font-medium">rewards</span>
-        </div>
-      </div>
-
-      <!-- Redemption Code button -->
-      <div
-        class="w-[95%] rounded-[10px] border border-[#F1C15A]/80 text-[#F1C15A] py-1 px-1.5 flex items-center gap-0.5 cursor-pointer active:bg-white/5 transition-colors"
-        (click)="openRedemption()">
-        <ion-icon name="gift-outline" class="text-[15px] shrink-0"></ion-icon>
-        <div class="flex flex-col items-start justify-center leading-none overflow-hidden">
-          <span class="text-[9px] font-sans font-medium truncate w-[42px] pt-[1px] pl-[1px]">Redempti..</span>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── Right Content Area ── -->
-    <div class="flex-1 flex flex-col min-w-0 pr-3 pt-3 pb-24 overflow-y-auto space-y-3.5 relative">
-      <div class="absolute inset-y-0 left-[-4px] w-[1px] bg-white/5"></div>
-      @for (offer of offers; track offer.id) {
-      <div
-        class="relative w-full rounded-2xl overflow-hidden active:scale-[0.98] transition-transform cursor-pointer shadow-lg border border-black/20"
-        style="height: 116px;" (click)="openOffer(offer)">
-        <!-- Banner Image -->
-        <img [src]="offer.bannerImg" class="w-full h-full block" style="object-fit: fill; width: 100%; height: 100%;" [alt]="offer.brand" />
-
-        <!-- Red circular badge -->
-        <div
-          class="absolute top-0 right-0 bg-[#E64242] text-white text-[10px] font-black min-w-[20px] h-[18px] flex items-center justify-center rounded-bl-[12px] rounded-tr-2xl border border-black/10 shadow-sm z-10 pt-[1px]">
-          1</div>
-
-        <!-- Glass effect reflection -->
-        <div
-          class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none rounded-2xl border border-white/10">
-        </div>
-      </div>
-      }
     </div>
   </div>
 </ion-content>
 
 <app-footer-nav activeTab="offers"></app-footer-nav>
-<app-treasure-modal [isOpen]="isTreasureModalOpen" (didDismiss)="isTreasureModalOpen = false"></app-treasure-modal>
--treasure-modal>

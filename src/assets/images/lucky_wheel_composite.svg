@@ -1,0 +1,69 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Metallic Gold Gradient -->
+    <linearGradient id="gold_metallic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="25%" stop-color="#FEF9C3"/>
+      <stop offset="50%" stop-color="#FACC15"/>
+      <stop offset="75%" stop-color="#EAB308"/>
+      <stop offset="100%" stop-color="#854D0E"/>
+    </linearGradient>
+
+    <!-- Inner Shadow for Recessed Channel -->
+    <filter id="recessed_shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="3" in="SourceAlpha"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="black" flood-opacity="0.6"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Halo Glow Gradient -->
+    <radialGradient id="halo_glow" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#FDE047" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#FDE047" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- WHEEL HALO (OUTER GLOW) -->
+  <circle cx="200" cy="200" r="200" fill="url(#halo_glow)" opacity="0.6"/>
+
+  <!-- THE MULTI-LAYERED RIM (SLIMMED FOR PARITY) -->
+  
+  <!-- OUTER GOLD RIM (Thinner) -->
+  <circle cx="200" cy="200" r="196" stroke="url(#gold_metallic)" stroke-width="1.8"/>
+  
+  <!-- RECESSED DARK GREEN CHANNEL (Slimmed to 10px) -->
+  <circle cx="200" cy="200" r="188" stroke="#013D2F" stroke-width="10" filter="url(#recessed_shadow)"/>
+  
+  <!-- INNER GOLD RIM (Thinner) -->
+  <circle cx="200" cy="200" r="180" stroke="url(#gold_metallic)" stroke-width="1.5"/>
+
+  <!-- BULBS (SCALED DOWN FOR SLIM CHANNEL) -->
+  <g id="bulbs">
+    <!-- Bulbs are placed at 30 degree intervals on the 188r path -->
+    <circle cx="200" cy="12" r="3.5" fill="#4ADE80"/>
+    <circle cx="294" cy="37.2" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="362.8" cy="106" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="388" cy="200" r="3.5" fill="#4ADE80"/>
+    <circle cx="362.8" cy="294" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="294" cy="362.8" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="200" cy="388" r="3.5" fill="#4ADE80"/>
+    <circle cx="106" cy="362.8" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="37.2" cy="294" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="12" cy="200" r="3.5" fill="#4ADE80"/>
+    <circle cx="37.2" cy="106" r="3.5" fill="#4ADE80" opacity="0.8"/>
+    <circle cx="106" cy="37.2" r="3.5" fill="#4ADE80" opacity="0.8"/>
+  </g>
+
+  <!-- CARDINAL SPARKLING FLARES -->
+  <g opacity="0.8">
+    <circle cx="200" cy="2" r="5" fill="white" filter="url(#recessed_shadow)"/>
+    <circle cx="200" cy="398" r="5" fill="white" filter="url(#recessed_shadow)"/>
+    <circle cx="2" cy="200" r="5" fill="white" filter="url(#recessed_shadow)"/>
+    <circle cx="398" cy="200" r="5" fill="white" filter="url(#recessed_shadow)"/>
+  </g>
+</svg>

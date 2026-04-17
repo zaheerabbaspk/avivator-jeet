@@ -1,128 +1,84 @@
 <ion-header class="ion-no-border">
-  <div class="invite-header bg-gradient-to-r from-[#1f2937]/90 to-[#374151]/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-white/10 sticky top-0 z-[100] shadow-md shadow-black/20">
-    <div class="flex items-center gap-3">
-      <button (click)="goBack()" class="w-8 h-8 flex items-center justify-center text-white/80 active:scale-90 transition-transform">
-        <ion-icon name="chevron-back-outline" class="text-2xl"></ion-icon>
-      </button>
-      <span class="text-white font-black text-lg tracking-tight uppercase italic">Invite & Earn</span>
-    </div>
-    
-    <div class="flex items-center gap-4">
-      <ion-icon name="headset-outline" (click)="handleSupport()" class="text-2xl text-[#00CFFF] active:scale-90 transition-transform"></ion-icon>
-      <ion-icon name="document-text-outline" (click)="handleRecords()" class="text-2xl text-[#00CFFF] active:scale-90 transition-transform"></ion-icon>
-    </div>
-  </div>
+  <app-invite-header (back)="handleBack()"></app-invite-header>
+  <app-invite-tabs [activeTab]="activeTab" (tabChange)="handleTabChange($event)" class="bg-[#111419] border-b border-white/[0.04]"></app-invite-tabs>
 </ion-header>
 
-<ion-content class="ion-padding-bottom">
-  <div class="content-wrapper p-4 space-y-6">
-    
-    <!-- Hero Banner -->
-    <div class="hero-card relative rounded-2xl overflow-hidden p-6 border border-white/10 bg-gradient-to-br from-[#1e40af] to-[#1e1b4b] shadow-2xl">
-      <div class="absolute top-0 right-0 w-32 h-32 bg-[#d2fe07] opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
-      <div class="relative z-10">
-        <h2 class="text-[#d2fe07] text-3xl font-black uppercase italic tracking-tighter leading-none">Refer Friends</h2>
-        <p class="text-white text-lg font-bold mt-1">Get Unlimited Rewards</p>
-        <div class="mt-4 flex items-center justify-between">
-          <div class="flex gap-4">
-            <div class="flex flex-col">
-              <span class="text-white/60 text-[10px] uppercase font-bold tracking-widest">Invited</span>
-              <span class="text-white text-xl font-black">{{stats.totalInvited}}</span>
+<ion-content [fullscreen]="true" class="bg-[#111419]">
+   <div class="flex flex-col min-h-full pt-1">
+      @if (activeTab === 'home') {
+         <!-- Sections as seen in Screenshot -->
+         <app-invite-banner [banners]="banners"></app-invite-banner>
+         
+         <app-invite-stats 
+            [agentStats]="agentStats" 
+            [inviteStats]="inviteStats">
+         </app-invite-stats>
+
+         <app-invite-link 
+            [referralCode]="referralCode" 
+            [referralLink]="referralLink"
+            (copy)="handleCopy($event)"
+            (share)="handleShare($event)">
+         </app-invite-link>
+
+         <!-- Earnings Overview -->
+         <div class="px-1 pt-1 pb-4 grid grid-cols-2 gap-4 border-b border-white/[0.05] mx-4 mb-2 mt-4">
+            <div class="flex flex-col gap-1.5">
+               <span class="text-[#6B7280] text-[12px] font-medium">Total Earnings</span>
+               <span class="text-[#F0A500] text-[14px] font-bold leading-none">{{ inviteStats.totalEarnings }}</span>
             </div>
-            <div class="w-px h-8 bg-white/20"></div>
-            <div class="flex flex-col">
-              <span class="text-white/60 text-[10px] uppercase font-bold tracking-widest">Rewards</span>
-              <span class="text-[#f7c04a] text-xl font-black">₹{{stats.totalRewards}}</span>
+            <div class="flex flex-col gap-1.5 pl-1">
+               <span class="text-[#6B7280] text-[12px] font-medium">Cumulative number of invitees</span>
+               <span class="text-white text-[14px] font-bold leading-none">{{ inviteStats.cumulativeInvitees }}</span>
             </div>
-          </div>
-          <button (click)="openDeposit()" class="bg-[#d2fe07] text-black font-black text-[10px] px-4 py-2 rounded-xl active:scale-90 transition-all shadow-lg shadow-[#d2fe07]/20 uppercase tracking-tighter italic">
-            Add Cash
-          </button>
-        </div>
-      </div>
-      <div class="absolute bottom-4 right-4 text-4xl text-white/20 rotate-12">
-        <ion-icon name="people-outline"></ion-icon>
-      </div>
-    </div>
+         </div>
 
-    <!-- Referral Info -->
-    <div class="section-container bg-white/5 border border-white/10 rounded-2xl p-5 space-y-6">
-      <div class="flex flex-col gap-2">
-        <label class="text-white/60 text-xs font-bold uppercase tracking-wider">My Referral Code</label>
-        <div class="flex items-center justify-between bg-black/40 rounded-xl p-3 border border-white/5">
-          <span class="text-[#d2fe07] font-black text-xl tracking-widest">{{referralCode}}</span>
-          <button (click)="copyToClipboard(referralCode)" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-white/10 px-3 py-1.5 rounded-lg active:scale-95">
-            <ion-icon name="copy-outline"></ion-icon>
-            <span class="text-xs font-bold">COPY</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-white/60 text-xs font-bold uppercase tracking-wider">Referral Link</label>
-        <div class="flex items-center justify-between bg-black/40 rounded-xl p-3 border border-white/5">
-          <span class="text-white font-medium text-xs truncate max-w-[200px]">{{referralLink}}</span>
-          <button (click)="copyToClipboard(referralLink)" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-white/10 px-3 py-1.5 rounded-lg active:scale-95">
-            <ion-icon name="copy-outline"></ion-icon>
-            <span class="text-xs font-bold">COPY</span>
-          </button>
-        </div>
-      </div>
-
-      <button (click)="shareInvite()" class="w-full bg-[#d2fe07] text-black font-black py-4 rounded-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-lg shadow-[#d2fe07]/20 uppercase tracking-widest text-sm">
-        <ion-icon name="share-social-outline" class="text-lg"></ion-icon>
-        Invite Now
-      </button>
-    </div>
-
-    <!-- How it works -->
-    <div class="space-y-4">
-      <h3 class="text-white font-black text-md uppercase tracking-tight italic px-1">How it works</h3>
-      
-      <div class="grid grid-cols-1 gap-3">
-        <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
-          <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-black">1</div>
-          <div class="flex-1">
-            <h4 class="text-white font-bold text-sm">Share your link</h4>
-            <p class="text-white/40 text-[10px]">Invite friends to join Aviator Jeet via your link</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
-          <div class="w-10 h-10 rounded-full bg-[#d2fe07]/20 flex items-center justify-center text-[#d2fe07] font-black">2</div>
-          <div class="flex-1">
-            <h4 class="text-white font-bold text-sm">Friends Sign Up</h4>
-            <p class="text-white/40 text-[10px]">Your friends register and start playing</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
-          <div class="w-10 h-10 rounded-full bg-[#f7c04a]/20 flex items-center justify-center text-[#f7c04a] font-black">3</div>
-          <div class="flex-1">
-            <h4 class="text-white font-bold text-sm">Earn commissions</h4>
-            <p class="text-white/40 text-[10px]">Get real cash rewards for every active player you refer</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Extra Space for Footer -->
-    <div class="h-20"></div>
-
-  </div>
+         <app-invite-commission 
+            [commissions]="commissions"
+            (claim)="handleClaim($event)">
+         </app-invite-commission>
+      } @else if (activeTab === 'promotion') {
+         <app-promotion-sharing 
+            (copy)="handleCopy($event)"
+            (share)="handleShare($event)">
+         </app-promotion-sharing>
+      } @else if (activeTab === 'data') {
+         <app-my-data [dataStats]="myDataStats"></app-my-data>
+      } @else if (activeTab === 'performance') {
+         <app-performance-tab class="w-full h-full flex flex-col flex-1" style="flex: 1 1 0%;"></app-performance-tab>
+      } @else if (activeTab === 'commission') {
+         <app-commission-tab class="w-full h-full flex flex-col flex-1" style="flex: 1 1 0%;"></app-commission-tab>
+      } @else {
+         <div class="flex-1 flex items-center justify-center p-10 opacity-40">
+            <span class="text-white text-lg font-black uppercase italic">Coming Soon...</span>
+         </div>
+      }
+   </div>
 </ion-content>
 
+
+
+<!-- Lucky Draw Modal Render -->
+<app-lucky-draw-modal [isOpen]="isSpinModalOpen" (modalClose)="isSpinModalOpen = false"></app-lucky-draw-modal>
+
+<!-- Floating Brand Logo Overlay -->
+@if (isFloatingLogoVisible) {
+   <div class="fixed bottom-[90px] left-4 z-[999] active:scale-95 transition-transform">
+      <div class="relative w-[60px] h-[60px] rounded-full p-0.5 bg-gradient-to-b from-[#A52424] to-[#5A0B0B] border-[2.5px] border-[#F1C15A] shadow-xl shadow-black/60 overflow-visible">
+         <img src="assets/brand_ar999.png" class="w-full h-full object-contain rounded-full shadow-inner" />
+         <!-- Close Button -->
+         <button (click)="closeFloatingLogo()" class="absolute -top-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border border-white/20 shadow-md">
+            <ion-icon name="close" class="text-white text-[12px]"></ion-icon>
+         </button>
+         <!-- Label -->
+         <div class="absolute -bottom-3.5 left-0 right-0 text-center">
+            <span class="text-[9px] font-black text-white italic tracking-widest drop-shadow-md">788win</span>
+         </div>
+      </div>
+   </div>
+}
+
 <app-footer-nav activeTab="invite"></app-footer-nav>
-
-<app-deposit-modal 
-  [isOpen]="isDepositModalOpen" 
-  (close)="closeDeposit()">
-</app-deposit-modal>
-
-<app-reward-modal
-  [isOpen]="isRewardModalOpen"
-  (close)="isRewardModalOpen = false">
-</app-reward-modal>
 
 <ion-toast
   [isOpen]="showCopyToast"

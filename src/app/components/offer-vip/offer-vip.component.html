@@ -1,0 +1,168 @@
+<div class="vip-card-wrapper mt-2">
+  <!-- VIP Level Selector (Compact) -->
+  <div #vipSelector class="overflow-x-auto flex gap-1.5 p-2 px-4 bg-[#111419]/30 [&::-webkit-scrollbar]:hidden"
+    style="scrollbar-width: none;">
+    @for (tier of vipTiers; track tier.lvl) {
+    <button (click)="scrollToLevel(tier.lvl)"
+      [class.active]="activeVipLevel === tier.lvl" class="vip-level-btn">VIP{{tier.lvl}}</button>
+    }
+  </div>
+
+  <!-- Swipeable VIP Card Carousel -->
+  <div class="vip-carousel-container">
+    <div #vipCarouselViewport (scroll)="onVipScroll($event)" class="carousel-viewport">
+      @for (tier of vipTiers; track tier.lvl) {
+      <div class="carousel-slide" [class.active-slide]="tier.lvl === activeVipLevel">
+        <div class="vip-card-header-gradient" [class.active-card]="tier.lvl === activeVipLevel">
+          <!-- Status Badge -->
+          <div class="card-badge-unlocked" [class.!bg-[#E64242]]="tier.isCurrent">
+            @if (tier.isCurrent) {
+              <span>Current Level</span>
+            } @else {
+              <ion-icon name="lock-closed"></ion-icon>
+              <span>To be unlocked</span>
+            }
+          </div>
+
+          <!-- Card Left Content -->
+          <div class="card-content-left">
+            <h2 class="card-lvl">VIP {{tier.lvl}}</h2>
+            <p class="card-promo">{{tier.label}}</p>
+          </div>
+
+          <!-- Elaborate Rank Badge -->
+          <div class="rank-badge-elaborate">
+            <div class="wreath-left"></div>
+            <div class="wreath-right"></div>
+            <div class="badge-outer-ring">
+              <div class="badge-inner">
+                <div class="crown-box" [class.multi-icons]="tier.lvl <= 10">
+                  @if (tier.lvl >= 1 && tier.lvl <= 5) { 
+                    @for (i of getIconArray(tier.lvl); track $index) { <ion-icon name="star"></ion-icon> }
+                  } @else if (tier.lvl >= 6 && tier.lvl <= 10) { 
+                    @for (i of getIconArray(tier.lvl - 5); track $index) { <ion-icon name="diamond"></ion-icon> }
+                  } @else {
+                    <ion-icon name="ribbon"></ion-icon>
+                  }
+                </div>
+                <div class="lvl-num">{{tier.lvl}}</div>
+                <div class="vip-label">VIP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button (click)="scrollToLevel(activeVipLevel - 1)"
+      [class.hidden]="activeVipLevel === 0" class="nav-arrow left">
+      <ion-icon name="chevron-back"></ion-icon>
+    </button>
+    <button (click)="scrollToLevel(activeVipLevel + 1)"
+      [class.hidden]="activeVipLevel === 50" class="nav-arrow right">
+      <ion-icon name="chevron-forward"></ion-icon>
+    </button>
+  </div>
+
+  <!-- Action Bar (Compact) -->
+  <div class="compact-action-bar" *ngIf="unclaimed">
+    <div class="unclaimed-info">
+      <span class="label">Unclaimed</span>
+      <span class="value">{{ unclaimed.total }}</span>
+      <ion-icon name="refresh" class="text-[#F1C15A] text-[12px] ml-0.5" (click)="refreshUnclaimed.emit()" [class.animate-spin]="isLoadingUnclaimed"></ion-icon>
+    </div>
+    <div class="bar-btns">
+      <button class="btn-receive">Receive</button>
+      <button class="btn-history" (click)="viewHistory.emit()">History</button>
+    </div>
+  </div>
+
+  <div class="vip-scroll-area mt-3" *ngIf="activeVipData">
+    <!-- Dynamic Bonus Items -->
+    <div class="vip-bonus-item-compact">
+      <div class="item-left">
+        <div class="icon-box bg-[#FDF2E9]">
+          <ion-icon name="star" class="text-[#E67E22]"></ion-icon>
+        </div>
+        <div class="text-content">
+          <div class="flex items-center gap-1">
+            <span class="title">Upgrade Bonus</span>
+            <span class="text-[#F1C15A] text-[11px] font-black">Rs {{ activeVipData.upgradeBonus }}</span>
+          </div>
+          <span class="subtitle">{{ activeVipData.label }}</span>
+        </div>
+      </div>
+      <button class="claim-btn-compact" (click)="claimBonus.emit('upgrade')">Claim</button>
+    </div>
+
+    <div class="vip-bonus-item-compact">
+      <div class="item-left">
+        <div class="icon-box bg-[#EBF5FB]">
+          <ion-icon name="calendar" class="text-[#2E86DE]"></ion-icon>
+        </div>
+        <div class="text-content">
+          <div class="flex items-center gap-1">
+            <span class="title">Daily Bonus</span>
+            <span class="text-[#F1C15A] text-[11px] font-black">Rs {{ activeVipData.dailyBonus }}</span>
+          </div>
+          <span class="subtitle">Daily deposit ≥ 1</span>
+        </div>
+      </div>
+      <button class="claim-btn-compact" (click)="claimBonus.emit('daily')">Claim</button>
+    </div>
+
+    <div class="vip-bonus-item-compact">
+      <div class="item-left">
+        <div class="icon-box bg-[#E9F7EF]">
+          <ion-icon name="calendar" class="text-[#28A745]"></ion-icon>
+        </div>
+        <div class="text-content">
+          <div class="flex items-center gap-1">
+            <span class="title">Weekly Bonus</span>
+            <span class="text-[#F1C15A] text-[11px] font-black">Rs {{ activeVipData.weeklyBonus }}</span>
+          </div>
+          <span class="subtitle">Weekly deposit ≥ 1</span>
+        </div>
+      </div>
+      <button class="claim-btn-compact" (click)="claimBonus.emit('weekly')">Claim</button>
+    </div>
+
+    <div class="vip-bonus-item-compact">
+      <div class="item-left">
+        <div class="icon-box bg-[#F5EEF8]">
+          <ion-icon name="calendar" class="text-[#6F42C1]"></ion-icon>
+        </div>
+        <div class="text-content">
+          <div class="flex items-center gap-1">
+            <span class="title">Monthly Bonus</span>
+            <span class="text-[#F1C15A] text-[11px] font-black">Rs {{ activeVipData.monthlyBonus }}</span>
+          </div>
+          <span class="subtitle">Monthly deposit ≥ 1</span>
+        </div>
+      </div>
+      <button class="claim-btn-compact" (click)="claimBonus.emit('monthly')">Claim</button>
+    </div>
+
+    <!-- Privilege Section (Compact) -->
+    <div class="bg-[#252830]/30 p-2.5 rounded-xl border border-white/5 mt-2">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="icon-box bg-[#FDF2E9]">
+          <ion-icon name="diamond" class="text-[#E67E22] text-[16px]"></ion-icon>
+        </div>
+        <span class="text-[#ADB6C3] text-[12px] font-black uppercase tracking-wider">VIP Privilege</span>
+      </div>
+      <div class="space-y-1.5">
+        <div class="flex justify-between text-[9px]">
+          <span class="text-[#ADB6C3]">Daily withdrawal total limit</span>
+          <span class="text-white font-black">Unlimited</span>
+        </div>
+        <div class="flex justify-between text-[9px]">
+          <span class="text-[#ADB6C3]">Daily withdrawal limit</span>
+          <span class="text-white font-black">Unlimited</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

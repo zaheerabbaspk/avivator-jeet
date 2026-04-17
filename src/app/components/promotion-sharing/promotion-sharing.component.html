@@ -1,0 +1,268 @@
+<div class="px-3 pt-3 pb-24 space-y-4">
+  
+  <!-- Invite Link Wrapper (Similar to InviteLinkComponent but specific styles) -->
+  <div class="bg-[#1C1E24] rounded-xl border border-white/[0.03] p-3 flex flex-col gap-3">
+     <div class="flex items-center justify-between">
+        <h3 class="text-white text-[13px] font-bold">Invite friends</h3>
+        <span class="text-[#8E99A7] text-[11px] font-normal tracking-wide">My invitation code <span class="text-white font-bold ml-1">{{ referralCode }}</span> <ion-icon name="copy-outline" (click)="copy.emit(referralCode)" class="ml-1 text-[13px] text-[#F1C15A] cursor-pointer align-text-bottom"></ion-icon></span>
+     </div>
+
+     <div class="flex gap-4">
+        <!-- QR Section -->
+        <div class="w-[85px] shrink-0 flex flex-col items-center">
+           <div class="w-[85px] aspect-square bg-white rounded-t-[6px] p-2 relative overflow-hidden">
+              <img src="assets/qr_placeholder.png" class="w-full h-full object-contain" />
+           </div>
+           <div class="w-[85px] bg-[#F1C15A] py-[3px] rounded-b-[6px] text-center shadow-md cursor-pointer active:opacity-80">
+               <span class="text-[#5A3D0A] text-[9.5px] font-bold leading-[1.2] block">Save</span>
+               <span class="text-[#5A3D0A] text-[9.5px] font-bold leading-[1.2] block">invitation...</span>
+           </div>
+        </div>
+
+        <!-- Link & Social Section -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+           <span class="text-[#545E6D] text-[11px] font-medium block mb-1">Referral link</span>
+           <div class="flex items-center gap-2 mb-3">
+              <div class="flex-1 bg-[#1A1D24] rounded-[6px] px-3 py-[6px] flex items-center justify-between border border-white/[0.04]">
+                 <span class="text-[#8E99A7] text-[11px] truncate">{{ referralLink }}</span>
+                 <ion-icon name="chevron-down-outline" class="text-[#8E99A7] text-[13px] ml-1"></ion-icon>
+              </div>
+              <ion-icon name="copy-outline" (click)="copy.emit(referralLink)" class="text-[#F1C15A] text-[17px] cursor-pointer pr-1"></ion-icon>
+           </div>
+           
+           <div class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-1">
+              <div class="flex flex-col items-center gap-1 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share.emit('instagram')">
+                 <div class="w-[32px] h-[32px] rounded-full bg-gradient-to-tr from-[#FFD600] via-[#FF0040] to-[#9900FF] flex items-center justify-center">
+                    <ion-icon name="logo-instagram" class="text-white text-[16px]"></ion-icon>
+                 </div>
+                 <span class="text-[#E0E0E0] text-[9px]">instagram</span>
+              </div>
+              <div class="flex flex-col items-center gap-1 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share.emit('whatsapp')">
+                 <div class="w-[32px] h-[32px] rounded-full bg-[#25D366] flex items-center justify-center">
+                    <ion-icon name="logo-whatsapp" class="text-white text-[16px]"></ion-icon>
+                 </div>
+                 <span class="text-[#E0E0E0] text-[9px]">WhatsApp</span>
+              </div>
+              <!-- TikTok fallback to standard play circle or general logo since ionicons lacks tiktok natively -->
+              <div class="flex flex-col items-center gap-1 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share.emit('tiktok')">
+                 <div class="w-[32px] h-[32px] rounded-full bg-black flex items-center justify-center border border-white/10">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-white"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.95v7.45c-.01 2.01-.84 3.96-2.28 5.37-1.43 1.4-3.4 2.19-5.41 2.19-2.01 0-3.95-.79-5.38-2.19-1.42-1.41-2.21-3.35-2.22-5.35.01-2.02.83-3.97 2.25-5.39 1.42-1.42 3.39-2.22 5.41-2.21.6 0 1.2.08 1.79.23v4.06c-.57-.14-1.16-.22-1.75-.21-1.07.01-2.11.45-2.86 1.23-.74.78-1.13 1.83-1.13 2.91 0 1.09.41 2.15 1.16 2.91.75.76 1.8 1.18 2.89 1.18 1.08 0 2.13-.42 2.87-1.18.73-.76 1.14-1.8 1.14-2.88V.02z"/></svg>
+                 </div>
+                 <span class="text-[#E0E0E0] text-[9px]">tiktok</span>
+              </div>
+              <div class="flex flex-col items-center gap-1 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share.emit('x')">
+                 <div class="w-[32px] h-[32px] rounded-full bg-black border border-white/10 flex items-center justify-center">
+                    <span class="text-white text-[15px] italic font-black leading-none mt-[-2px]">X</span>
+                 </div>
+                 <span class="text-[#E0E0E0] text-[9px]">X(Twitter)</span>
+              </div>
+              <!-- Threads icon fallback -->
+              <div class="flex flex-col items-center gap-1 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share.emit('threads')">
+                 <div class="w-[32px] h-[32px] rounded-full bg-[#1A1A1A] flex items-center justify-center border border-white/10">
+                    <span class="text-white font-bold text-[14px]">@</span>
+                 </div>
+                 <span class="text-[#E0E0E0] text-[9px]">Threads</span>
+              </div>
+           </div>
+        </div>
+     </div>
+  </div>
+
+  <!-- Agent Tutorial -->
+  <div class="pt-2">
+     <h2 class="text-white text-[15px] font-bold px-1 mb-3">Agent Tutorial</h2>
+     
+     <div class="flex items-center gap-3 overflow-x-auto no-scrollbar pb-3">
+        <button (click)="selectTab('A')" [ngClass]="{'bg-[#F1C15A] text-[#1A1C22] font-bold': activeTutorialTab === 'A', 'bg-transparent text-white border border-white/20': activeTutorialTab !== 'A'}" class="px-4 py-1.5 rounded-full text-[12px] whitespace-nowrap transition-colors outline-none cursor-pointer">
+           A commission
+        </button>
+        <button (click)="selectTab('B1')" [ngClass]="{'bg-[#F1C15A] text-[#1A1C22] font-bold': activeTutorialTab === 'B1', 'bg-transparent text-white border border-white/20': activeTutorialTab !== 'B1'}" class="px-4 py-1.5 rounded-full text-[12px] whitespace-nowrap transition-colors outline-none cursor-pointer">
+           B1 commission
+        </button>
+        <button (click)="selectTab('B2')" [ngClass]="{'bg-[#F1C15A] text-[#1A1C22] font-bold': activeTutorialTab === 'B2', 'bg-transparent text-white border border-white/20': activeTutorialTab !== 'B2'}" class="px-4 py-1.5 rounded-full text-[12px] whitespace-nowrap transition-colors outline-none cursor-pointer">
+           B2 commission
+        </button>
+     </div>
+     
+     <!-- Dynamic Info Box Below Tabs -->
+     @if (activeTutorialTab === 'A') {
+        <div class="flex items-center gap-4 mt-2 px-1">
+           <div class="w-[50px] h-[50px] relative">
+              <div class="w-full h-full rounded-full border-2 border-white/20 overflow-hidden bg-white/5 flex items-center justify-center">
+                 <ion-icon name="person" class="text-white text-[30px] mt-2"></ion-icon>
+              </div>
+              <div class="absolute -bottom-1 -right-1 w-[16px] h-[16px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-[#1A1C22]">
+                 <span class="text-[#1A1C22] text-[10px] font-black leading-none">A</span>
+              </div>
+           </div>
+           
+           <div class="flex flex-col text-[11px] font-bold tracking-wide space-y-1">
+              <div class="text-white">Sub's Perf.=<span class="font-normal">{{ '500+3000=3500' }}</span></div>
+              <div class="text-white">Direct commission=<span class="font-normal">{{ '3500*3%=' }}</span><span class="text-[#F1C15A]">105</span></div>
+              <div class="text-white">Other commission=<span class="text-[#F1C15A]">20+40=60</span></div>
+              <div class="text-white">Current commission=<span class="text-[#F1C15A]">105+60=165</span></div>
+           </div>
+        </div>
+     }
+
+     <!-- Visual Flowchart Area -->
+     <div class="relative w-full mt-[40px] pt-[20px] pb-[80px] bg-transparent">
+        
+        <!-- Root node is implicit above via connector -->
+        <div class="absolute top-0 left-1/2 w-[2px] h-[20px] bg-[#6B7280] -translate-x-1/2" style="z-index: 1;"></div>
+        
+        <!-- B1 and B2 Layer -->
+        <div class="relative flex justify-center w-full gap-[15px] pt-4" style="z-index: 2;">
+           <!-- Connector branching from above to B1/B2 -->
+           <div class="absolute -top-4 w-[50%] left-1/4 right-1/4 h-[8px] border-t-[2px] border-l-[2px] border-r-[2px] border-[#6B7280] rounded-t-[4px]" style="z-index: 1;"></div>
+           
+           <!-- B1 Box -->
+           <div class="bg-[#DFCE9C] rounded-[8px] pt-[24px] pb-[10px] w-full max-w-[145px] text-center relative shadow-sm border border-[#5A3D0A]/10">
+              <!-- Avatar -->
+              <div class="w-[44px] h-[44px] absolute -top-[22px] left-1/2 -translate-x-1/2">
+                 <div class="w-full h-full rounded-full border-2 border-white overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <ion-icon name="person" class="text-gray-500 text-[26px] mt-2"></ion-icon>
+                 </div>
+                 <div class="absolute -bottom-1 -right-1 w-[16px] h-[16px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-white">
+                    <span class="text-white text-[9px] font-black leading-none">B1</span>
+                 </div>
+              </div>
+              <div class="text-[#5A3D0A] text-[10px] font-bold">Valid Bets 500</div>
+              <div class="text-[#5A3D0A] text-[9px] mt-0.5">Give A commission 500*3%=<span class="text-[#F1C15A] drop-shadow-md">15</span></div>
+
+              <!-- Connecting line to bottom -->
+              <div class="absolute -bottom-[20px] left-1/2 w-[2px] h-[20px] bg-[#6B7280] -translate-x-1/2"></div>
+           </div>
+
+           <!-- B2 Box -->
+           <div class="bg-[#DFCE9C] rounded-[8px] pt-[24px] pb-[10px] w-full max-w-[145px] text-center relative shadow-sm border border-[#5A3D0A]/10">
+              <!-- Avatar -->
+              <div class="w-[44px] h-[44px] absolute -top-[22px] left-1/2 -translate-x-1/2">
+                 <div class="w-full h-full rounded-full border-2 border-white overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <ion-icon name="person" class="text-gray-500 text-[26px] mt-2"></ion-icon>
+                 </div>
+                 <div class="absolute -bottom-1 -right-1 w-[16px] h-[16px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-white">
+                    <span class="text-white text-[9px] font-black leading-none">B2</span>
+                 </div>
+              </div>
+              <div class="text-[#5A3D0A] text-[10px] font-bold">Valid Bets 3000</div>
+              <div class="text-[#5A3D0A] text-[9px] mt-0.5">Give A commission 3000*3%=<span class="text-[#F1C15A] drop-shadow-md">90</span></div>
+
+              <!-- Connecting line to bottom straight down to C3 -->
+              <div class="absolute -bottom-[20px] left-1/2 w-[2px] h-[20px] bg-[#6B7280] -translate-x-1/2"></div>
+           </div>
+        </div>
+
+        <!-- C1, C2, C3 Layer -->
+        <div class="relative flex justify-center w-full gap-[15px] pt-[50px]" style="z-index: 2;">
+           <!-- Connector branching from B1 to C1/C2 -->
+           <div class="absolute top-[30px] w-[33%] left-[12%] h-[12px] border-t-[2px] border-l-[2px] border-r-[2px] border-[#6B7280] rounded-t-[4px]" style="z-index: 1;"></div>
+           <!-- No branch for B2, it just drops straight to C3 which is aligned with B2 -->
+
+           <!-- C1 Box -->
+           <div class="bg-[#C8C2BA] rounded-[8px] pt-[24px] pb-[10px] w-full max-w-[90px] text-center relative shadow-sm border border-[#5A3D0A]/10">
+              <div class="w-[36px] h-[36px] absolute -top-[18px] left-1/2 -translate-x-1/2">
+                 <div class="w-full h-full rounded-full border-2 border-white overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <ion-icon name="person" class="text-gray-500 text-[22px] mt-2"></ion-icon>
+                 </div>
+                 <div class="absolute -bottom-1 -right-1 w-[14px] h-[14px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-white">
+                    <span class="text-white text-[8px] font-black leading-none">C1</span>
+                 </div>
+              </div>
+              <div class="text-[#3A3D40] text-[9px] font-bold leading-tight px-1">Valid Bets 1000</div>
+              <div class="text-[#3A3D40] text-[8px] mt-0.5 leading-tight px-1">Give A commission<br/>1000*2%=<span class="text-[#F1C15A] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] font-bold">20</span></div>
+
+              <!-- Drop down line -->
+              <div class="absolute -bottom-[20px] left-1/2 w-[2px] h-[20px] bg-[#6B7280] -translate-x-1/2"></div>
+           </div>
+
+           <!-- C2 Box -->
+           <div class="bg-[#C8C2BA] rounded-[8px] pt-[24px] pb-[10px] w-full max-w-[90px] text-center relative shadow-sm border border-[#5A3D0A]/10">
+              <div class="w-[36px] h-[36px] absolute -top-[18px] left-1/2 -translate-x-1/2">
+                 <div class="w-full h-full rounded-full border-2 border-white overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <ion-icon name="person" class="text-gray-500 text-[22px] mt-2"></ion-icon>
+                 </div>
+                 <div class="absolute -bottom-1 -right-1 w-[14px] h-[14px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-white">
+                    <span class="text-white text-[8px] font-black leading-none">C2</span>
+                 </div>
+              </div>
+              <div class="text-[#3A3D40] text-[9px] font-bold leading-tight px-1">Valid Bets 2000</div>
+              <div class="text-[#3A3D40] text-[8px] mt-0.5 leading-tight px-1">Give A commission<br/>2000*2%=<span class="text-[#F1C15A] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] font-bold">40</span></div>
+
+              <!-- Drop down line -->
+              <div class="absolute -bottom-[20px] left-1/2 w-[2px] h-[20px] bg-[#6B7280] -translate-x-1/2"></div>
+           </div>
+
+           <!-- C3 Box -->
+           <div class="bg-[#C8C2BA] rounded-[8px] pt-[24px] pb-[10px] w-full max-w-[90px] text-center relative shadow-sm border border-[#5A3D0A]/10">
+              <div class="w-[36px] h-[36px] absolute -top-[18px] left-1/2 -translate-x-1/2">
+                 <div class="w-full h-full rounded-full border-2 border-white overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <ion-icon name="person" class="text-gray-500 text-[22px] mt-2"></ion-icon>
+                 </div>
+                 <div class="absolute -bottom-1 -right-1 w-[14px] h-[14px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-white">
+                    <span class="text-white text-[8px] font-black leading-none">C3</span>
+                 </div>
+              </div>
+              <div class="text-[#3A3D40] text-[9px] font-bold leading-tight px-1">Valid Bets 20000</div>
+              <div class="text-[#3A3D40] text-[8px] mt-0.5 leading-tight px-1">Give A commission<br/>20000*0%=<span class="text-[#F1C15A] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] font-bold">0</span></div>
+
+              <!-- Drop down line -->
+              <div class="absolute -bottom-[20px] left-1/2 w-[2px] h-[20px] bg-[#6B7280] -translate-x-1/2"></div>
+           </div>
+        </div>
+
+        <!-- The common horizontal line catching C1, C2, C3 -->
+        <div class="absolute bottom-[35px] left-1/6 w-[70%] border-t-[2px] border-[#6B7280] left-[15%] right-[15%]" style="z-index: 1;"></div>
+        
+        <!-- The line dropping to N -->
+        <div class="absolute bottom-[20px] left-1/2 w-[2px] h-[15px] bg-[#6B7280] -translate-x-1/2" style="z-index: 1;"></div>
+        
+        <!-- The N Box / Base Block -->
+        <div class="absolute -bottom-[15px] left-1/2 w-[95%] -translate-x-1/2 bg-[#B7CCBC] rounded-[8px] p-2 pt-[18px] shadow-sm text-center border border-green-800/10" style="z-index: 2;">
+           <div class="w-[38px] h-[38px] absolute -top-[19px] left-1/2 -translate-x-1/2">
+               <div class="w-full h-full rounded-full border-2 border-white overflow-hidden bg-gray-200 flex items-center justify-center">
+                  <ion-icon name="person" class="text-gray-600 text-[24px] mt-2"></ion-icon>
+               </div>
+               <div class="absolute -bottom-1 -right-1 w-[14px] h-[14px] bg-[#22C55E] rounded-full flex items-center justify-center border border-white">
+                  <span class="text-white text-[8px] font-black leading-none">N</span>
+               </div>
+           </div>
+           
+           <div class="text-[#3A403C] text-[9px] font-medium leading-tight">
+              (Countless subordinates)<br/>
+              contributes performance and commission to A, with unlimited subordinate levels-the<br/>
+              more, the better
+           </div>
+        </div>
+
+        <!-- Abstract Yellow Arrows matching the screenshot's 'Give A Commission' lines mapping upwards -->
+        <!-- These are positioned absolutely to emulate the complex network diagram drawing -->
+        
+        <!-- Arrow out of B1 going up left outer -->
+        <div class="absolute top-[0px] left-[5%] bottom-[130px] w-[15px] border-l-[1.5px] border-[#F1C15A] border-t-[1.5px] border-b-[1.5px] rounded-tl-[4px] rounded-bl-[4px]" style="z-index: 0;"></div>
+        <div class="absolute top-[-4px] left-[5%] -translate-x-1/2 text-[#F1C15A] text-[12px]">&#9650;</div>
+
+        <!-- Arrow out of C1 going up left inner -->
+        <div class="absolute top-[10px] left-[15%] bottom-[20px] w-[15px] border-l-[1.5px] border-[#F1C15A] border-t-[1.5px] border-b-[1.5px] rounded-tl-[4px] rounded-bl-[4px]" style="z-index: 0;"></div>
+        <div class="absolute top-[6px] left-[15%] -translate-x-1/2 text-[#F1C15A] text-[12px]">&#9650;</div>
+
+        <!-- Arrow out of B2 going up right outer -->
+        <div class="absolute top-[0px] right-[5%] bottom-[130px] w-[15px] border-r-[1.5px] border-[#F1C15A] border-t-[1.5px] border-b-[1.5px] rounded-tr-[4px] rounded-br-[4px]" style="z-index: 0;"></div>
+        <div class="absolute top-[-4px] right-[5%] translate-x-1/2 text-[#F1C15A] text-[12px]">&#9650;</div>
+
+        <!-- Arrow out of C2 going up right inner -->
+        <!-- In the screenshot C2 has a yellow line going out right, up, inside the B2 line -->
+        <div class="absolute top-[10px] right-[15%] bottom-[20px] w-[45px] border-r-[1.5px] border-[#F1C15A] border-t-[1.5px] border-b-[1.5px] rounded-tr-[4px] rounded-br-[4px]" style="z-index: 0;"></div>
+        <div class="absolute top-[6px] right-[15%] translate-x-1/2 text-[#F1C15A] text-[12px]">&#9650;</div>
+     </div>
+
+  </div>
+
+  <!-- Explanation Block -->
+  <div class="bg-[#1C1E24] rounded-lg mt-10 p-4 border border-white/[0.03]">
+     <h3 class="text-white text-[13px] font-bold mb-2">Explanation:</h3>
+     <p class="text-white text-[12px] font-medium leading-relaxed">
+        Assume that for valid bets &lt; 10000, commission is 100 (1%). For valid bets &ge; 10000, commission is 300 (3%). A recruit
+     </p>
+  </div>
+</div>

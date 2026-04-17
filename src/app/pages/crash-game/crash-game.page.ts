@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { home, wallet, caretBack, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, removeCircleOutline, addCircleOutline, helpCircleOutline, menuOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, checkmarkSharp } from 'ionicons/icons';
+import { home, wallet, caretBack, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, removeCircleOutline, addCircleOutline, helpCircleOutline, menuOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, checkmarkSharp, volumeMediumOutline, volumeMuteOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { CrashGameEngineService } from '../../services/crash-game-engine.service';
+import { SoundService } from '../../services/sound.service';
 import { DepositModalComponent } from '../../components/deposit-modal/deposit-modal.component';
 
 @Component({
@@ -27,6 +28,7 @@ import { DepositModalComponent } from '../../components/deposit-modal/deposit-mo
 })
 export class CrashGamePage implements OnInit, OnDestroy {
     private router = inject(Router);
+    private soundService = inject(SoundService);
     gameEngine = inject(CrashGameEngineService);
 
     // Loading State
@@ -100,31 +102,28 @@ export class CrashGamePage implements OnInit, OnDestroy {
         this.isDraggingNav = false;
     }
 
-    // Audio State
-    private audioCtx: AudioContext | null = null;
-    private engineOsc: OscillatorNode | null = null;
-    private engineGain: GainNode | null = null;
 
     constructor() {
-        addIcons({ home, wallet, caretBack, checkmarkSharp, helpCircleOutline, menuOutline, removeCircleOutline, addCircleOutline, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark });
+        addIcons({ home, wallet, caretBack, checkmarkSharp, helpCircleOutline, menuOutline, removeCircleOutline, addCircleOutline, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, volumeMediumOutline, volumeMuteOutline });
 
         // Watch for game state changes from server
         effect(() => {
             const state = this.gameEngine.gameState();
+            const multiplier = this.gameEngine.currentMultiplier();
             
             // Handle state transitions
             if (state === 'WAITING') {
-                this.stopEngineSound();
+                this.soundService.setFlight(false);
                 this.gameEngine.resetBetsIfNeeded();
             } else if (state === 'RUNNING') {
                 // ONLY play sound if game is not in loading screen
                 if (!this.isLoading) {
-                    this.playEngineSound();
+                    this.soundService.setFlight(true, multiplier);
                 }
             } else if (state === 'CRASHED') {
-                this.stopEngineSound();
+                this.soundService.setFlight(false);
                 if (!this.isLoading) {
-                    this.playBlastSound();
+                    this.soundService.playFlyAway();
                 }
                 const crashMult = this.gameEngine.currentMultiplier();
                 this.gameEngine.handleCrash(crashMult);
@@ -132,79 +131,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
         });
     }
 
-    // --- Audio Synthesis Engine ---
-    private initAudio() {
-        if (!this.audioCtx) {
-            this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        }
-    }
-
-    private playEngineSound() {
-        this.initAudio();
-        if (!this.audioCtx) return;
-        if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
-        this.stopEngineSound();
-
-        // Create engine drone (propeller plane rumble)
-        this.engineOsc = this.audioCtx.createOscillator();
-        this.engineGain = this.audioCtx.createGain();
-        
-        this.engineOsc.type = 'sawtooth';
-        this.engineOsc.frequency.setValueAtTime(45, this.audioCtx.currentTime); 
-        this.engineOsc.frequency.exponentialRampToValueAtTime(140, this.audioCtx.currentTime + 25);
-        
-        this.engineGain.gain.setValueAtTime(0, this.audioCtx.currentTime);
-        this.engineGain.gain.linearRampToValueAtTime(0.06, this.audioCtx.currentTime + 1);
-
-        this.engineOsc.connect(this.engineGain);
-        this.engineGain.connect(this.audioCtx.destination);
-        
-        this.engineOsc.start();
-    }
-
-    private stopEngineSound() {
-        if (this.engineOsc && this.engineGain && this.audioCtx) {
-            this.engineGain.gain.cancelScheduledValues(this.audioCtx.currentTime);
-            this.engineGain.gain.linearRampToValueAtTime(0, this.audioCtx.currentTime + 0.3);
-            setTimeout(() => {
-                try { this.engineOsc?.stop(); } catch(e){}
-                this.engineOsc = null;
-            }, 300);
-        }
-    }
-
-    private playBlastSound() {
-        this.initAudio();
-        if (!this.audioCtx) return;
-        if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
-
-        // White noise explosion blast
-        const bufferSize = this.audioCtx.sampleRate * 1.5;
-        const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * 0.8; 
-        }
-
-        const noise = this.audioCtx.createBufferSource();
-        noise.buffer = buffer;
-
-        // Thud filter
-        const filter = this.audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1500, this.audioCtx.currentTime);
-        filter.frequency.exponentialRampToValueAtTime(40, this.audioCtx.currentTime + 1.2);
-
-        const gainNode = this.audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.3, this.audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 1.2);
-
-        noise.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(this.audioCtx.destination);
-
-        noise.start();
-    }
 
     ngOnInit() {
         console.log('🎮 Crash game page initialized');
@@ -232,7 +158,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
                         this.isLoading = false;
                         // Trigger sound if game is already running after loading completes
                         if (this.gameEngine.gameState() === 'RUNNING') {
-                            this.playEngineSound();
+                            this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
                         }
                     }, 600);
                     return;
@@ -247,9 +173,17 @@ export class CrashGamePage implements OnInit, OnDestroy {
         startLoading();
     }
 
+    toggleSound() {
+        this.soundService.toggleMute();
+    }
+
+    get isMuted() {
+        return this.soundService.isMuted();
+    }
+
     ngOnDestroy() {
         console.log('🎮 Crash game page destroyed');
-        this.stopEngineSound(); // Ensure sound stops on back
+        this.soundService.stopAll(); // Ensure sound stops on back
     }
 
     // UI Actions (Refined for visible start)
@@ -329,6 +263,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
     }
 
     goBack() {
+        this.soundService.stopAll();
         this.router.navigate(['/home'], { queryParams: { showReward: 'true' } });
     }
 

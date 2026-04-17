@@ -1,0 +1,88 @@
+<div class="pb-8 space-y-5">
+  
+  <!-- Date Filters - Sticky -->
+  <div class="flex items-center gap-3 overflow-x-auto no-scrollbar py-3 px-4 bg-[#111419] sticky top-0 z-50 border-b border-white/[0.02]">
+     @for (filter of filters; track filter) {
+        <button 
+           (click)="selectFilter(filter)" 
+           [ngClass]="{
+             'bg-[#F1C15A] text-[#1A1C22] font-bold border-transparent shadow-[0_2px_4px_rgba(241,193,90,0.2)]': activeFilter === filter,
+             'bg-transparent text-[#E0E0E0] border border-white/10 font-medium': activeFilter !== filter
+           }" 
+           class="px-[18px] py-[6px] rounded-full text-[11px] whitespace-nowrap transition-colors outline-none cursor-pointer">
+           {{ filter }}
+        </button>
+     }
+  </div>
+
+  <!-- Subordinate Stats -->
+  <div class="space-y-4 px-2">
+     <h2 class="text-white text-[13px] font-bold text-center mt-2">Subordinate Stats</h2>
+     
+     <div class="grid grid-cols-3 gap-[6px]">
+        @for (stat of dataStats?.subordinateStats; track stat.label) {
+           <div class="bg-[#1A1C22]/80 rounded-[6px] p-2 pt-3 pb-3 flex flex-col items-center justify-center text-center shadow-sm border border-white/[0.02]">
+              <span class="text-[#6B7280] text-[9.5px] font-medium leading-[1.2] min-h-[22px] flex items-center justify-center -mt-1">{{ stat.label }}</span>
+              <span class="text-white text-[16px] font-semibold mt-1">{{ stat.value }}</span>
+           </div>
+        }
+     </div>
+  </div>
+
+  <!-- Direct Revenue Stats -->
+  <div class="space-y-4 px-2 pt-1 border-t border-white/[0.04] mt-2">
+     <h2 class="text-white text-[13px] font-bold text-center pt-2">From direct revenue</h2>
+     
+     <div class="grid grid-cols-3 gap-[6px]">
+        @for (stat of dataStats?.revenueStats; track stat.label) {
+           <div class="bg-[#1A1C22]/80 rounded-[6px] p-2 pt-3 pb-3 flex flex-col items-center justify-center text-center shadow-sm border border-white/[0.02]">
+              <span class="text-[#6B7280] text-[9.5px] font-medium leading-[1.2] min-h-[22px] flex items-center justify-center -mt-1">{{ stat.label }}</span>
+              <span [ngClass]="stat.isYellow ? 'text-[#F0A500]' : 'text-white'" class="text-[16px] font-semibold mt-1">{{ stat.value }}</span>
+           </div>
+        }
+     </div>
+  </div>
+
+  <!-- Additional Data Blocks -->
+  <div class="space-y-4 px-2 mt-5">
+     
+     <!-- All Data Section -->
+     <div class="bg-[#1A1C22]/90 rounded-[8px] border border-white/[0.02] overflow-hidden flex flex-col">
+        <div class="w-full py-[14px] text-center border-b border-white/[0.04]">
+           <span class="text-white text-[12px] font-bold">All Data(Include indirect subordinates)</span>
+        </div>
+        <div class="flex flex-col">
+           @for (row of dataStats?.allDataStats; track $index) {
+              <div class="flex w-full border-b border-white/[0.04] last:border-b-0">
+                 @for (col of row; track col.label) {
+                    <div class="flex-1 p-[10px] flex flex-col items-center justify-center text-center border-r border-white/[0.04] last:border-r-0">
+                       <span class="text-[#6B7280] text-[9.5px] font-medium leading-[1.2] min-h-[22px] flex items-center justify-center px-1">{{ col.label }}</span>
+                       <span class="text-white text-[16px] font-semibold mt-1">{{ col.value }}</span>
+                    </div>
+                 }
+              </div>
+           }
+        </div>
+     </div>
+
+     <!-- My Total Income Section -->
+     <div class="bg-[#1A1C22]/90 rounded-[8px] border border-white/[0.02] overflow-hidden flex flex-col">
+        <div class="w-full py-[14px] text-center border-b border-white/[0.04]">
+           <span class="text-[#F1C15A] text-[13px] font-bold drop-shadow-sm">My total income</span>
+        </div>
+        <div class="flex flex-col">
+           @for (row of dataStats?.totalIncomeStats; track $index) {
+              <div class="flex w-full border-b border-white/[0.04] last:border-b-0">
+                 @for (col of row; track col.label) {
+                    <div class="flex-1 p-[10px] flex flex-col items-center justify-center text-center border-r border-white/[0.04] last:border-r-0">
+                       <span class="text-[#6B7280] text-[9.5px] font-medium leading-[1.2] min-h-[24px] flex items-center justify-center px-1">{{ col.label }}</span>
+                       <span [ngClass]="col.isYellow ? 'text-[#F0A500]' : 'text-white'" class="text-[16px] font-semibold mt-1">{{ col.value }}</span>
+                    </div>
+                 }
+              </div>
+           }
+        </div>
+     </div>
+
+  </div>
+</div>

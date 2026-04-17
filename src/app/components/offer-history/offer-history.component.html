@@ -1,0 +1,108 @@
+<div class="px-3.5 space-y-5">
+  <!-- Top Row: Filters & Bonus Summary -->
+  <div class="grid grid-cols-3 gap-2 mb-4 items-center">
+    <!-- Filter 1 -->
+    <div class="relative">
+      <div class="filter-dropdown" (click)="toggleHistory.emit()" [class.border-[#F1C15A]]="isHistoryFilterOpen">
+        <span>{{ activeHistoryFilter }}</span>
+        <ion-icon name="chevron-down" [class.rotate-180]="isHistoryFilterOpen" class="transition-transform"></ion-icon>
+      </div>
+    </div>
+    
+    <!-- Filter 2 -->
+    <div class="relative">
+      <div class="filter-dropdown bg-[#1A2128]/40" (click)="toggleStatus.emit()" [class.border-[#F1C15A]]="isStatusFilterOpen">
+        <span>{{ activeStatusFilter }}</span>
+        <ion-icon [name]="isStatusFilterOpen ? 'chevron-up' : 'chevron-down'" class="transition-transform"></ion-icon>
+      </div>
+      
+      @if (isStatusFilterOpen) {
+      <div class="filter-dropdown-menu">
+        @for (opt of statusOptions; track opt) {
+          <div class="menu-item" [class.active]="activeStatusFilter === opt" (click)="setStatus.emit(opt)">
+            {{ opt }}
+          </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Bonus Summary -->
+    <div class="flex justify-end pr-1">
+      <div class="bonus-summary">
+        <span class="label">Bonus</span>
+        <span class="value">{{ activeHistoryFilter === 'Today' ? '50.00' : '0.00' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Navigation Card -->
+  @if (isHistoryFilterOpen) {
+  <div class="bg-[#1A1C22] p-4 rounded-xl border border-white/[0.03] shadow-2xl relative z-50 animate-in fade-in zoom-in duration-200">
+    <div class="grid grid-cols-3 gap-2.5 mb-6">
+      @for (period of historyPeriods; track period) {
+      <button (click)="onSelectPending(period)" [class.active]="pendingHistoryFilter === period"
+        class="filter-pill-btn">{{period}}</button>
+      }
+    </div>
+
+    <div class="flex gap-2.5">
+      <button (click)="toggleHistory.emit()"
+        class="flex-1 h-[48px] rounded-[10px] bg-[#252830] text-[#ADB6C3] text-[14px] font-bold active:opacity-60 transition-all border border-white/5 flex items-center justify-center">Cancel</button>
+      <button (click)="confirmHistory.emit(pendingHistoryFilter)"
+        class="flex-1 h-[48px] rounded-[10px] bg-[#F1C15A] text-[#5A3D0A] text-[14px] font-bold shadow-xl active:scale-[0.98] transition-all flex items-center justify-center">Confirm</button>
+    </div>
+  </div>
+  }
+
+  <!-- History Records List -->
+  @if (historyRecords.length > 0) {
+    <div class="space-y-3">
+      @for (record of historyRecords; track record.id) {
+        <div class="bg-[#1A1C22]/60 p-4 rounded-xl border border-white/[0.03] flex items-center justify-between">
+          <div>
+            <span class="text-white text-[13px] font-black block mb-1">{{ record.type }}</span>
+            <span class="text-[#6B7280] text-[10px] font-bold">{{ record.date }}</span>
+          </div>
+          <div class="text-right">
+            <span class="text-[#F1C15A] text-[14px] font-black block mb-1">{{ record.amount }}</span>
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" 
+                  [class.bg-green-500/10]="record.status === 'Distributed'"
+                  [class.text-green-500]="record.status === 'Distributed'"
+                  [class.bg-blue-500/10]="record.status === 'Claimed'"
+                  [class.text-blue-500]="record.status === 'Claimed'">
+              {{ record.status }}
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Empty State -->
+    <div class="flex flex-col items-center justify-center pt-8">
+      <div class="mb-4 opacity-50">
+        <svg width="100" height="95" viewBox="0 0 100 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(55, 2) rotate(30)">
+            <polygon points="0,0 24,10 10,14" fill="#6B7280" />
+            <polygon points="0,0 10,14 4,22" fill="#9CA3AF" />
+            <line x1="10" y1="14" x2="5" y2="10" stroke="#4B5563" stroke-width="1" />
+          </g>
+          <path d="M18 42 L50 35 L50 52 L18 52 Z" fill="#374151" />
+          <path d="M50 35 L82 42 L82 52 L50 52 Z" fill="#2D3748" />
+          <rect x="18" y="52" width="64" height="38" rx="2" fill="#374151" />
+          <rect x="18" y="52" width="64" height="38" rx="2" fill="url(#boxGradHistory)" />
+          <rect x="46" y="52" width="8" height="38" fill="#2D3748" opacity="0.5" />
+          <line x1="18" y1="71" x2="82" y2="71" stroke="#2D3748" stroke-width="1.5" opacity="0.4" />
+          <defs>
+            <linearGradient id="boxGradHistory" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4B5563" stop-opacity="0.2" />
+              <stop offset="100%" stop-color="#1F2937" stop-opacity="0.4" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <p class="text-[#6B7280] text-[13px] font-semibold">Today No Records, but <span
+          class="text-[#F1C15A] font-black cursor-pointer">View More</span></p>
+    </div>
+  }
+</div>

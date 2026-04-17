@@ -1,0 +1,22 @@
+.active-tab-indicator {
+  @apply absolute bottom-[2px] left-0 right-0 h-[2.5px] bg-[#F1C15A] transition-all duration-300;
+  box-shadow: 0 -1px 4px rgba(241, 193, 90, 0.3);
+}
+
+.no-scrollbar {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+button {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}

@@ -3,7 +3,7 @@ import { IonFooter, IonIcon } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { homeOutline, giftOutline, peopleOutline, headsetOutline, personOutline } from 'ionicons/icons';
+import { homeOutline, giftOutline, peopleOutline, walletOutline, personOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-footer-nav',
@@ -18,7 +18,7 @@ export class FooterNavComponent {
   private router = inject(Router);
 
   constructor() {
-    addIcons({ homeOutline, giftOutline, peopleOutline, headsetOutline, personOutline });
+    addIcons({ homeOutline, giftOutline, peopleOutline, walletOutline, personOutline });
   }
 
   navigateTo(path: string) {

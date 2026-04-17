@@ -1,0 +1,38 @@
+.announce-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #0f1520;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+
+  .announce-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .announce-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .announce-link {
+      color: #00c2ff;
+      font-weight: 700;
+    }
+  }
+
+  .announce-badge {
+    background: #ef4444;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    border-radius: 999px;
+    padding: 1px 6px;
+    flex-shrink: 0;
+  }
+}

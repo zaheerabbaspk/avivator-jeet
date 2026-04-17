@@ -1,0 +1,47 @@
+<div class="home-header" [class.logged-in-bg]="isLoggedIn">
+  <!-- Conditional Left -->
+  <div class="header-left">
+    <div class="header-menu-icon" *ngIf="isLoggedIn">
+      <span></span><span></span><span></span>
+    </div>
+    @if (isLoggedIn) {
+      <span class="logo-aviator">Aviator</span>
+    } @else {
+      <span class="header-arrow">⇒</span>
+      <span class="logo-text">No<span class="logo-777">777</span>.com</span>
+    }
+  </div>
+
+  <!-- Conditional Right -->
+  <div class="header-right">
+    @if (isLoggedIn) {
+      <div class="header-balance-wrap v2" *ngIf="!isLoadingBalance">
+        <div class="flag-circle">
+          <svg viewBox="0 0 100 100" class="pk-svg">
+            <circle cx="50" cy="50" r="50" fill="#01411c" />
+            <path d="M0 0 h25 v100 h-25 z" fill="#fff" />
+            <circle cx="68" cy="50" r="28" fill="#fff" />
+            <circle cx="76" cy="50" r="24" fill="#01411c" />
+            <polygon points="78,40 81,48 89,48 83,54 85,62 78,57 71,62 73,54 67,48 75,48" fill="#fff" />
+          </svg>
+        </div>
+        <span class="balance-value-gold">{{ userBalance | number:'1.2-2' }}</span>
+        <ion-icon name="reload-outline" 
+                  class="refresh-icon" 
+                  (click)="onRefresh()"></ion-icon>
+      </div>
+      <div class="deposit-btn-wrap">
+        <button class="header-deposit-btn-blue" (click)="onDeposit()">
+          Deposit <ion-icon name="caret-down"></ion-icon>
+        </button>
+        <div class="bonus-badge">+7%</div>
+      </div>
+    } @else {
+      <button class="login-btn" (click)="onLogin()">Login</button>
+      <button class="register-btn" (click)="onLogin()">
+        <span class="reg-badge">+1777</span>
+        Register
+      </button>
+    }
+  </div>
+</div>

@@ -1,69 +1,34 @@
-// --- Top Header Tabs ---
-.top-tab-btn {
-  @apply bg-transparent border-none text-[13px] font-bold px-4 pb-2.5 whitespace-nowrap cursor-pointer relative shrink-0 transition-colors duration-200 active:opacity-70 font-sans h-full flex items-center;
-}
-
-.active-tab-indicator {
-  @apply absolute bottom-0 left-1/2 -translate-x-1/2 h-[2.5px] bg-[#F0C059] rounded-t-full transition-all duration-300;
-  width: calc(100% - 24px);
-}
-
-.tab-badge {
-  @apply absolute -top-1 -right-0.5 bg-[#FF4D4F] text-white text-[9px] font-black min-w-[14px] h-[14px] flex items-center justify-center rounded-full px-1 border border-white/20 shadow-md;
-}
-
-// --- Sidebar Tabs (Reference assets) ---
-.sidebar-tab-item {
-  @apply w-full flex flex-col items-center justify-center rounded-lg transition-all duration-200 cursor-pointer overflow-hidden;
-  background-size: cover;
-  background-position: center;
-  aspect-ratio: 1/1;
-  
-  &.active {
-    background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/2-1-7/web/common/btn_zc1_1.avif?manualVersion=1&version=ff933d0296');
-  }
-  
-  &:not(.active) {
-    background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/2-1-7/web/common/btn_zc1_2.avif?manualVersion=1&version=19d009e724');
-  }
-}
-
-.sidebar-icon-box {
-  @apply w-5 h-5 flex items-center justify-center mb-0.5;
-  svg { @apply w-full h-full; }
-}
-
-// --- Control Bar ---
-.control-bar {
-  @apply flex items-center justify-between p-2 pt-0 gap-2 mb-1;
-}
-
-.utility-btn {
-  @apply flex items-center gap-1.5 px-3 py-1.5 border border-[#F0C059]/10 bg-white/5 rounded-md cursor-pointer transition-all duration-200 active:scale-95;
-  
-  .btn-text {
-    @apply text-[10px] font-bold text-[#ADB6C3]/80;
-  }
-  
-  ion-icon { 
-    @apply text-[14px] text-[#F0C059]; 
-  }
-}
-
-.refresh-btn-wrap {
-  @apply flex items-center gap-2;
-}
-
-// --- Banner List ---
-.banner-card {
-  @apply relative rounded-xl overflow-hidden shadow-xl active:scale-[0.98] transition-all;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.banner-red-badge {
-  @apply absolute top-1.5 right-1.5 bg-[#FF4D4F] text-white text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center z-10 border border-white/20;
-}
-
 :host {
   --ion-safe-area-top: 0px;
+}
+
+// Custom Scrollbar Styling (Golden Premium)
+.offers-list-scroll {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none;  // IE/Edge
+
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+// --- Button Polish ---
+button {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Ensure the sidebar doesn't scroll separately from the content for a "locked" feel
+ion-content {
+  --overflow: hidden;
+
+  .flex.h-full {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .flex-1 {
+    overflow-y: auto;
+  }
 }

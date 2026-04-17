@@ -10,18 +10,23 @@ import {
   timeOutline,
   refreshOutline,
   giftOutline,
-  reloadOutline
+  reloadOutline, apps, close, reload, gift, ticketOutline, ticket,
+  helpCircleOutline, refresh, chevronForwardOutline, paperPlaneOutline,
+  ribbon, calendar, calendarNumber, calendarClear, diamond, chevronDown,
+  chevronForward, lockClosed, star, chevronBack, card
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { FooterNavComponent } from '../../components/footer-nav/footer-nav.component';
 import { TreasureModalComponent } from '../../components/treasure-modal/treasure-modal.component';
-
-export interface OfferCard {
-  id: string;
-  brand: string;   // used for alt text
-  bannerImg: string;   // full card image banner
-  brandColor: string;   // used for card border
-}
+import { OfferCardComponent } from '../../components/offer-card/offer-card.component';
+import { OfferHeaderComponent } from '../../components/offer-header/offer-header.component';
+import { OfferSidebarComponent } from '../../components/offer-sidebar/offer-sidebar.component';
+import { OfferEventComponent } from '../../components/offer-event/offer-event.component';
+import { OfferMissionComponent } from '../../components/offer-mission/offer-mission.component';
+import { OfferVipComponent } from '../../components/offer-vip/offer-vip.component';
+import { OfferUnclaimedComponent } from '../../components/offer-unclaimed/offer-unclaimed.component';
+import { OfferHistoryComponent } from '../../components/offer-history/offer-history.component';
+import { OffersService, OfferCardData, Mission, VipTier, HistoryRecord, UnclaimedSummary } from '../../services/offers.service';
 
 @Component({
   selector: 'app-offers',
@@ -35,120 +40,139 @@ export interface OfferCard {
     IonHeader,
     IonIcon,
     FooterNavComponent,
-    TreasureModalComponent
+    TreasureModalComponent,
+    OfferHeaderComponent,
+    OfferSidebarComponent,
+    OfferEventComponent,
+    OfferMissionComponent,
+    OfferVipComponent,
+    OfferUnclaimedComponent,
+    OfferHistoryComponent
   ]
 })
 export class OffersPage implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private offersService = inject(OffersService);
 
+  // Navigation State
   activeTab = 'event';
-  activeSubTab = 'all'; // Lower sub-category tabs
+  activeSubTab = 'all';
   activeSidebar = 'all';
   isTreasureModalOpen = false;
 
   tabs = [
-    { id: 'event', label: 'Event', badge: 3 },
-    { id: 'mission', label: 'Mission', badge: 1 },
+    { id: 'event', label: 'Event', badge: '3' },
+    { id: 'mission', label: 'Mission' },
     { id: 'vip', label: 'VIP' },
     { id: 'unclaimed', label: 'Unclaimed' },
     { id: 'history', label: 'History' },
   ];
 
-  subTabs = [
-    { id: 'all', label: 'All', icon: '/siteadmin/skin/lobby_asset/common/web/common/icon_dtfl_zh_0.svg' },
-    { id: 'cooperate', label: 'cooperate' },
-  ];
+  // Data State
+  offers: OfferCardData[] = [];
+  missions: Mission[] = [];
+  vipTiers: VipTier[] = [];
+  historyRecords: HistoryRecord[] = [];
+  unclaimed: UnclaimedSummary | null = null;
 
-  offers: OfferCard[] = [
-    {
-      id: '788win',
-      brand: '788win.com',
-      bannerImg: 'assets/main.png',
-      brandColor: '#fccc04', // Gold
-    },
-    {
-      id: '877bet',
-      brand: '877bet.com',
-      bannerImg: 'assets/main1.png',
-      brandColor: '#4ade80', // Light green
-    },
-    {
-      id: '588win',
-      brand: '588win',
-      bannerImg: 'assets/main2.png',
-      brandColor: '#ffedd5', // Light orange/white outline
-    },
-    {
-      id: '388win',
-      brand: '388win',
-      bannerImg: 'assets/main3.png',
-      brandColor: '#3b82f6', // Bright blue
-    },
-    {
-      id: '288win',
-      brand: '288win',
-      bannerImg: 'assets/main4.png',
-      brandColor: '#22c55e', // Green
-    },
-    {
-      id: '288win',
-      brand: '288win',
-      bannerImg: 'assets/main5.png',
-      brandColor: '#22c55e', // Green
-    },
+  // UI State
+  activeMissionTab: 'daily' | 'weekly' = 'daily';
+  activeVipLevel = 0;
+  activeVipData: VipTier | null = null;
 
-    {
-      id: '288win',
-      brand: '288win',
-      bannerImg: 'assets/mm.png',
-      brandColor: '#22c55e', // Green
-    },
-    {
-      id: '288win',
-      brand: '288win',
-      bannerImg: 'assets/mmm.png',
-      brandColor: '#22c55e', // Green
-    },
-    {
-      id: '288win',
-      brand: '288win',
-      bannerImg: 'assets/mmmm.png',
-      brandColor: '#22c55e', // Green
-    },
-    {
-      id: '288win',
-      brand: '288win',
-      bannerImg: 'assets/mmmmmm.png',
-      brandColor: '#22c55e', // Green
-    },
-  ];
+  // Filter State
+  activeHistoryFilter = 'Today';
+  historyPeriods = ['Today', 'Yesterday', 'This Week', 'Last Week', 'This Month', 'Last Month'];
+  isHistoryFilterOpen = false;
+  pendingHistoryFilter = 'Today';
+  isStatusFilterOpen = false;
+  activeStatusFilter = 'All';
+  statusOptions = ['All', 'Claimed', 'Distributed'];
 
-  showCopyToast = false;
-  toastMessage = '';
+  // Loading States
   isLoadingRewards = false;
+  isLoadingUnclaimed = false;
+  isLoadingMissions = false;
 
   constructor() {
-    addIcons({ chevronBackOutline, gridOutline, timeOutline, refreshOutline, giftOutline, reloadOutline });
+    addIcons({ chevronBackOutline, apps, reload, ticket, close, refresh, paperPlaneOutline, lockClosed, star, chevronBack, chevronForward, helpCircleOutline, diamond, chevronDown, ticketOutline, gift, gridOutline, timeOutline, refreshOutline, giftOutline, reloadOutline, chevronForwardOutline, ribbon, calendar, calendarNumber, calendarClear, card });
   }
 
   ngOnInit() {
+    this.loadAllData();
     this.route.queryParams.subscribe(params => {
       if (params['showTreasure'] === 'true') this.showTreasure();
     });
   }
 
+  loadAllData() {
+    this.offers = this.offersService.getOffers();
+    this.missions = this.offersService.getMissions(this.activeMissionTab);
+    this.vipTiers = this.offersService.getVipTiers();
+    this.historyRecords = this.offersService.getHistory(this.activeStatusFilter, this.activeHistoryFilter);
+    this.unclaimed = this.offersService.getUnclaimedSummary();
+    
+    // Set initial VIP focus
+    this.activeVipData = this.vipTiers[0];
+  }
+
+  setMissionTab(tab: 'daily' | 'weekly') {
+    this.activeMissionTab = tab;
+    this.missions = this.offersService.getMissions(tab);
+  }
+
+  // Navigation
   goBack() { this.router.navigate(['/home']); }
   openOffer(_: any) { this.showTreasure(); }
   showTreasure() { this.isTreasureModalOpen = true; }
 
+  // Refresh Logic
   refreshRewards() {
-    if (this.isLoadingRewards) return;
     this.isLoadingRewards = true;
-    setTimeout(() => {
-      this.isLoadingRewards = false;
-    }, 1500);
+    setTimeout(() => { this.isLoadingRewards = false; this.offers = this.offersService.getOffers(); }, 1000);
   }
 
-  openRedemption() { }
+  refreshUnclaimed() {
+    this.isLoadingUnclaimed = true;
+    setTimeout(() => { this.isLoadingUnclaimed = false; this.unclaimed = this.offersService.getUnclaimedSummary(); }, 1000);
+  }
+
+  refreshMissions() {
+    this.isLoadingMissions = true;
+    setTimeout(() => { this.isLoadingMissions = false; this.loadAllData(); }, 1000);
+  }
+
+  // Filters
+  toggleHistoryFilter() {
+    this.isHistoryFilterOpen = !this.isHistoryFilterOpen;
+    if (this.isHistoryFilterOpen) this.pendingHistoryFilter = this.activeHistoryFilter;
+  }
+
+  confirmHistoryFilter() {
+    this.activeHistoryFilter = this.pendingHistoryFilter;
+    this.isHistoryFilterOpen = false;
+    this.historyRecords = this.offersService.getHistory(this.activeStatusFilter, this.activeHistoryFilter);
+  }
+
+  toggleStatusFilter() { this.isStatusFilterOpen = !this.isStatusFilterOpen; }
+
+  setStatusFilter(status: string) {
+    this.activeStatusFilter = status;
+    this.isStatusFilterOpen = false;
+    this.historyRecords = this.offersService.getHistory(this.activeStatusFilter, this.activeHistoryFilter);
+  }
+
+  openRedemption() {
+    // Placeholder for redemption modal/logic
+    console.log('Opening redemption...');
+  }
+
+  // VIP Logic (Updated for modular components)
+  onVipLevelScrollChange(lvl: number) {
+    this.activeVipLevel = lvl;
+    this.activeVipData = this.vipTiers[lvl];
+  }
+
+  getIconArray(count: number): any[] { return Array(Math.max(0, count)); }
 }
