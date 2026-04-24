@@ -6,14 +6,14 @@
     </button>
 
     <!-- Tabs (Segment - Scrollable) -->
-    <ion-segment [(ngModel)]="activeTab" mode="md" [scrollable]="true" class="withdraw-segment">
-      <ion-segment-button value="request">
+    <ion-segment [value]="activeTab" (ionChange)="onSegmentChange($event)" mode="md" [scrollable]="true" class="withdraw-segment">
+      <ion-segment-button value="request" (click)="setTab('request')">
         <ion-label>Request withdrawal</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="account">
+      <ion-segment-button value="account" (click)="setTab('account')">
         <ion-label>Receiving account</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="record">
+      <ion-segment-button value="record" (click)="setTab('record')">
         <ion-label>Withdrawal</ion-label>
       </ion-segment-button>
     </ion-segment>
@@ -28,46 +28,81 @@
   @if (!isPasswordSet) {
     <app-withdrawal-password 
       (onBack)="goBack()" 
-      (onConfirm)="isPasswordSet = true">
+      (onConfirm)="onPinSet($event)">
     </app-withdrawal-password>
   } @else {
 
     <!-- ============ TAB 1: Request Withdrawal ============ -->
     @if (activeTab === 'request') {
     <div class="tab-content">
-      <!-- Balance -->
-      <div class="balance-row">
-        <span class="label">Balance</span>
-        <span class="amount">
-          0.00
-          <ion-icon name="refresh-outline" class="refresh-icon"></ion-icon>
-        </span>
+      <!-- Balance Header -->
+      <div class="balance-section">
+        <span class="bal-label">Balance <span class="bal-val">{{ userBalance | number:'1.2-2' }}</span></span>
+        <ion-icon name="refresh-outline" class="refresh-icon" [class.animate-spin]="isLoadingBalance" (click)="refreshBalance()"></ion-icon>
       </div>
 
-      <!-- Add Withdrawal Account -->
-      <div class="account-card" (click)="setTab('account')">
-        <div class="account-card-left">
-          <div class="folder-icon">
-            <ion-icon name="wallet-outline"></ion-icon>
+      <!-- Action Chips -->
+      <div class="action-chips">
+        <div class="chip active">Normal withdrawal</div>
+      </div>
+
+      <!-- Account Selector Card -->
+      <div class="selector-card" (click)="setTab('account')">
+        @if (selectedAccount) {
+          <div class="sel-info">
+            <div class="sel-logo">
+              <img [src]="selectedAccount.method_key === 'jazzcash' ? '/assets/new-jazz-seeklogo.png' : '/assets/easypaisa-seeklogo.png'" />
+            </div>
+            <span class="sel-text">{{ selectedAccount.method_name }}(****{{ selectedAccount.account_id.slice(-4) }})</span>
           </div>
-          <span>Add withdrawal account</span>
+        } @else {
+          <div class="sel-info empty">
+            <ion-icon name="wallet-outline" class="sel-icon-empty"></ion-icon>
+            <span class="sel-text">Add a withdrawal account</span>
+          </div>
+        }
+        <div class="sel-right">
+          <ion-icon name="chevron-down-outline" class="sel-chev"></ion-icon>
+          <div class="card-action-icon">
+            <ion-icon name="card-outline"></ion-icon>
+            <ion-icon name="settings-outline" class="mini-cog"></ion-icon>
+          </div>
         </div>
-        <ion-icon name="chevron-forward-outline" class="chev"></ion-icon>
       </div>
 
-      <!-- Info Row -->
-      <div class="info-row">
-        <span class="rs-badge">Rs</span>
-        <span class="info-text">Add a withdrawal account before withdrawing</span>
+      <!-- Amount Input -->
+      <div class="amount-section">
+        <div class="amount-label">Withdrawal Amount</div>
+        <div class="amount-input-box">
+          <span class="currency-prefix">Rs</span>
+          <input type="number" placeholder="Min 200, Max 100000" class="amt-input" [(ngModel)]="withdrawAmount" />
+          <span class="amt-all" (click)="withdrawAmount = userBalance">All</span>
+        </div>
+      </div>
+
+      <!-- PIN Verification -->
+      <div class="pin-section">
+        <div class="pin-header">
+          <span>Verify withdrawal password</span>
+          <ion-icon name="eye-off-outline" class="pin-eye"></ion-icon>
+        </div>
+        <div class="pin-grid">
+          @for (d of verifyPin; track $index) {
+            <input type="password" maxlength="1" class="pin-box" 
+              [(ngModel)]="verifyPin[$index]"
+              (input)="onPinInput($event, $index)"
+              (keydown)="onPinKeyDown($event, $index)" />
+          }
+        </div>
       </div>
 
       <!-- Bottom Actions -->
-      <div class="actions-row">
-        <div class="earn-wrap">
-          <span class="apr-badge">APR 100%</span>
-          <button class="earn-btn">Earn interest</button>
+      <div class="bottom-actions-row">
+        <div class="earn-action">
+          <div class="apr-tag">APR 200%</div>
+          <button class="earn-btn-blue">Earn interest</button>
         </div>
-        <button class="confirm-btn-disabled">Confirm withdrawal</button>
+        <button class="confirm-withdraw-btn" [disabled]="!selectedAccount" (click)="confirmWithdrawal()">Confirm withdrawal</button>
       </div>
     </div>
     }
@@ -77,11 +112,37 @@
     <div class="tab-content">
       <!-- Sub Header -->
       <div class="account-header-row">
-        <span class="account-label">Receiving account <span class="count">(0/15)</span></span>
-        <ion-icon name="refresh-outline" class="refresh-icon"></ion-icon>
+        <span class="account-label">Receiving account <span class="count">({{ addedAccounts.length }}/19)</span></span>
+        <ion-icon name="refresh-outline" class="refresh-icon" (click)="initData()"></ion-icon>
       </div>
 
-      <!-- Payment Methods -->
+      <!-- Added Accounts Area (Hi-Fi) -->
+      @if (addedAccounts.length > 0) {
+        <div class="added-accounts-box">
+          @for (acc of addedAccounts; track acc.id) {
+            <div class="added-acc-card premium">
+              <div class="acc-info">
+                <div class="acc-logo">
+                  <img [src]="acc.method_key === 'jazzcash' ? '/assets/new-jazz-seeklogo.png' : '/assets/easypaisa-seeklogo.png'" />
+                </div>
+                <div class="acc-text">
+                  <span class="acc-name">{{ acc.method_name }}</span>
+                  <span class="acc-id-cyan">****{{ acc.account_id.slice(-4) }}</span>
+                </div>
+              </div>
+              <!-- Bottom Right Checkmark -->
+              <div class="acc-checkmark-corner">
+                <svg viewBox="0 0 24 24" class="check-svg" fill="none" stroke="currentColor">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Payment Methods (Add New) -->
+      <div class="methods-title">Commonly used channels</div>
       <div class="methods-list">
         @for (m of paymentMethods; track m.key) {
         <div class="method-row" (click)="openAddModal(m)">
@@ -101,9 +162,56 @@
 
     <!-- ============ TAB 3: Withdrawal Record ============ -->
     @if (activeTab === 'record') {
-    <div class="tab-content empty-state">
-      <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
-      <span class="empty-label">No withdrawal records yet</span>
+    <div class="tab-content" [class.empty-state]="withdrawalHistory.length === 0">
+      @if (isLoadingHistory && withdrawalHistory.length === 0) {
+        <div class="text-center py-10">
+          <ion-icon name="refresh-outline" class="animate-spin text-2xl text-[#d4a017]"></ion-icon>
+          <div class="text-[12px] text-white/40 mt-2">Loading records...</div>
+        </div>
+      } @else if (withdrawalHistory.length === 0) {
+        <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
+        <span class="empty-label">No withdrawal records yet</span>
+      } @else {
+        <div class="flex flex-col gap-3">
+          @for (record of withdrawalHistory; track record.id) {
+            <div class="bg-[#1c1c22] rounded-xl p-4 border border-white/5 relative overflow-hidden flex flex-col gap-2">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-white/50 text-[11px] font-medium tracking-wide bg-black/20 px-2 py-1 rounded">
+                  {{ record.submitted_at | date:'MMM d, y, h:mm a' }}
+                </span>
+                <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded"
+                   [class.text-[#F1C15A]]="record.status === 'pending'"
+                   [class.bg-[#F1C15A]/10]="record.status === 'pending'"
+                   [class.text-[#1AA350]]="record.status === 'approved'"
+                   [class.bg-[#1AA350]/10]="record.status === 'approved'"
+                   [class.text-[#E45C2A]]="record.status === 'rejected'"
+                   [class.bg-[#E45C2A]/10]="record.status === 'rejected'">
+                  {{ record.status }}
+                </span>
+              </div>
+              
+              <div class="flex justify-between items-end mt-1">
+                <div class="flex flex-col">
+                  <span class="text-white/40 text-[11px] mb-1">Amount</span>
+                  <span class="text-[#F1C15A] text-[20px] font-black leading-none">
+                    Rs {{ record.amount | number:'1.2-2' }}
+                  </span>
+                </div>
+                <div class="flex flex-col items-end">
+                  <span class="text-white/40 text-[11px] mb-1">Method</span>
+                  <span class="text-white/90 text-[13px] font-bold">{{ record.withdrawal_accounts?.method_name }}</span>
+                </div>
+              </div>
+              
+              @if (record.rejection_reason) {
+                <div class="mt-2 text-[#E45C2A] text-[11px] bg-[#E45C2A]/10 p-2 rounded-md border border-[#E45C2A]/20">
+                  <span class="font-bold">Reason:</span> {{ record.rejection_reason }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
     </div>
     }
   }
@@ -113,7 +221,7 @@
     <app-add-account-modal
       [method]="selectedMethod"
       (onClose)="closeModal()"
-      (onConfirm)="confirmAdd()">
+      (onConfirm)="confirmAdd($event)">
     </app-add-account-modal>
   }
 

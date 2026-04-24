@@ -32,7 +32,7 @@
               {{ balance | number:'1.2-2' }}
             </span>
           </div>
-          <button class="claim-btn uppercase font-black text-[14px] tracking-wider px-10 py-1 rounded-md" (click)="handleClaim()">
+          <button class="claim-btn uppercase font-black text-[14px] tracking-wider px-10 py-1 rounded-md mb-[7px]" (click)="handleClaim()">
             CLAIM
           </button>
         </div>
@@ -91,9 +91,43 @@
 
         <!-- Main Call to Action -->
         <div class="cta-wrapper px-2 mt-4">
-          <button class="invite-action-btn font-bold text-[16px] w-full py-3.5 rounded-xl shadow-lg active:scale-95 transition-transform">
+          <button class="invite-action-btn font-bold text-[16px] w-full py-3.5 rounded-xl shadow-lg active:scale-95 transition-transform" (click)="goInvite()">
             Invite friend, Win bonus
           </button>
+        </div>
+
+        <!-- Social Share Icons (Added) -->
+        <div class="flex items-center justify-center mt-5 mb-2 gap-4 pb-2">
+           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('generic')">
+              <div class="w-[42px] h-[42px] rounded-full flex items-center justify-center border border-white/20 bg-black/20">
+                 <ion-icon name="share-outline" class="text-white text-[20px]"></ion-icon>
+              </div>
+              <span class="text-white font-medium text-[11px]">Share</span>
+           </div>
+           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('telegram')">
+              <div class="w-[42px] h-[42px] rounded-full bg-[#2AABEE] flex items-center justify-center">
+                 <ion-icon name="paper-plane" class="text-white text-[20px]"></ion-icon>
+              </div>
+              <span class="text-white font-medium text-[11px]">Telegram</span>
+           </div>
+           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('facebook')">
+              <div class="w-[42px] h-[42px] rounded-full bg-[#1877F2] flex items-center justify-center">
+                 <ion-icon name="logo-facebook" class="text-white text-[22px]"></ion-icon>
+              </div>
+              <span class="text-white font-medium text-[11px]">Facebook</span>
+           </div>
+           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('instagram')">
+              <div class="w-[42px] h-[42px] rounded-full bg-gradient-to-tr from-[#FFD600] via-[#FF0040] to-[#9900FF] flex items-center justify-center">
+                 <ion-icon name="logo-instagram" class="text-white text-[22px]"></ion-icon>
+              </div>
+              <span class="text-white font-medium text-[11px]">Instagram</span>
+           </div>
+           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('whatsapp')">
+              <div class="w-[42px] h-[42px] rounded-full bg-[#25D366] flex items-center justify-center">
+                 <ion-icon name="logo-whatsapp" class="text-white text-[22px]"></ion-icon>
+              </div>
+              <span class="text-white font-medium text-[11px]">WhatsApp</span>
+           </div>
         </div>
       </div>
 

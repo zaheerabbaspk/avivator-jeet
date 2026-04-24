@@ -9,7 +9,7 @@
   </app-home-header>
 </ion-header>
 
-<ion-content>
+<ion-content [scrollEvents]="true" (ionScroll)="onContentScroll($event)">
   <div class="home-body">
 
     <!-- Hero Banners -->
@@ -48,7 +48,70 @@
 
   </div>
 
-  <!-- TOP floating button -->
+  <!-- Site Footer -->
+  <div class="site-footer">
+    <div class="footer-links">
+      <div class="footer-col">
+        <h3>Casino</h3>
+        <a>Mission</a>
+        <a>Rebate</a>
+        <a>Unclaimed</a>
+        <a>VIP</a>
+        <a>Invite</a>
+        <a>Event</a>
+        <a>Fund</a>
+      </div>
+      <div class="footer-col">
+        <h3>Games</h3>
+        <a>Hot</a>
+        <a>Slot</a>
+        <a>Blockchain</a>
+        <a>Cards</a>
+        <a>Sports</a>
+        <a>Live</a>
+        <a>Fishing</a>
+      </div>
+      <div class="footer-col">
+        <h3>Support</h3>
+        <a>Online Support</a>
+        <a>Help Center</a>
+        <a>Reward Feedback</a>
+      </div>
+    </div>
+
+    <div class="footer-license-header">
+      <h3>License Compliance</h3>
+      <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/common/common/common/18plus.avif?manualVersion=1&version=10fea753dc" alt="18+">
+    </div>
+
+    <div class="license-divider"></div>
+
+    <div class="footer-contact">
+      <h3>Contact us</h3>
+      <div class="social-icons">
+        <div class="icon-circle fb">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </div>
+        <div class="icon-circle tg">
+          <ion-icon name="paper-plane"></ion-icon>
+        </div>
+        <div class="icon-circle wa">
+          <ion-icon name="logo-whatsapp"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <p class="license-text">
+      bp999 is the most well-known international online gaming operator, providing exciting and fun live dealer casino, chess, electronic, fishing, lottery, sports and other full-category games. It is authorized and regulated by the government of Curacao and operates under license 8048/JAZ issued by Antillephone. Passed all compliance checks and is legally authorized to all operations of games of chance and betting games.
+    </p>
+
+    <div class="footer-bottom-flex">
+      <span>bp999.com</span>
+      <span class="sep">|</span>
+      <span>@Copyright 2002-2026</span>
+    </div>
+  </div>
+
   <div class="top-fab" (click)="scrollToTop()">
     <ion-icon name="chevron-up-outline"></ion-icon>
     <span>TOP</span>
@@ -58,7 +121,32 @@
 <!-- Footer Nav -->
 <app-footer-nav activeTab="home"></app-footer-nav>
 
+<!-- Floating Left Icons -->
+<div class="floating-icons left" [class.is-scrolling]="isScrolling()">
+  @for (widget of leftWidgets; track widget.id) {
+    @if (widget.visible) {
+      <div class="float-widget">
+        <ion-icon class="close-btn" name="close" (click)="hideWidget(widget, $event)"></ion-icon>
+        <img [src]="widget.src" alt="Promo Left">
+      </div>
+    }
+  }
+</div>
+
+<!-- Floating Right Icons -->
+<div class="floating-icons right" [class.is-scrolling]="isScrolling()">
+  @for (widget of rightWidgets; track widget.id) {
+    @if (widget.visible) {
+      <div class="float-widget">
+        <ion-icon class="close-btn" name="close" (click)="hideWidget(widget, $event)"></ion-icon>
+        <img [src]="widget.src" alt="Promo Right">
+      </div>
+    }
+  }
+</div>
+
 <!-- Modals -->
 <app-auth-modal [isOpen]="isAuthModalOpen" [authMode]="authMode" (close)="isAuthModalOpen = false" (authSuccess)="handleAuthSuccess()"></app-auth-modal>
 <app-success-modal [isOpen]="isSuccessModalOpen" (close)="isSuccessModalOpen = false" (deposit)="handleDeposit()"></app-success-modal>
 <app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false" (depositClick)="handleRewardDeposit($event)"></app-reward-modal>
+<app-bonus-rain-modal [isOpen]="isBonusRainOpen" (modalClose)="isBonusRainOpen = false" (openBonus)="handleBonusOpen()"></app-bonus-rain-modal>

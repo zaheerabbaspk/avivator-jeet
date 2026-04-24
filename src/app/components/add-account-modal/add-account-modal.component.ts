@@ -40,7 +40,7 @@ export interface PaymentMethod {
           <button class="paste-btn">Paste</button>
         </div>
 
-        <!-- 13-digit ID -->
+        <!-- 13-digit ID (CNIC) -->
         <div class="input-wrap highlight">
           <ion-icon name="card-outline" class="input-icon"></ion-icon>
           <input type="text" [(ngModel)]="idNumber"
@@ -64,8 +64,8 @@ export interface PaymentMethod {
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
       z-index: 2000;
       display: flex;
       flex-direction: column;
@@ -74,43 +74,42 @@ export interface PaymentMethod {
       padding-bottom: 60px;
     }
     .modal-sheet {
-      width: calc(100% - 32px);
-      max-width: 420px;
+      width: calc(100% - 48px);
+      max-width: 380px;
       background: #1e1e26;
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 24px 20px 20px;
+      border-radius: 28px;
+      padding: 30px 24px 24px;
       display: flex;
       flex-direction: column;
       gap: 16px;
       position: relative;
     }
     .modal-title {
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 19px;
+      font-weight: 900;
       color: #ffffff;
       text-align: center;
-      margin: 0 0 8px;
+      margin: 0 0 10px;
     }
     .input-wrap {
       display: flex;
       align-items: center;
       gap: 12px;
       background: #141418;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 14px 16px;
+      border: 1.5px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 14px 18px;
       &.highlight {
         border-color: #f0c040;
-        box-shadow: 0 0 10px rgba(240, 192, 64, 0.2);
       }
       .input-icon {
-        font-size: 20px;
-        color: rgba(255,255,255,0.3);
+        font-size: 18px;
+        color: rgba(255,255,255,0.25);
       }
       .method-icon-sm { 
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         object-fit: contain;
         background: #fff;
         border-radius: 6px;
@@ -123,16 +122,16 @@ export interface PaymentMethod {
         outline: none;
         color: #ffffff;
         font-size: 14px;
-        font-weight: 500;
-        &::placeholder { color: rgba(255,255,255,0.25); }
+        font-weight: 600;
+        &::placeholder { color: rgba(255,255,255,0.2); }
       }
       .paste-btn {
         background: transparent;
         border: none;
         color: #f0c040;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 800;
-        cursor: pointer;
+        padding: 0;
       }
     }
     .modal-warning {
@@ -141,35 +140,48 @@ export interface PaymentMethod {
       margin: 0;
       text-align: center;
       font-weight: 600;
+      line-height: 1.4;
     }
     .confirm-yellow-btn {
       width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #d4a017, #f0c040);
-      color: #1a1000;
-      font-size: 15px;
+      padding: 18px;
+      background: #666; /* Grey when disabled */
+      color: #fff;
+      font-size: 16px;
       font-weight: 900;
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
-      &:disabled { filter: grayscale(1) opacity(0.5); cursor: not-allowed; }
+      margin-top: 8px;
+      transition: all 0.2s;
+      &:not(:disabled) {
+        background: linear-gradient(135deg, #d4a017, #f0c040);
+        color: #1a1000;
+        box-shadow: 0 4px 15px rgba(240, 192, 64, 0.3);
+      }
+      &:disabled { 
+        background: #4a4a55;
+        color: rgba(255,255,255,0.3);
+        cursor: not-allowed; 
+      }
     }
     .modal-close-btn {
       position: absolute;
-      bottom: -70px;
+      bottom: -80px;
       left: 50%;
       transform: translateX(-50%);
-      width: 44px;
-      height: 44px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.4);
+      border: 2px solid rgba(255,255,255,0.3);
       background: transparent;
       color: #fff;
-      font-size: 24px;
+      font-size: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      &:active { border-color: #fff; transform: translateX(-50%) scale(0.9); }
     }
   `],
   standalone: true,

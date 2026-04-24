@@ -6,14 +6,13 @@
         <div class="modal-header">
           <div class="logo-container">
             <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center shadow-[2px_2px_0px_#000]">
-              <span class="text-black font-black text-sm italic">AJ</span>
+              <span class="text-black font-black text-sm italic">BP</span>
             </div>
             <div class="flex flex-col ml-2">
-              <span class="text-white font-black text-xl italic leading-none">AVIVATOR</span>
-              <span class="text-green-500 text-[11px] font-black tracking-widest leading-none">JEET</span>
+              <span class="text-white font-black text-xl italic leading-none">bp999</span>
             </div>
           </div>
-          <p class="yellow-text">Sign Up on AVIVATOR JEET. BET — Play instantly, Win Big!</p>
+          <p class="yellow-text">Sign Up on bp999. BET — Play instantly, Win Big!</p>
         </div>
 
         <!-- Tabs -->
@@ -59,14 +58,12 @@
                       class="right-icon"></ion-icon>
           </div>
 
-          <!-- Real Name (Register Only) -->
+          <!-- Nickname / Name (Register Only) -->
           <div class="input-group" *ngIf="authMode === 'register'">
             <ion-icon name="person-circle-outline" class="left-icon"></ion-icon>
-            <ion-input name="realName" [(ngModel)]="realName" type="text" placeholder="*Please enter your real name"></ion-input>
+            <ion-input name="realName" [(ngModel)]="realName" type="text" placeholder="*Enter your name or nickname"></ion-input>
           </div>
-          <p class="sub-disclaimer" *ngIf="authMode === 'register'">
-            Must have the same name as your withdrawal bank account
-          </p>
+
 
           <!-- Checkbox -->
           <div class="agree-container" *ngIf="authMode === 'register'">

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel, IonDatetime, IonModal, IonBadge } from '@ionic/angular/standalone';
+import { IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel, IonDatetime, IonModal } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   chevronBackOutline, 
@@ -20,7 +20,7 @@ import { FooterNavComponent } from '../../components/footer-nav/footer-nav.compo
   templateUrl: './records.page.html',
   styleUrls: ['./records.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel, IonDatetime, IonModal, IonBadge, FooterNavComponent]
+  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel, IonDatetime, IonModal, FooterNavComponent]
 })
 export class RecordsPage {
   private router = inject(Router);

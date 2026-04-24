@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ImageCacheService } from './image-cache.service';
 
 export interface Banner {
   id: string;
@@ -33,7 +34,7 @@ export interface Game {
   providedIn: 'root'
 })
 export class HomeService {
-  
+
   private bannerSlides = [
     'assets/m.png',
     'assets/main1.png',
@@ -64,15 +65,37 @@ export class HomeService {
   ];
 
   private games: Game[] = [
-    { id: '1', title: 'Aviator', provider: 'Spribe', image: 'assets/avi.png', route: '/crash-game', popular: true, badge: 'HOT', category: 'hot' },
-    { id: '2', title: 'Lucky 7', provider: 'Evolution', image: 'assets/avi5.png', route: null, popular: true, badge: '', category: 'hot' },
-    { id: '3', title: 'Crash', provider: 'Spribe', image: 'assets/avi.png', route: '/crash-game', popular: true, badge: '', category: 'hot' },
-    { id: '4', title: 'Fruit Ninja', provider: 'GameArt', image: 'assets/avi1.png', route: null, popular: true, badge: 'NEW', category: 'hot' },
-    { id: '5', title: 'Poker Master', provider: 'Playtech', image: 'assets/avi2.png', route: null, popular: false, badge: '', category: 'cards' },
-    { id: '6', title: 'Deep Sea Fishing', provider: 'Microgaming', image: 'assets/avi4.png', route: null, popular: false, badge: '', category: 'fishing' },
+    { id: '1', title: 'Game 16', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/312/11/custom_PKR.avif?p=1776173589', route: '/crash-game', popular: true, badge: '', category: 'hot' },
+    { id: '2', title: 'Game 2', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/hot/315/1/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '3', title: 'Game 3', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/315/1/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '4', title: 'Game 4', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/314/11/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '5', title: 'Game 5', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/315/11/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '6', title: 'Game 6', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/118/2/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '7', title: 'Game 7', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/200/3/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '8', title: 'Game 8', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/13/11/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '9', title: 'Game 9', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/47/5/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '10', title: 'Game 10', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/56/1/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '11', title: 'Game 11', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/75/4/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '12', title: 'Game 12', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/86/1/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '13', title: 'Game 13', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/95/11/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '14', title: 'Game 14', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/301/4/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '15', title: 'Game 15', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/310/3/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '16', title: 'Game 1', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/315/3/custom_PKR.avif?p=1776173589', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '17', title: 'Game 17', provider: 'Casino', image: 'https://140.150.30.128:5030/game_pictures/g/EA/315/3/3150051/default.avif?g0=1776048611', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '18', title: 'Game 18', provider: 'Casino', image: 'https://140.150.30.128:5030/game_pictures/g/EA/366/11/3660003/default.avif?g0=1776048611', route: null, popular: true, badge: '', category: 'hot' }
   ];
 
-  constructor() { }
+  constructor(private imageCache: ImageCacheService) {
+    this.initCache();
+  }
+
+  private async initCache() {
+    for (let game of this.games) {
+      if (game.image) {
+        game.image = await this.imageCache.getCachedImage(game.image);
+      }
+    }
+  }
 
   getBanners() {
     return this.bannerSlides;

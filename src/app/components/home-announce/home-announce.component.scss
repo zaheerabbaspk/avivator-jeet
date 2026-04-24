@@ -1,38 +1,84 @@
 .announce-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   padding: 6px 12px;
-  background: #0f1520;
-  border-top: 1px solid rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  background-color: #121926;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 75%, transparent 75%, transparent);
+  background-size: 8px 8px; /* Diagonal pattern */
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
 
-  .announce-icon {
-    font-size: 14px;
+  .left-icons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     flex-shrink: 0;
-  }
 
-  .announce-text {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.6);
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    .speaker-icon {
+      font-size: 16px;
+      color: #3b82f6; /* Professional blue */
+      filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.4));
+    }
 
-    .announce-link {
-      color: #00c2ff;
-      font-weight: 700;
+    .gift-img {
+      height: 18px;
+      width: auto;
     }
   }
 
-  .announce-badge {
-    background: #ef4444;
-    color: #fff;
-    font-size: 9px;
-    font-weight: 900;
-    border-radius: 999px;
-    padding: 1px 6px;
-    flex-shrink: 0;
+  .marquee-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+
+    .marquee-content {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: marquee 25s linear infinite;
+      font-size: 11px;
+      font-weight: 800;
+      color: #00ff41; /* Neon green from image */
+      letter-spacing: 0.1px;
+      text-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+    }
   }
+
+  .right-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    .envelope-img {
+      height: 18px;
+      width: auto;
+      filter: brightness(0.9);
+    }
+
+    .announce-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 8px;
+      font-weight: 900;
+      border-radius: 50%;
+      width: 13px;
+      height: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
 }

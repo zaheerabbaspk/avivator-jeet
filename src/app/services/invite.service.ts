@@ -142,6 +142,17 @@ export class InviteService {
   getBanners() { return this.banners; }
   getCommissions() { return this.commissions; }
 
+  claimCommission(commission: CommissionCard) {
+    const amount = parseFloat(commission.reward);
+    if (amount <= 0) return { success: false, message: 'No reward to claim' };
+
+    // Update the local state for simulation
+    commission.claimedBalance = (parseFloat(commission.claimedBalance) + amount).toFixed(2);
+    commission.reward = '0.00';
+    
+    return { success: true, amount };
+  }
+
   getMyDataStats(): MyDataStats {
     return {
       subordinateStats: [

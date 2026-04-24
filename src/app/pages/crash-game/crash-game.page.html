@@ -1,32 +1,81 @@
-<ion-header class="ion-no-border">
+<!-- ======================== GAME LIMITS OVERLAY ======================== -->
+@if (isGameLimitsOpen) {
+<div class="fixed top-[78px] left-0 right-0 bottom-0 z-[100000] pointer-events-none">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/70 pointer-events-auto" (click)="toggleGameLimits()"></div>
+
+    <!-- Container with slide animation -->
+    <div class="absolute top-0 left-0 right-0 px-0 pointer-events-none game-limits-container">
+        <div
+            class="bg-[#1b1b1b] rounded-[6px] overflow-hidden shadow-2xl pointer-events-auto w-[95%] mx-auto border border-white/5 mt-2">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-3 py-1 bg-[#252525]">
+                <span class="text-white font-medium text-[10px] uppercase tracking-wide">Game Limits</span>
+                <div class="w-5 h-5 flex items-center justify-center cursor-pointer" (click)="toggleGameLimits()">
+                    <ion-icon name="close-outline" class="text-white/40 text-[16px]"></ion-icon>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-2 bg-[#1b1b1b]">
+
+                <!-- Limit Card -->
+                <div class="bg-[#121212] rounded-[4px] border border-white/5 overflow-hidden">
+                    <!-- Min Bet -->
+                    <div class="flex items-center justify-between px-2.5 py-1.5 border-b border-white/5">
+                        <span class="text-white/80 font-medium text-[9px]">Minimum bet PKR:</span>
+                        <div class="px-2 py-0 rounded-full border border-[#3fb93f] bg-black">
+                            <span class="text-white font-bold text-[10px] tabular-nums">16.00</span>
+                        </div>
+                    </div>
+                    <!-- Max Bet -->
+                    <div class="flex items-center justify-between px-2.5 py-1.5 border-b border-white/5">
+                        <span class="text-white/80 font-medium text-[9px]">Maximum bet PKR:</span>
+                        <div class="px-2 py-0 rounded-full border border-[#3fb93f] bg-black">
+                            <span class="text-white font-bold text-[10px] tabular-nums">16,000.00</span>
+                        </div>
+                    </div>
+                    <!-- Max Win -->
+                    <div class="flex items-center justify-between px-2.5 py-1.5">
+                        <span class="text-white/80 font-medium text-[9px]">Maximum win for one bet PKR:</span>
+                        <div class="px-2 py-0 rounded-full border border-[#3fb93f] bg-black">
+                            <span class="text-white font-bold text-[10px] tabular-nums">1,600,000.00</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+}
+
+<ion-header class="ion-no-border z-[20000] relative">
     <div class="crash-header" style="padding-top: calc(env(safe-area-inset-top) + 10px);">
+        @if (!isLoading) {
         <!-- LEFT: Aviator branding -->
         <div class="flex items-center">
             <span class="font-black italic text-xl leading-none" style="color: #ef4444; font-family: 'Arial Black', Impact, sans-serif;
                          text-shadow: 1px 1px 0 #7f0000, 2px 2px 8px rgba(239,68,68,0.5);">
-                Aviator
+                bp999
             </span>
         </div>
 
         <!-- RIGHT: Balance + Sound + Hamburger -->
         <div class="flex items-center gap-2">
-            @if (!isLoading) {
             <span class="text-[#1dfd71] font-black text-sm tabular-nums"
                 style="text-shadow: 0 0 10px rgba(29,253,113,0.4);">
                 {{ gameEngine.balance() | number:'1.2-2' }} PKR
             </span>
-            }
             <div class="w-7 h-7 flex items-center justify-center rounded-md cursor-pointer"
                 style="background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.08);"
-                (click)="toggleSound()">
-                <ion-icon [name]="isMuted ? 'volume-mute-outline' : 'volume-medium-outline'" 
-                    style="color:rgba(255,255,255,0.6); font-size:16px;"></ion-icon>
-            </div>
-            <div class="w-7 h-7 flex items-center justify-center rounded-md"
-                style="background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.08);">
+                (click)="toggleGameMenu()">
                 <ion-icon name="menu-outline" style="color:rgba(255,255,255,0.6); font-size:16px;"></ion-icon>
             </div>
         </div>
+        }
     </div>
 
     <!-- Multiplier History Strip -->
@@ -39,8 +88,8 @@
         </div>
         }
         <!-- Menu dot -->
-        <div class="ml-auto w-6 h-4 flex items-center justify-center rounded-[4px] shrink-0"
-            style="background: rgba(255,255,255,0.1);">
+        <div class="ml-auto w-6 h-4 flex items-center justify-center rounded-[4px] shrink-0 cursor-pointer"
+            style="background: rgba(255,255,255,0.1);" (click)="toggleHistoryExpanded()">
             <ion-icon name="ellipsis-horizontal" style="color:rgba(255,255,255,0.6); font-size:10px;"></ion-icon>
         </div>
     </div>
@@ -51,108 +100,69 @@
 <ion-content style="--background: #0d0d0d;">
 
     <!-- Loading Overlay -->
+
     @if (isLoading) {
     <div class="spribe-loading-overlay">
-        <!-- Sunburst Background -->
-        <div class="spribe-sunburst"></div>
 
-        <div class="flex flex-col items-center justify-center relative z-10 w-full h-full">
-
-            <!-- UFC | Aviator OFFICIAL PARTNERS -->
-            <div class="flex flex-col items-center mb-[30px]">
-                <div class="flex items-center gap-[18px] mb-2">
-                    <!-- UFC -->
-                    <span class="text-[#e01e30] font-black italic text-[52px] transform tracking-tight"
-                        style="font-family: Impact, 'Arial Black', sans-serif; line-height: 1;">UFC</span>
-
-                    <!-- Divider -->
-                    <div class="w-[2px] h-[45px] bg-white opacity-80"
-                        style="box-shadow: 0 0 4px rgba(255,255,255,0.4);"></div>
-
-                    <!-- Aviator logo -->
-                    <div class="flex flex-col relative justify-center pl-2 pb-1">
-                        <!-- Plane -->
-                        <svg class="w-12 h-12 absolute -top-[16px] -right-[15px] transform rotate-[10deg] drop-shadow-[0_2px_4px_rgba(224,30,48,0.4)]"
-                            viewBox="0 0 100 100" fill="none" stroke="#e01e30" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <!-- Body -->
-                            <path d="M15,50 L75,50 C80,50 85,47 85,45 C85,43 80,40 75,40 L35,40 Z" fill="#e01e30" />
-                            <!-- Wings -->
-                            <path d="M45,50 L35,65 L55,65 L65,50 Z" fill="#e01e30" />
-                            <path d="M55,40 L45,25 L65,25 L75,40 Z" fill="#e01e30" />
-                            <!-- Tail -->
-                            <path d="M25,50 L10,65 L5,65 L20,40 Z" fill="#e01e30" />
-                            <path d="M30,40 L15,25 L10,25 L25,40 Z" fill="#e01e30" />
-                            <!-- Propeller -->
-                            <line x1="88" y1="30" x2="88" y2="60" stroke="#e01e30" stroke-width="4" />
-                        </svg>
-                        <span class="text-[#e01e30] font-medium text-[42px] lowercase"
-                            style="font-family: 'Brush Script MT', 'Comic Sans MS', cursive; letter-spacing: -0.5px; line-height: 1; text-transform: capitalize; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">Aviator</span>
-                    </div>
-                </div>
-
-                <div class="text-white font-black text-[13px] tracking-[0.08em] uppercase mx-auto text-center mt-2 z-10"
-                    style="font-family: Impact, 'Arial Black', sans-serif;">
-                    OFFICIAL PARTNERS
-                </div>
-
-                <!-- Loading Line -->
-                <div class="w-[280px] h-[3.5px] bg-[#1a1a1a] mt-4 flex overflow-hidden rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.8)] z-10 p-[0.5px]">
-                    <div class="h-full bg-gradient-to-r from-[#e01e30] via-[#ff4d5a] to-[#e01e30] relative" [style.width.%]="loadingProgress"
-                        style="box-shadow: 0 0 10px rgba(224, 30, 48, 0.4); transition: width 0.1s linear;">
-                        <!-- Shine Sweep -->
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine" style="width: 50%;"></div>
-                    </div>
-                </div>
+        <!-- PHASE 1: SPLASH (Powered by Spribe) -->
+        @if (loadingPhase === 'splash') {
+        <div class="flex flex-col items-center justify-center relative z-10 w-full h-full animate-fade-in">
+            <span class="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Powered by</span>
+            <div class="flex items-center gap-3">
+                <svg width="32" height="32" viewBox="0 0 24 24" class="opacity-90">
+                    <g fill="white">
+                        <circle cx="10" cy="5" r="1.5" />
+                        <circle cx="14" cy="5" r="1.5" />
+                        <circle cx="18" cy="5" r="1.5" />
+                        <circle cx="6" cy="9" r="1.5" />
+                        <circle cx="10" cy="13" r="1.5" />
+                        <circle cx="14" cy="13" r="1.5" />
+                        <circle cx="18" cy="17" r="1.5" />
+                        <circle cx="6" cy="21" r="1.5" />
+                        <circle cx="10" cy="21" r="1.5" />
+                        <circle cx="14" cy="21" r="1.5" />
+                    </g>
+                </svg>
+                <span class="text-white font-black text-[28px] tracking-wider"
+                    style="font-family: 'Oswald', sans-serif;">SPRIBE</span>
             </div>
-
-            <!-- Spribe Badge -->
-            <div class="flex flex-col items-center justify-center mt-2 relative z-20">
-                <div class="spribe-badge-panel">
-                    <!-- Spribe Logo -->
-                    <div class="flex items-center gap-[6px] mb-2.5">
-                        <svg width="22" height="22" viewBox="0 0 24 24" class="opacity-90">
-                            <g fill="white">
-                                <circle cx="10" cy="5" r="1.5" />
-                                <circle cx="14" cy="5" r="1.5" />
-                                <circle cx="18" cy="5" r="1.5" />
-                                <circle cx="6" cy="9" r="1.5" />
-                                <circle cx="10" cy="13" r="1.5" />
-                                <circle cx="14" cy="13" r="1.5" />
-                                <circle cx="18" cy="17" r="1.5" />
-                                <circle cx="6" cy="21" r="1.5" />
-                                <circle cx="10" cy="21" r="1.5" />
-                                <circle cx="14" cy="21" r="1.5" />
-                            </g>
-                        </svg>
-                        <span class="text-white font-medium text-[20px] tracking-wide"
-                            style="font-family: 'Oswald', 'Arial Narrow', sans-serif; letter-spacing: 0.5px;">SPRIBE</span>
-                    </div>
-
-                    <!-- Official Game Pill -->
-                    <div class="flex items-center justify-center gap-[5px] border border-[#3fb93f] bg-transparent rounded-lg px-2.5 py-[3px] mb-2 w-full"
-                        style="border-radius: 999px;">
-                        <span class="text-[#3fb93f] text-[10px] whitespace-nowrap font-medium"
-                            style="letter-spacing: 0.2px;">Official Game</span>
-                        <div
-                            class="w-[13px] h-[13px] bg-[#3fb93f] rounded-full flex items-center justify-center shadow-[0_0_5px_rgba(63,185,63,0.5)]">
-                            <ion-icon name="checkmark-sharp" class="text-white text-[9px] font-bold"></ion-icon>
-                        </div>
-                    </div>
-
-                    <!-- Since 2019 -->
-                    <span class="text-white/50 text-[10px] font-medium" style="letter-spacing: 0.3px;">Since 2019</span>
+            <!-- Three dots indicator -->
+            <div class="flex gap-2.5 mt-10">
+                <div class="w-1.5 h-1.5 bg-white/20 rounded-full dot-anim"></div>
+                <div
+                    class="w-2.5 h-2.5 bg-[#ef4444] rounded-full shadow-[0_0_12px_rgba(239,68,68,0.9)] dot-anim delay-1">
                 </div>
+                <div class="w-1.5 h-1.5 bg-white/20 rounded-full dot-anim delay-2"></div>
             </div>
-
         </div>
+        }
+
+        <!-- PHASE 2: CONNECTION -->
+        @if (loadingPhase === 'connection') {
+        <div class="flex flex-col items-center justify-center relative z-10 w-full h-full animate-fade-in">
+            <span class="text-white text-[15px] font-medium tracking-wide">Connection...</span>
+        </div>
+        }
+
+        <!-- PHASE 3: LOADING (Animated Graphic) -->
+        @if (loadingPhase === 'loading') {
+        <div class="spribe-sunburst"></div>
+        <div class="flex flex-col items-center justify-center relative z-10 w-full h-full p-6 animate-fade-in">
+            <div class="relative w-full max-w-[400px] flex flex-col items-center">
+                <div class="w-[160px] h-[160px] relative flex items-center justify-center">
+                    <img [src]="loadingImage" class="w-full h-full object-contain" alt="Loading Game">
+                </div>
+            </div>
+        </div>
+        }
     </div>
     }
 
     <div class="flex flex-col" [class.hidden]="isLoading" style="background:#0d0d0d;">
 
         <!-- ======================== GAME AREA ======================== -->
-        <div class="relative overflow-hidden flex flex-col" style="height:42vh; min-height:270px; background:#0a0a0a;">
+        <div class="relative overflow-hidden flex flex-col"
+            style="height:45vh; min-height:240px; max-height:380px; background:#000;">
 
             <!-- Left Side Navbar Wrapper (Draggable up and down) -->
             <div class="absolute left-0 z-50 flex flex-col" [style.top.px]="sideNavTopPx"
@@ -188,23 +198,32 @@
             </div>
 
             <!-- Sunburst background -->
-            <div class="absolute inset-0 pointer-events-none sunburst-container">
-                <div class="sunburst"></div>
+            <div class="absolute inset-0 pointer-events-none sunburst-container"
+                [class.is-crashed]="gameEngine.gameState() === 'CRASHED'"
+                [class.high-multiplier]="visualMultiplier() >= 2.0">
+                <div class="sunburst-wrapper">
+                    <div class="sunburst"></div>
+                </div>
             </div>
 
             <!-- Growth Curve SVG -->
             <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100"
-                preserveAspectRatio="none" style="filter:drop-shadow(0 0 10px rgba(239,68,68,0.4));">
+                preserveAspectRatio="none" style="z-index: 10;">
                 <defs>
-                    <linearGradient id="curveFillGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                        <stop offset="0%" style="stop-color:rgba(239,68,68,0.8); stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(239,68,68,0); stop-opacity:0" />
+                    <linearGradient id="graphGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" [attr.stop-color]="visualMultiplier() >= 2.0 ? '#FF1744' : '#ff1020'"
+                            stop-opacity="0.85" />
+                        <stop offset="100%" [attr.stop-color]="visualMultiplier() >= 2.0 ? '#C4003A' : '#b41428'"
+                            stop-opacity="0.35" />
                     </linearGradient>
                 </defs>
                 @if (gameEngine.gameState() === 'RUNNING') {
-                <path [attr.d]="curvePath + ' L ' + planeCoordinates.x + ' 100 L 0 100 Z'"
-                    fill="url(#curveFillGradient)" />
-                <path [attr.d]="curvePath" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" />
+                <!-- tailX is derived from plane position to ensure vertical drop -->
+                <path [attr.d]="curvePath + ' L ' + (planeCoordinates.x - 11.5) + ' 100 L 0 100 Z'"
+                    fill="url(#graphGradient)" />
+                <path [attr.d]="curvePath" fill="none"
+                    [style.stroke]="visualMultiplier() >= 2.0 ? '#FF1744' : '#ff1020'" stroke-width="1.3"
+                    stroke-linecap="round" style="filter: drop-shadow(0 0 6px rgba(255,16,32,0.4));" />
                 }
             </svg>
 
@@ -249,10 +268,11 @@
                                         <path d="M25,50 L10,65 L5,65 L20,40 Z" fill="#e01e30" />
                                         <path d="M30,40 L15,25 L10,25 L25,40 Z" fill="#e01e30" />
                                         <!-- Propeller -->
+
                                         <line x1="88" y1="30" x2="88" y2="60" stroke="#e01e30" stroke-width="4" />
                                     </svg>
                                     <span class="text-[#e01e30] font-medium text-[42px] lowercase"
-                                        style="font-family: 'Brush Script MT', 'Comic Sans MS', cursive; letter-spacing: -0.5px; line-height: 1; text-transform: capitalize; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">Aviator</span>
+                                        style="font-family: 'Brush Script MT', 'Comic Sans MS', cursive; letter-spacing: -0.5px; line-height: 1; text-transform: capitalize; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">bp999</span>
                                 </div>
                             </div>
 
@@ -316,18 +336,18 @@
                     </div>
                 </div>
                 } @else if (gameEngine.gameState() === 'RUNNING') {
-                <div class="flex flex-col items-center translate-y-[-10px]">
+                <div class="flex flex-col items-center translate-y-[-10px] relative z-20">
                     <div
-                        class="text-7xl font-black text-white tabular-nums drop-shadow-[0_0_40px_rgba(255,255,255,0.5)] tracking-tighter">
-                        {{ gameEngine.currentMultiplier() | number:'1.2-2' }}x
+                        class="main-multiplier-text text-white tabular-nums drop-shadow-[0_0_40px_rgba(255,255,255,0.5)] tracking-tighter">
+                        {{ visualMultiplier() | number:'1.2-2' }}x
                     </div>
                 </div>
                 } @else if (gameEngine.gameState() === 'CRASHED') {
                 <div class="flex flex-col items-center">
-                    <div class="text-[#e01e30] uppercase tracking-[0.5em] text-[15px] mb-2 font-black"
-                        style="font-family: 'Arial Black', Impact, sans-serif; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                    <div class="text-white/90 uppercase tracking-[0.5em] text-[15px] mb-2 font-black"
+                        style="font-family: 'Arial Black', Impact, sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
                         FLEW AWAY!</div>
-                    <div class="text-[5rem] font-black text-[#e01e30] tabular-nums leading-none tracking-tighter"
+                    <div class="main-multiplier-text text-[#e01e30] tabular-nums leading-none tracking-tighter"
                         style="font-family: 'Arial Black', Impact, sans-serif;">
                         {{ gameEngine.currentMultiplier() | number:'1.2-2' }}x
                     </div>
@@ -336,9 +356,10 @@
             </div>
 
             <!-- Plane (Always in DOM for continuous flyaway animation) -->
-            <div class="absolute z-[35] pointer-events-none" [ngStyle]="planePosition">
-                <img src="assets/avivator.png" class="w-20 h-auto"
-                    style="filter:drop-shadow(0 0 15px rgba(239,68,68,0.4)) drop-shadow(0 15px 25px rgba(0,0,0,0.8));">
+            <div class="absolute z-[35] pointer-events-none flex items-center justify-center" [ngStyle]="planePosition"
+                style="width: 130px; height: auto;">
+                <img src="assets/avivator.png" class="w-full h-auto plane-svg"
+                    style="filter:drop-shadow(0 0 15px rgba(224,30,48,0.4)) drop-shadow(0 8px 20px rgba(0,0,0,0.6));">
             </div>
 
             <!-- Bottom Right Users Count -->
@@ -366,33 +387,27 @@
             <div class="bet-panel">
                 <div class="relative flex items-center justify-center mb-4 min-h-[30px]">
                     <div class="bet-tabs absolute left-1/2 -translate-x-1/2">
-                        <button class="bet-tab" [class.active]="slotAMode === 'manual'"
-                            (click)="slotAMode = 'manual'">Bet</button>
-                        <button class="bet-tab" [class.active]="slotAMode === 'auto'"
-                            (click)="slotAMode = 'auto'">Auto</button>
+                        <button class="bet-tab" [class.active]="slotAMode() === 'manual'"
+                            (click)="slotAMode.set('manual')">Bet</button>
+                        <button class="bet-tab" [class.active]="slotAMode() === 'auto'"
+                            (click)="slotAMode.set('auto')">Auto</button>
                     </div>
-                    @if (slotAMode === 'auto') {
-                    <div class="absolute right-0 flex items-center gap-1">
-                        <span class="text-white/30 text-[9px] font-bold uppercase">Cashout</span>
-                        <input type="number" [(ngModel)]="autoCashoutA"
-                            class="w-12 text-center text-[11px] font-black outline-none tabular-nums text-white rounded-md px-1 py-0.5"
-                            style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);"
-                            placeholder="2.00">
-                    </div>
-                    }
                 </div>
+
+
 
                 <div class="flex gap-2 items-stretch">
 
                     <!-- Left Column: Amount Control + Quick Buttons -->
-                    <div class="flex flex-col gap-1 w-[175px] shrink-0">
+                    <div class="flex flex-col gap-1 bet-left-col shrink-0">
                         <!-- Amount control -->
                         <div class="amount-control w-full">
                             <button (click)="adjustBet('A', -1, 'add')" class="ctrl-btn minus">
                                 <ion-icon name="remove" class="text-xl"></ion-icon>
                             </button>
                             <div class="flex flex-col items-center justify-center flex-1 min-w-0">
-                                <input type="number" [(ngModel)]="betAmountA"
+                                <input type="number" [(ngModel)]="betAmountA" min="16"
+                                    (blur)="betAmountA = betAmountA < 16 ? 16 : betAmountA"
                                     class="w-full text-center text-xl font-black outline-none tabular-nums text-white"
                                     style="background:transparent;" [disabled]="gameEngine.gameState() !== 'WAITING'">
                             </div>
@@ -413,10 +428,21 @@
                     <!-- Right Column: Action button -->
                     <div class="flex-1 flex">
                         @if (gameEngine.gameState() === 'WAITING') {
+                        @if (gameEngine.betSlotA().status === 'PLACED') {
+                        <button (click)="cancelBet('A')" class="action-btn cancel-btn !h-auto w-full flex-1">
+                            <span class="text-base font-medium mb-0.5 tracking-wide leading-none">CANCEL</span>
+                            <span class="flex items-baseline gap-1 text-white">
+                                <span class="text-xl font-black tabular-nums leading-none">{{ betAmountA |
+                                    number:'1.2-2' }}</span>
+                                <span class="text-xs font-bold opacity-90 leading-none">PKR</span>
+                            </span>
+                        </button>
+                        } @else {
                         <button (click)="placeBet('A')" [disabled]="gameEngine.betSlotA().status !== 'IDLE'"
                             class="action-btn bet-btn !h-auto w-full flex-1">
                             <span class="text-base font-medium mb-0.5 tracking-wide leading-none">{{
-                                gameEngine.betSlotA().status === 'IDLE' ? (slotAMode === 'auto' ? 'Auto Bet' : 'Bet') :
+                                gameEngine.betSlotA().status === 'IDLE' ? (slotAMode() === 'auto' ? 'Auto Bet' : 'Bet')
+                                :
                                 'Placed' }}</span>
                             <span class="flex items-baseline gap-1 text-white">
                                 <span class="text-xl font-black tabular-nums leading-none">{{ betAmountA |
@@ -424,6 +450,7 @@
                                 <span class="text-xs font-bold opacity-90 leading-none">PKR</span>
                             </span>
                         </button>
+                        }
                         } @else if (gameEngine.gameState() === 'RUNNING') {
                         @if (gameEngine.betSlotA().status === 'PLACED') {
                         <button (click)="cashOut('A')" class="action-btn cashout-btn !h-auto w-full flex-1">
@@ -434,8 +461,9 @@
                             </span>
                         </button>
                         } @else {
-                        <div class="action-btn inactive-btn !h-auto w-full flex-1">
-                            {{ gameEngine.betSlotA().status === 'CASHED_OUT' ? 'Winner!' : 'Lost' }}
+                        <div class="action-btn inactive-btn !h-auto w-full flex-1"
+                            [class.is-lost]="gameEngine.betSlotA().status === 'LOST' || (gameEngine.gameState() === 'RUNNING' && gameEngine.betSlotA().status === 'IDLE')">
+                            {{ gameEngine.betSlotA().status === 'CASHED_OUT' ? 'Winner!' : 'LOST' }}
                         </div>
                         }
                         } @else {
@@ -444,38 +472,61 @@
                     </div>
 
                 </div>
+
+                <!-- Bottom Auto Controls row (Slot A) -->
+                @if (slotAMode() === 'auto') {
+                <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between px-1">
+                    <div class="flex items-center gap-2 cursor-pointer" (click)="useAutoBetA.set(!useAutoBetA())">
+                        <span class="text-[12px] font-bold" [style.color]="useAutoBetA() ? '#fff' : '#7a7e8e'">Auto
+                            Bet</span>
+                        <div class="aj-switch" [class.active]="useAutoBetA()">
+                            <div class="switch-handle"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5 cursor-pointer"
+                            (click)="useAutoCashoutA.set(!useAutoCashoutA())">
+                            <span class="text-[12px] font-bold"
+                                [style.color]="useAutoCashoutA() ? '#fff' : '#7a7e8e'">Auto Cash Out</span>
+                            <div class="aj-switch" [class.active]="useAutoCashoutA()">
+                                <div class="switch-handle"></div>
+                            </div>
+                        </div>
+                        <div class="multiplier-input-wrap" [class.disabled]="!useAutoCashoutA()">
+                            <input type="number" [ngModel]="autoCashoutA()" (ngModelChange)="autoCashoutA.set($event)"
+                                [disabled]="!useAutoCashoutA()" placeholder="1.1">
+                            <span class="suffix">x</span>
+                        </div>
+                    </div>
+                </div>
+                }
             </div>
 
             <!-- ---- SLOT B ---- -->
             <div class="bet-panel">
-                <div class="relative flex items-center justify-center mb-8 min-h-[36px]">
+                <div class="relative flex items-center justify-center mb-4 min-h-[36px]">
                     <div class="bet-tabs absolute left-1/2 -translate-x-1/2">
-                        <button class="bet-tab" [class.active]="slotBMode === 'manual'"
-                            (click)="slotBMode = 'manual'">Bet</button>
-                        <button class="bet-tab" [class.active]="slotBMode === 'auto'"
-                            (click)="slotBMode = 'auto'">Auto</button>
+                        <button class="bet-tab" [class.active]="slotBMode() === 'manual'"
+                            (click)="slotBMode.set('manual')">Bet</button>
+                        <button class="bet-tab" [class.active]="slotBMode() === 'auto'"
+                            (click)="slotBMode.set('auto')">Auto</button>
                     </div>
-                    @if (slotBMode === 'auto') {
-                    <div class="absolute right-8 flex items-center gap-1">
-                        <span class="text-white/30 text-[9px] font-bold uppercase">Cashout</span>
-                        <input type="number" [(ngModel)]="autoCashoutB"
-                            class="w-12 text-center text-[11px] font-black outline-none tabular-nums text-white rounded-md px-1 py-0.5"
-                            style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);"
-                            placeholder="2.00">
-                    </div>
-                    }
                 </div>
+
+
 
                 <div class="flex gap-2 items-stretch">
 
                     <!-- Left Column: Amount Control + Quick Buttons -->
-                    <div class="flex flex-col gap-1 w-[175px] shrink-0">
+                    <div class="flex flex-col gap-1 bet-left-col shrink-0">
                         <div class="amount-control w-full">
                             <button (click)="adjustBet('B', -1, 'add')" class="ctrl-btn minus">
                                 <ion-icon name="remove" class="text-xl"></ion-icon>
                             </button>
                             <div class="flex flex-col items-center justify-center flex-1 min-w-0">
-                                <input type="number" [(ngModel)]="betAmountB"
+                                <input type="number" [(ngModel)]="betAmountB" min="16"
+                                    (blur)="betAmountB = betAmountB < 16 ? 16 : betAmountB"
                                     class="w-full text-center text-xl font-black outline-none tabular-nums text-white"
                                     style="background:transparent;" [disabled]="gameEngine.gameState() !== 'WAITING'">
                             </div>
@@ -496,10 +547,21 @@
                     <!-- Right Column: Action button -->
                     <div class="flex-1 flex">
                         @if (gameEngine.gameState() === 'WAITING') {
+                        @if (gameEngine.betSlotB().status === 'PLACED') {
+                        <button (click)="cancelBet('B')" class="action-btn cancel-btn !h-auto w-full flex-1">
+                            <span class="text-base font-medium mb-0.5 tracking-wide leading-none">CANCEL</span>
+                            <span class="flex items-baseline gap-1 text-white">
+                                <span class="text-xl font-black tabular-nums leading-none">{{ betAmountB |
+                                    number:'1.2-2' }}</span>
+                                <span class="text-xs font-bold opacity-90 leading-none">PKR</span>
+                            </span>
+                        </button>
+                        } @else {
                         <button (click)="placeBet('B')" [disabled]="gameEngine.betSlotB().status !== 'IDLE'"
                             class="action-btn bet-btn !h-auto w-full flex-1">
                             <span class="text-base font-medium mb-0.5 tracking-wide leading-none">{{
-                                gameEngine.betSlotB().status === 'IDLE' ? (slotBMode === 'auto' ? 'Auto Bet' : 'Bet') :
+                                gameEngine.betSlotB().status === 'IDLE' ? (slotBMode() === 'auto' ? 'Auto Bet' : 'Bet')
+                                :
                                 'Placed' }}</span>
                             <span class="flex items-baseline gap-1 text-white">
                                 <span class="text-xl font-black tabular-nums leading-none">{{ betAmountB |
@@ -507,6 +569,7 @@
                                 <span class="text-xs font-bold opacity-90 leading-none">PKR</span>
                             </span>
                         </button>
+                        }
                         } @else if (gameEngine.gameState() === 'RUNNING') {
                         @if (gameEngine.betSlotB().status === 'PLACED') {
                         <button (click)="cashOut('B')" class="action-btn cashout-btn !h-auto w-full flex-1">
@@ -517,8 +580,9 @@
                             </span>
                         </button>
                         } @else {
-                        <div class="action-btn inactive-btn !h-auto w-full flex-1">
-                            {{ gameEngine.betSlotB().status === 'CASHED_OUT' ? 'Winner!' : 'Lost' }}
+                        <div class="action-btn inactive-btn !h-auto w-full flex-1"
+                            [class.is-lost]="gameEngine.betSlotB().status === 'LOST' || (gameEngine.gameState() === 'RUNNING' && gameEngine.betSlotB().status === 'IDLE')">
+                            {{ gameEngine.betSlotB().status === 'CASHED_OUT' ? 'Winner!' : 'LOST' }}
                         </div>
                         }
                         } @else {
@@ -527,6 +591,35 @@
                     </div>
 
                 </div>
+
+                <!-- Bottom Auto Controls row (Slot B) -->
+                @if (slotBMode() === 'auto') {
+                <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between px-1">
+                    <div class="flex items-center gap-2 cursor-pointer" (click)="useAutoBetB.set(!useAutoBetB())">
+                        <span class="text-[12px] font-bold" [style.color]="useAutoBetB() ? '#fff' : '#7a7e8e'">Auto
+                            Bet</span>
+                        <div class="aj-switch" [class.active]="useAutoBetB()">
+                            <div class="switch-handle"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5 cursor-pointer"
+                            (click)="useAutoCashoutB.set(!useAutoCashoutB())">
+                            <span class="text-[12px] font-bold"
+                                [style.color]="useAutoCashoutB() ? '#fff' : '#7a7e8e'">Auto Cash Out</span>
+                            <div class="aj-switch" [class.active]="useAutoCashoutB()">
+                                <div class="switch-handle"></div>
+                            </div>
+                        </div>
+                        <div class="multiplier-input-wrap" [class.disabled]="!useAutoCashoutB()">
+                            <input type="number" [ngModel]="autoCashoutB()" (ngModelChange)="autoCashoutB.set($event)"
+                                [disabled]="!useAutoCashoutB()" placeholder="1.1">
+                            <span class="suffix">x</span>
+                        </div>
+                    </div>
+                </div>
+                }
             </div>
 
             <!-- ---- ALL BETS SECTION ---- -->
@@ -620,12 +713,147 @@
                 <span class="text-white text-[10px] font-bold tracking-tight">Provably Fair Game</span>
             </div>
             <div class="flex items-center gap-1.5 opacity-40">
-                <span class="text-white text-[12px] font-black tracking-widest leading-none">Aviator Jeet</span>
+                <span class="text-white text-[12px] font-black tracking-widest leading-none">bp999</span>
             </div>
         </div>
 
     </div>
+
 </ion-content>
 
+<!-- ======================== EXPANDED HISTORY OVERLAY ======================== -->
+@if (isHistoryExpanded) {
+<div class="fixed top-[50px] left-0 right-0 bottom-0 z-[100000] pointer-events-none">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/70 pointer-events-auto" (click)="toggleHistoryExpanded()"></div>
+
+    <!-- Container with slide animation -->
+    <div class="absolute top-0 left-0 right-0 px-0 pointer-events-none game-limits-container">
+        <div
+            class="bg-[#1b1b1b] rounded-[6px] overflow-hidden shadow-2xl pointer-events-auto w-[95%] mx-auto border border-white/5 mt-2">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-3 py-1 bg-[#252525]">
+                <span class="text-white font-medium text-[10px]">Round History</span>
+                <div class="w-5 h-5 flex items-center justify-center cursor-pointer" (click)="toggleHistoryExpanded()">
+                    <ion-icon name="close-outline" class="text-white/40 text-[16px]"></ion-icon>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="p-2.5 bg-[#1b1b1b]">
+                <div
+                    class="grid grid-cols-5 xs:grid-cols-6 sm:grid-cols-8 gap-x-2 gap-y-2 max-h-[60vh] overflow-y-auto pr-1">
+                    @for (m of gameEngine.history(); track $index) {
+                    <div class="flex items-center justify-center py-0.5">
+                        <span [class]="'text-[10px] font-black ' + getMultiplierColor(m)">{{ m | number:'1.2-2'
+                            }}x</span>
+                    </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+}
+
+<!-- ======================== GAME MENU OVERLAY ======================== -->
+@if (isGameMenuOpen) {
+<div class="fixed inset-0 pointer-events-none" style="z-index: 30000;">
+    <!-- Backdrop: Positioned below header but above content -->
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-auto"
+        style="z-index: 10000; top: calc(env(safe-area-inset-top) + 48px);" (click)="toggleGameMenu()"></div>
+
+    <!-- Menu Container: Highest layer -->
+    <div class="absolute top-[calc(env(safe-area-inset-top)+42px)] right-4 game-menu-card pointer-events-auto"
+        style="z-index: 30001;">
+
+        <!-- User Info Section -->
+        <div class="game-menu-header">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+                <div class="w-10 h-10 rounded-full border border-white/10 overflow-hidden shrink-0">
+                    <img src="assets/avivator.png" class="w-full h-full object-cover">
+                </div>
+                <span class="text-white font-bold text-[13px] truncate">2961agent_1897142</span>
+            </div>
+            <div class="change-avatar-btn shrink-0 ml-2">
+                <ion-icon name="person"></ion-icon>
+                <div class="flex flex-col">
+                    <span>Change</span>
+                    <span>Avatar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="flex flex-col border-b border-white/5">
+            <!-- Sound -->
+            <div class="menu-item" (click)="toggleSetting('sound')">
+                <div class="item-left">
+                    <ion-icon [name]="settings.sound ? 'volume-medium-outline' : 'volume-mute-outline'"></ion-icon>
+                    <span>Sound</span>
+                </div>
+                <div class="menu-switch" [class.active]="settings.sound">
+                    <div class="switch-handle"></div>
+                </div>
+            </div>
+            <!-- Music -->
+            <div class="menu-item" (click)="toggleSetting('music')">
+                <div class="item-left">
+                    <ion-icon name="musical-notes-outline"></ion-icon>
+                    <span>Music</span>
+                </div>
+                <div class="menu-switch" [class.active]="settings.music">
+                    <div class="switch-handle"></div>
+                </div>
+            </div>
+            <!-- Animation -->
+            <div class="menu-item" (click)="toggleSetting('animation')">
+                <div class="item-left">
+                    <ion-icon name="settings-outline"></ion-icon>
+                    <span>Animation</span>
+                </div>
+                <div class="menu-switch" [class.active]="settings.animation">
+                    <div class="switch-handle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Links Section -->
+        <div class="flex flex-col py-1">
+            <div class="menu-link-item">
+                <ion-icon name="star-outline"></ion-icon>
+                <span>Free Bets</span>
+            </div>
+            <div class="menu-link-item">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>My Bet History</span>
+            </div>
+            <div class="menu-link-item" (click)="toggleGameLimits()">
+                <ion-icon name="wallet-outline"></ion-icon>
+                <span>Game Limits</span>
+            </div>
+            <div class="menu-link-item">
+                <ion-icon name="help-circle-outline"></ion-icon>
+                <span>How To Play</span>
+            </div>
+            <div class="menu-link-item">
+                <ion-icon name="document-text-outline"></ion-icon>
+                <span>Game Rules</span>
+            </div>
+            <div class="menu-link-item border-b-0">
+                <ion-icon name="shield-checkmark"></ion-icon>
+                <span>Provably Fair Settings</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+}
+
 <!-- Deposit Modal Component -->
-<app-deposit-modal [isOpen]="isDepositModalOpen" (close)="isDepositModalOpen = false"></app-deposit-modal>
+<app-deposit-modal [isOpen]="isDepositModalOpen" (close)="isDepositModalOpen = false"></app-deposit-modal>
+
+<!-- Bonus Rain Modal Component -->
+<app-bonus-rain-modal [isOpen]="isBonusRainOpen()" (modalClose)="isBonusRainOpen.set(false)"></app-bonus-rain-modal>

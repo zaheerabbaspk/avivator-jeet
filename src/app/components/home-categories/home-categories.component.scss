@@ -17,13 +17,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   padding: 8px 14px 10px;
   cursor: pointer;
   border-bottom: 3px solid transparent;
   flex-shrink: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   scroll-snap-align: start;
+
+  @media (max-width: 380px) {
+    padding: 6px 10px 8px;
+    gap: 3px;
+  }
+
+  @media (max-width: 360px) {
+    padding: 5px 8px 6px;
+    gap: 2px;
+  }
 
   .cat-icon-wrap {
     width: 32px;
@@ -35,6 +45,11 @@
     border-radius: 50%;
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (max-width: 360px) {
+      width: 28px;
+      height: 28px;
+    }
 
     &::after {
       content: '';
@@ -60,6 +75,10 @@
       display: block;
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+
+      @media (max-width: 360px) {
+        height: 20px;
+      }
     }
   }
 
@@ -71,6 +90,14 @@
     transition: all 0.3s;
     text-transform: none;
     letter-spacing: -0.1px;
+
+    @media (max-width: 380px) {
+      font-size: 10px;
+    }
+
+    @media (max-width: 360px) {
+      font-size: 9px;
+    }
   }
 
   &:active {

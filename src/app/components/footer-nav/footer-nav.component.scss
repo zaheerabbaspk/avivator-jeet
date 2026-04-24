@@ -1,71 +1,92 @@
+:host {
+  display: block;
+}
+
 ion-footer {
-    background: #0f1520; /* Solid background for footer area */
-    padding-bottom: var(--ion-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+  background: #0f1520;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6);
+  padding-bottom: var(--ion-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 
 .footer-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 60px; /* Adjusted to match ref height */
-    background: #0f1520; /* Matching reference dark blue background */
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 58px;
+  width: 100%;
+  background: transparent;
+
+  @media (max-width: 360px) {
+    height: 52px;
+  }
 }
 
 .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    flex: 1;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0 4px;
 
+  ion-icon {
+    font-size: 26px;
+    color: #71717a;
+    flex-shrink: 0;
+
+    @media (max-width: 360px) {
+      font-size: 22px;
+    }
+  }
+
+  span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #71717a;
+    text-transform: none;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+    text-align: center;
+
+    @media (max-width: 360px) {
+      font-size: 9px;
+    }
+  }
+
+  &.active {
     ion-icon {
-        font-size: 28px; /* Matched icons height */
-        color: #71717a;
+      color: #fbbf24;
     }
 
     span {
-        font-size: 10px;
-        font-weight: 700;
-        color: #71717a;
-        text-transform: none;
-        letter-spacing: -0.1px;
+      color: #fbbf24;
     }
-
-    &.active {
-        ion-icon {
-            color: #fbbf24; /* Match gold/yellow theme from ref */
-        }
-
-        span {
-            color: #fbbf24;
-        }
-    }
+  }
 }
 
 .badge {
-    position: absolute;
-    top: -2px;
-    right: 20%;
-    background: #ff3b30;
-    color: white;
-    font-size: 8px;
-    font-weight: 900;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1.5px solid #121212;
+  position: absolute;
+  top: -2px;
+  right: 16%;
+  background: #ff3b30;
+  color: white;
+  font-size: 8px;
+  font-weight: 900;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #0f1520;
 }

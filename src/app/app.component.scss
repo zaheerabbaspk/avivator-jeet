@@ -1,0 +1,55 @@
+ion-header, 
+ion-header ion-toolbar, 
+ion-header::after {
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  --box-shadow: none !important;
+  --border-width: 0 !important;
+  display: flex !important; /* Ensure header still shows, but without border */
+}
+
+ion-header::after {
+  display: none !important;
+}
+
+ion-menu {
+  --background: #0f1520;
+  --width: 210px; /* Standardized width for all mobile screens */
+  margin-top: 48px;
+  height: auto;
+  max-height: calc(100% - 48px);
+  box-shadow: 4px 0 20px rgba(0,0,0,0.6);
+  z-index: 100 !important;
+  border: none !important;
+  outline: none !important;
+
+  /* Ensures consistency across all mobile widths */
+  @media (max-width: 450px) {
+    --width: 210px;
+  }
+}
+
+ion-menu::part(container) {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+ion-menu::part(backdrop) {
+  margin-top: 48px;
+  height: calc(100% - 48px);
+  z-index: 99 !important;
+  pointer-events: none !important; /* This prevents clicking the backdrop from closing the menu */
+}
+
+app-side-menu {
+  display: block;
+  height: 100%;
+  pointer-events: auto !important;
+}
+
+/* Ensure the component itself is flex to allow its content to fill */
+app-side-menu {
+  display: flex;
+  flex-direction: column;
+}

@@ -20,10 +20,19 @@
 
     img {
       width: 100%;
-      height: 140px;
+      height: 150px;
+      /* Reduced from 160px */
       object-fit: cover;
       object-position: center top;
       display: block;
+
+      @media (max-width: 380px) {
+        height: 90px;
+      }
+
+      @media (max-width: 360px) {
+        height: 90px;
+      }
     }
   }
 

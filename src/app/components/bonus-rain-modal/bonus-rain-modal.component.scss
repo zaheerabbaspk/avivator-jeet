@@ -1,0 +1,747 @@
+/* ============================================
+   BONUS RAIN MODAL — Unified Design
+   ============================================ */
+
+.bonus-rain-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 5, 15, 0.7);
+  /* Slightly more transparent */
+  backdrop-filter: blur(3px);
+  /* Reduced blur for UI visibility */
+  z-index: 1;
+}
+
+/* ---- Background Rain ---- */
+.rain-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  /* In front of backdrop (1) but behind main card (10) */
+}
+
+.rain-packet {
+  position: absolute;
+  top: -150px;
+  animation: packet-fall linear infinite;
+  z-index: 5;
+
+  &.foreground {
+    z-index: 15;
+  }
+
+  .packet-body {
+    width: 65px;
+    height: 95px;
+    background: url('/assets/rain.png') no-repeat center center;
+    background-size: cover;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    animation: packet-sway 3s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes packet-fall {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+@keyframes packet-sway {
+  0% {
+    transform: rotate(-8deg) translateX(-10px);
+  }
+
+  100% {
+    transform: rotate(8deg) translateX(10px);
+  }
+}
+
+/* ---- Main Container ---- */
+.main-envelope-container {
+  position: relative;
+  z-index: 10;
+  width: min(84vw, 275px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ================================================
+   SCREEN 1: THE ENVELOPE (Tap to Open)
+   ================================================ */
+.envelope-screen {
+  width: 100%;
+  cursor: pointer;
+  animation: screen-pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+
+  &:active .envelope-card {
+    transform: scale(0.96);
+  }
+}
+
+@keyframes screen-pop-in {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.envelope-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.55;
+  /* Adjusted for rain.png asset */
+  background: url('/assets/rain.png') no-repeat center center;
+  background-size: cover;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+
+/* Central OPEN Circle (Integrated design) */
+.tap-to-open {
+  position: absolute;
+  top: 61%;
+  left: 50%;
+  /* Adjusted to match curve in rain.png */
+  transform: translate(-50%, -50%);
+  z-index: 6;
+}
+
+.open-circle {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #f5c430;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), inset 0 -3px 6px rgba(139, 69, 0, 0.22);
+  animation: circle-float 2.8s ease-in-out infinite;
+
+  .open-circle-gloss {
+    position: absolute;
+    top: 6%;
+    left: 13%;
+    width: 74%;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0%, transparent 100%);
+    border-radius: 50% 50% 40% 40%;
+  }
+
+  span {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 17.5px;
+    font-weight: 900;
+    color: #723200;
+    letter-spacing: -0.4px;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@keyframes circle-float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* ================================================
+   SCREEN 2: REWARD (Same Card Design)
+   ================================================ */
+.reward-screen {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: reward-pop-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes reward-pop-in {
+  from {
+    transform: scale(0.7) translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.reward-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.25;
+  /* Adjusted for rain2.png asset aspect ratio */
+  border-radius: 20px;
+  overflow: hidden;
+  background: url('/assets/rain2.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.dynamic-amount-overlay {
+  position: absolute;
+  top: 22%;
+  /* Moved even higher to sit near the top of the white paper */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 15;
+
+  .congrats-amount {
+    font-size: 38px;
+    /* Further reduced font size for a cleaner look */
+    font-weight: 900;
+    color: #dc2626;
+    line-height: 1;
+    letter-spacing: -1.2px;
+    font-family: 'Inter', sans-serif;
+    animation: amount-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+
+    &.glow-active {
+      text-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+      animation: amount-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both,
+        number-pulse 1.8s ease-in-out 1.5s infinite alternate;
+    }
+  }
+}
+
+/* ---- Animations ---- */
+@keyframes badge-pop {
+  from {
+    transform: scale(0.7) translateY(-8px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes amount-appear {
+  from {
+    transform: scale(0.6) translateY(10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes number-pulse {
+  from {
+    text-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+  }
+
+  to {
+    text-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
+  }
+}
+
+@keyframes shine-sweep {
+  0% {
+    left: -60%;
+    opacity: 0.8;
+  }
+
+  100% {
+    left: 130%;
+    opacity: 0;
+  }
+}
+
+@keyframes text-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Sparkle Overlay (Stars) ---- */
+.sparkle-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  overflow: visible;
+}
+
+.sparkle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  box-shadow: 0 0 10px #fff, 0 0 20px #f1c40f;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.s1 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly1 0.7s ease-out 0.05s forwards;
+}
+
+.s2 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly2 0.75s ease-out 0.10s forwards;
+}
+
+.s3 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly3 0.72s ease-out 0.08s forwards;
+}
+
+.s4 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly4 0.68s ease-out 0.12s forwards;
+}
+
+.s5 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly5 0.78s ease-out 0.06s forwards;
+}
+
+.s6 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly6 0.70s ease-out 0.15s forwards;
+}
+
+.s7 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly7 0.74s ease-out 0.09s forwards;
+}
+
+.s8 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly8 0.76s ease-out 0.07s forwards;
+}
+
+.s9 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly9 0.65s ease-out 0.13s forwards;
+}
+
+.s10 {
+  top: 50%;
+  left: 50%;
+  animation: spark-fly10 0.80s ease-out 0.04s forwards;
+}
+
+@keyframes spark-fly1 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(-90px, -80px) scale(1.2);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly2 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(90px, -80px) scale(1.2);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly3 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(-110px, 10px) scale(1.1);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly4 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(110px, 10px) scale(1.1);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly5 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(0px, -110px) scale(1.3);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly6 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(-60px, 90px) scale(1.0);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly7 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(60px, 90px) scale(1.0);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly8 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(-75px, -35px) scale(0.9);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly9 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(75px, -35px) scale(0.9);
+    opacity: 0
+  }
+}
+
+@keyframes spark-fly10 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1
+  }
+
+  100% {
+    transform: translate(0px, 100px) scale(1.1);
+    opacity: 0
+  }
+}
+
+.ray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, rgba(255, 215, 0, 0.8), transparent);
+  transform-origin: top center;
+  border-radius: 1px;
+}
+
+.r1 {
+  transform: translate(-50%, -50%) rotate(30deg);
+  animation: ray-shoot 0.6s ease-out 0.05s forwards;
+}
+
+.r2 {
+  transform: translate(-50%, -50%) rotate(150deg);
+  animation: ray-shoot 0.6s ease-out 0.08s forwards;
+}
+
+.r3 {
+  transform: translate(-50%, -50%) rotate(270deg);
+  animation: ray-shoot 0.6s ease-out 0.03s forwards;
+}
+
+.r4 {
+  transform: translate(-50%, -50%) rotate(90deg);
+  animation: ray-shoot 0.6s ease-out 0.10s forwards;
+}
+
+@keyframes ray-shoot {
+  0% {
+    height: 0;
+    opacity: 0.9;
+  }
+
+  50% {
+    height: 80px;
+    opacity: 0.6;
+  }
+
+  100% {
+    height: 110px;
+    opacity: 0;
+  }
+}
+
+/* ---- Reward Halo & Confetti ---- */
+.reward-halo {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 260px;
+  height: 260px;
+  border: 5px solid rgba(255, 200, 0, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  box-shadow: 0 0 80px rgba(255, 180, 0, 0.7), inset 0 0 40px rgba(255, 180, 0, 0.5);
+  animation: halo-pop 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  z-index: 11;
+
+  /* Bright white core */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    background: white;
+    filter: blur(15px);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.8;
+  }
+}
+
+@keyframes halo-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Radial Light Rays */
+.light-rays {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 10;
+}
+
+.ray-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 160px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), transparent);
+  transform-origin: top center;
+  opacity: 0;
+  animation: ray-blast 1s ease-out forwards;
+}
+
+@keyframes ray-blast {
+  0% {
+    height: 0;
+    opacity: 1;
+  }
+
+  100% {
+    height: 250px;
+    opacity: 0;
+  }
+}
+
+.confetti-container {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 13;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  opacity: 0;
+  animation: confetti-fly 1.4s ease-out forwards;
+}
+
+@keyframes confetti-fly {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* ---- Coin Blast Animation ---- */
+.coin-blast {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.coin {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  background: radial-gradient(circle at 30% 30%, #fff7ad 0%, #ffd700 40%, #daa520 75%, #8b4513 100%);
+  border: 2px solid #fff9c4;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), inset 0 0 8px rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: coin-explode ease-out forwards;
+
+  .coin-symbol {
+    font-size: 24px;
+    font-weight: 900;
+    color: rgba(139, 69, 19, 0.85);
+    text-shadow: 0.5px 0.5px 0 rgba(255, 255, 255, 0.4);
+    user-select: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+  }
+}
+
+@keyframes coin-explode {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+/* ---- Close Button ---- */
+.modal-close-wrapper {
+  margin-top: 5px; /* Minimized gap right below the main envelope */
+  z-index: 999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  ion-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.8);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  }
+}

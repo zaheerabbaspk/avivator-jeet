@@ -1,4 +1,7 @@
 .home-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -6,6 +9,11 @@
   background: #0f1520;
   transition: background 0.3s ease;
   min-height: calc(var(--ion-safe-area-top, 20px) + 44px);
+
+  @media (max-width: 360px) {
+    padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 8px) 8px 5px;
+    min-height: calc(var(--ion-safe-area-top, 20px) + 40px);
+  }
 
   &.logged-in-bg {
     background: #0f1520;
@@ -18,18 +26,62 @@
   align-items: center;
   gap: 12px;
 
+  @media (max-width: 360px) {
+    gap: 8px;
+  }
+
   .header-menu-icon {
     display: flex;
-    flex-direction: column;
-    gap: 3.5px;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    background: transparent;
+    padding: 6px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    pointer-events: auto !important;
 
-    span {
-      display: block;
-      width: 17px;
-      height: 2px;
-      background: #84ccf7;
-      border-radius: 1px;
+    &.is-open {
+      transform: rotate(180deg);
+    }
+
+    &:active {
+      transform: scale(0.85) rotate(0deg);
+    }
+
+    &.is-open:active {
+      transform: scale(0.85) rotate(180deg);
+    }
+
+    .custom-menu-icon {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .lines {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        span {
+          display: block;
+          width: 14px;
+          height: 1.5px;
+          background: #fff; /* Crisp white like screenshot */
+          border-radius: 1px;
+        }
+      }
+
+      .chevron {
+        display: flex;
+        align-items: center;
+        color: #fff; /* Crisp white like screenshot */
+        
+        svg {
+          width: 10px;
+          height: 10px;
+        }
+      }
     }
   }
 
@@ -40,6 +92,10 @@
     font-family: 'Inter', system-ui, sans-serif;
     letter-spacing: -0.3px;
     margin-bottom: 2px;
+
+    @media (max-width: 360px) {
+      font-size: 17px;
+    }
   }
 
   .logo-text {
@@ -56,6 +112,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+
+  @media (max-width: 360px) {
+    gap: 5px;
+  }
 }
 
 .header-balance-wrap.v2 {
@@ -63,15 +123,22 @@
   border: 1px solid #1e40af;
   border-radius: 20px;
   padding: 0 4px;
+  margin-right: 5px;
   display: flex;
   align-items: center;
   gap: 6px;
-  height: 24px;
-  margin-right: 4px;
+  &.loading-wrap {
+    pointer-events: none;
+  }
+
+  @media (max-width: 360px) {
+    gap: 4px;
+    padding: 0 3px;
+  }
 
   .flag-circle {
-    width: 22px;
-    height: 22px;
+    width: 18px; /* Reduced base from 22px */
+    height: 18px;
     background: transparent;
     border: 2px solid #ffcc00;
     border-radius: 50%;
@@ -80,6 +147,11 @@
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
+
+    @media (max-width: 360px) {
+      width: 16px; /* Reduced from 18px */
+      height: 16px;
+    }
 
     .pk-svg {
       width: 100%;
@@ -90,7 +162,7 @@
 
   .balance-value-gold {
     color: #ffcc00;
-    font-size: 15px;
+    font-size: 13px; /* Reduced base from 15px */
     font-weight: 800;
     text-decoration: underline;
     text-decoration-thickness: 1.5px;
@@ -98,15 +170,39 @@
     margin-right: -1px;
     line-height: 1;
     letter-spacing: -0.2px;
+
+    @media (max-width: 360px) {
+      font-size: 11px; /* Reduced from 12px */
+    }
   }
 
   .refresh-icon {
-    font-size: 16px;
+    font-size: 14px; /* Reduced base from 16px */
     color: #31d7f1;
     margin-top: 1px;
     --ionicon-stroke-width: 50px;
     margin-left: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    @media (max-width: 360px) {
+      font-size: 12px; /* Reduced from 13px */
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    &.spinning {
+      animation: icon-spin 1s linear infinite;
+      color: #ffcc00;
+    }
   }
+}
+
+@keyframes icon-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .deposit-btn-wrap {
@@ -127,6 +223,12 @@
     align-items: center;
     gap: 4px;
     cursor: pointer;
+
+    @media (max-width: 360px) {
+      font-size: 12px;
+      padding: 0 8px;
+      height: 28px;
+    }
 
     ion-icon {
       font-size: 10px;
@@ -171,6 +273,11 @@
   font-weight: 700;
   padding: 6px 16px;
   cursor: pointer;
+
+  @media (max-width: 360px) {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
 }
 
 .register-btn {
@@ -183,6 +290,11 @@
   font-size: 13px;
   font-weight: 900;
   cursor: pointer;
+
+  @media (max-width: 360px) {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
 
   .reg-badge {
     position: absolute;

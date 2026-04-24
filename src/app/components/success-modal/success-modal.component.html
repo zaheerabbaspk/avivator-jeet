@@ -2,83 +2,86 @@
   <ng-template>
     <div class="sm-overlay">
 
-      <!-- Modal Card -->
-      <div class="sm-card">
+      <!-- Card Outer Wrapper: relative context for floating checkmark -->
+      <div class="sm-card-outer">
 
-        <!-- Floating Green Check -->
+        <!-- Floating Green Check — OUTSIDE the scrollable card so overflow-y doesn't clip it -->
         <div class="sm-check-wrap">
           <div class="sm-check-circle">
             <ion-icon name="checkmark-circle"></ion-icon>
           </div>
         </div>
 
-        <!-- 🎉 Sparkles left/right of title area -->
-        <div class="sm-sparkle sm-sparkle--left">🎉</div>
-        <div class="sm-sparkle sm-sparkle--right">🎉</div>
+        <!-- Modal Card (scrollable) -->
+        <div class="sm-card">
 
-        <!-- Title -->
-        <h1 class="sm-title">Congrats On Successful Registration!</h1>
+          <!-- Sparkles -->
+          <div class="sm-sparkle sm-sparkle--left">🎉</div>
+          <div class="sm-sparkle sm-sparkle--right">🎉</div>
 
-        <!-- Subtitle -->
-        <div class="sm-subtitle">
-          <p>🎁 New member benefits! 🎉</p>
-          <p>👉 Receive an <strong>8888 reward</strong> on your first recharge! 🚀 ✨</p>
-        </div>
+          <!-- Title -->
+          <h1 class="sm-title">Congrats On Successful Registration!</h1>
 
-        <!-- Reward Cards -->
-        <div class="sm-rewards">
-          @for (reward of rewards; track reward.id) {
-            <div class="sm-reward-card">
-              <div class="sm-reward-strip"></div>
-              <div class="sm-reward-body">
-                <img src="assets/gift-box-coins.png" class="sm-reward-img" alt="">
-                <div class="sm-reward-info">
-                  <span class="sm-reward-name">{{ reward.title }}</span>
-                  <div class="sm-lt-badge">
-                    <span class="sm-lt-text">⚡ LT</span>
-                    <span class="sm-lt-time">{{ reward.timer }}</span>
+          <!-- Subtitle -->
+          <div class="sm-subtitle">
+            <p>🎁 New member benefits! 🎉</p>
+            <p>👉 Receive an <strong>8888 reward</strong> on your first recharge! 🚀 ✨</p>
+          </div>
+
+          <!-- Reward Cards -->
+          <div class="sm-rewards">
+            @for (reward of rewards; track reward.id) {
+              <div class="sm-reward-card">
+                <div class="sm-reward-strip"></div>
+                <div class="sm-reward-body">
+                  <img src="assets/gift-box-coins.png" class="sm-reward-img" alt="">
+                  <div class="sm-reward-info">
+                    <span class="sm-reward-name">{{ reward.title }}</span>
+                    <div class="sm-lt-badge">
+                      <span class="sm-lt-text">⚡ LT</span>
+                      <span class="sm-lt-time">{{ reward.timer }}</span>
+                    </div>
                   </div>
-                </div>
-                <div class="sm-reward-max">
-                  <span class="sm-max-label">MAX</span>
-                  <div class="sm-max-row">
-                    <span class="sm-rs-circle">Rs</span>
-                    <span class="sm-max-amt">{{ reward.maxBonus | number:'1.2-2' }}</span>
+                  <div class="sm-reward-max">
+                    <span class="sm-max-label">MAX</span>
+                    <div class="sm-max-row">
+                      <span class="sm-rs-circle">Rs</span>
+                      <span class="sm-max-amt">{{ reward.maxBonus | number:'1.2-2' }}</span>
+                    </div>
                   </div>
+                  <ion-icon name="chevron-forward-outline" class="sm-chevron"></ion-icon>
                 </div>
-                <ion-icon name="chevron-forward-outline" class="sm-chevron"></ion-icon>
               </div>
+            }
+          </div>
+
+          <!-- Badges + Buttons -->
+          <div class="sm-btn-section">
+            <div class="sm-badge-row">
+              <div class="sm-badge">🎁 Earn bonus</div>
+              <div class="sm-badge">🎁 8888 bonus</div>
             </div>
-          }
-        </div>
-
-        <!-- Badges + Buttons row -->
-        <div class="sm-btn-section">
-          <!-- Badge row -->
-          <div class="sm-badge-row">
-            <div class="sm-badge">🎁 Earn bonus</div>
-            <div class="sm-badge">🎁 8888 bonus</div>
+            <div class="sm-btn-row">
+              <button class="sm-btn sm-btn--purple">
+                <ion-icon name="gift-outline" class="sm-btn-ion-icon"></ion-icon>
+                <span class="sm-btn-text">Download APP</span>
+              </button>
+              <button class="sm-btn sm-btn--orange" (click)="onDeposit()">
+                <ion-icon name="wallet-outline" class="sm-btn-ion-icon"></ion-icon>
+                <span class="sm-btn-text">Deposit Now</span>
+              </button>
+            </div>
           </div>
-          <!-- Button row -->
-          <div class="sm-btn-row">
-            <button class="sm-btn sm-btn--purple">
-              <ion-icon name="gift-outline" class="sm-btn-ion-icon"></ion-icon>
-              <span class="sm-btn-text">Download APP</span>
-            </button>
-            <button class="sm-btn sm-btn--orange" (click)="onDeposit()">
-              <ion-icon name="wallet-outline" class="sm-btn-ion-icon"></ion-icon>
-              <span class="sm-btn-text">Deposit Now</span>
-            </button>
-          </div>
-        </div>
 
-      </div>
+        </div><!-- /sm-card -->
 
-      <!-- Close X -->
-      <button class="sm-close" (click)="dismiss()">
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </button>
+        <!-- Close X -->
+        <button class="sm-close" (click)="dismiss()">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </button>
 
-    </div>
+      </div><!-- /sm-card-outer -->
+
+    </div><!-- /sm-overlay -->
   </ng-template>
 </ion-modal>

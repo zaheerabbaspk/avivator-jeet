@@ -47,7 +47,7 @@
     --overflow: visible !important;
     --height: auto !important;
     --width: 100% !important;
-    
+
     &::part(content) {
         background: transparent !important;
         box-shadow: none !important;
@@ -60,6 +60,61 @@
         background: rgba(0, 0, 0, 0.6) !important;
         backdrop-filter: blur(4px) !important;
         opacity: 1 !important;
+    }
+}
+
+/* Premium Alert Styles */
+.premium-alert {
+    --background: #1e1e26 !important;
+    --border-radius: 20px !important;
+    
+    .alert-wrapper {
+        background: #1e1e26 !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.6) !important;
+    }
+
+    .alert-head {
+        padding-top: 28px !important;
+        padding-bottom: 12px !important;
+        .alert-title {
+            color: #ffffff !important;
+            font-size: 20px !important;
+            font-weight: 900 !important;
+            text-align: center !important;
+            letter-spacing: 0.5px !important;
+        }
+    }
+
+    .alert-message {
+        color: rgba(255,255,255,0.7) !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        text-align: center !important;
+        padding: 0 20px 28px !important;
+        line-height: 1.5 !important;
+    }
+
+    .alert-button-group {
+        padding: 0 20px 20px !important;
+        justify-content: center !important;
+        
+        .alert-button {
+            width: 100% !important;
+            height: 52px !important;
+            background: linear-gradient(135deg, #d4a017, #f0c040) !important;
+            color: #1a1000 !important;
+            font-weight: 900 !important;
+            font-size: 16px !important;
+            border-radius: 14px !important;
+            margin: 0 !important;
+            text-transform: uppercase !important;
+            box-shadow: 0 4px 15px rgba(240, 192, 64, 0.3) !important;
+            
+            .alert-button-inner {
+                justify-content: center !important;
+            }
+        }
     }
 }
 

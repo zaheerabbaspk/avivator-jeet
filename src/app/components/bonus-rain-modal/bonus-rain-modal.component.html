@@ -1,0 +1,91 @@
+<div class="bonus-rain-wrapper" *ngIf="isOpen">
+  <!-- Backdrop -->
+  <div class="modal-backdrop" (click)="close()"></div>
+
+  <!-- Falling envelopes (Sharp, in front of backdrop) -->
+  <div class="rain-container">
+    <div *ngFor="let packet of packets" class="rain-packet"
+      [class.foreground]="packet.isForeground"
+      [style.left.%]="packet.left"
+      [style.animation-delay.s]="packet.delay"
+      [style.animation-duration.s]="packet.duration">
+      <div class="packet-body"
+        [style.transform]="'rotate(' + packet.rotation + 'deg) scale(' + packet.scale + ')'">
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-envelope-container">
+
+    <!-- ===== SCREEN 1: THE ENVELOPE ===== -->
+    <div class="envelope-screen" *ngIf="!isClaimed" (click)="handleOpen()">
+      <div class="envelope-card">
+        <!-- The card background image 'rain.png' replaces text/curves -->
+        <div class="tap-to-open">
+          <div class="open-circle" [class.disabled]="bonusService.bonusStatus() === 'loading' || bonusService.bonusStatus() === 'already_claimed'">
+            <div class="open-circle-gloss"></div>
+            <span>OPEN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCREEN 2: THE REWARD ===== -->
+    <div class="reward-screen" *ngIf="isClaimed">
+      <div class="reward-card">
+        <!-- Asset 'rain2.png' handles background, badge, and text -->
+        <div class="dynamic-amount-overlay">
+          <div class="congrats-amount" [class.glow-active]="displayedAmount >= claimedAmount">
+            {{ displayedAmount | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <!-- Radial Light Rays -->
+        <div class="light-rays" *ngIf="sparklesVisible">
+          <div *ngFor="let r of [1,2,3,4,5,6,7,8]" class="ray-line"
+            [style.transform]="'rotate(' + (r * 45) + 'deg) translate(-50%, 0)'">
+          </div>
+        </div>
+
+        <!-- Glowing Halo Ring -->
+        <div class="reward-halo" *ngIf="sparklesVisible"></div>
+
+        <!-- Confetti Blast -->
+        <div class="confetti-container" *ngIf="sparklesVisible">
+          <div *ngFor="let c of confetti" class="confetti-piece"
+            [style.--tx.px]="c.x"
+            [style.--ty.px]="c.y"
+            [style.--rot.deg]="c.rotation"
+            [style.background-color]="c.color"
+            [style.animation-delay.s]="c.delay"></div>
+        </div>
+
+        <!-- Coin Blast Animation -->
+        <div class="coin-blast">
+          <div *ngFor="let coin of coins" class="coin"
+            [style.--tx.px]="coin.x"
+            [style.--ty.px]="coin.y"
+            [style.--rot.deg]="coin.rotation"
+            [style.animation-delay.s]="coin.delay"
+            [style.animation-duration.s]="coin.duration"
+            [style.transform]="'scale(' + coin.scale + ')'">
+            <span class="coin-symbol">{{ coin.symbol }}</span>
+          </div>
+        </div>
+
+        <!-- Sparkles Overlay -->
+        <div class="sparkle-overlay" *ngIf="sparklesVisible">
+          <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]" class="sparkle s{{i}}"></div>
+          <div *ngFor="let i of [1,2,3,4]" class="ray r{{i}}"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Close Button (Moved inside main container) -->
+    <div class="modal-close-wrapper" (click)="close()">
+      <ion-icon name="close-circle-outline"></ion-icon>
+    </div>
+
+  </div>
+</div>

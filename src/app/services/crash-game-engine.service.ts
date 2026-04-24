@@ -1,6 +1,7 @@
 import { Injectable, signal, inject, OnDestroy, effect, untracked } from '@angular/core';
 import { Bet } from '../models/crash-game.model';
 import { CrashGameSocketService, GameState } from './crash-game-socket.service';
+import { AuthService } from './auth.service';
 
 export interface ActiveBet {
     id: string;
@@ -22,7 +23,7 @@ export class CrashGameEngineService implements OnDestroy {
     private socketService = inject(CrashGameSocketService);
 
     // UI State Signals (managed locally)
-    balance = signal<number>(10000); // Initial virtual balance
+    balance = signal<number>(0); 
     history = signal<number[]>([]);
 
     // Betting Signals (local UI state)
@@ -45,7 +46,14 @@ export class CrashGameEngineService implements OnDestroy {
     private _activeBets: ActiveBet[] = [];
     private syncTimer: any;
 
+    private authService = inject(AuthService);
+
     constructor() {
+        // Subscribe to global balance
+        this.authService.balance$.subscribe((val: number) => {
+            this.balance.set(val);
+        });
+
         // Subscribe to game state changes from server
         this.setupServerEventHandlers();
 
@@ -87,6 +95,14 @@ export class CrashGameEngineService implements OnDestroy {
                     if (updated) {
                         this.totalWinAmount.update(w => w + newWins);
                     }
+
+                    // MY AUTO CASHOUT LOGIC
+                    [this.betSlotA, this.betSlotB].forEach(betSignal => {
+                        const bet = betSignal();
+                        if (bet.status === 'PLACED' && bet.autoCashout && multiplier >= bet.autoCashout) {
+                            this.cashOut(bet.slot as 'A' | 'B');
+                        }
+                    });
                 } else if (state === 'CRASHED' && multiplier > 1.0) {
                     // Mark all playing bots as lost
                     for (const bet of this._activeBets) {
@@ -166,7 +182,7 @@ export class CrashGameEngineService implements OnDestroy {
 
     // --- Betting Actions (send to server) ---
 
-    placeBet(slot: 'A' | 'B', amount: number, autoCashout?: number | null) {
+    async placeBet(slot: 'A' | 'B', amount: number, autoCashout?: number | null) {
         // Validate state
         if (this.gameState() !== 'WAITING') {
             console.warn('Cannot place bet: game is not in WAITING state');
@@ -200,33 +216,39 @@ export class CrashGameEngineService implements OnDestroy {
             autoCashout
         });
 
-        // Deduct from balance
-        this.balance.update(b => b - amount);
+        try {
+            // Deduct from universal balance in database
+            await this.authService.updateBalance(-amount);
+            
+            // Send to server
+            this.socketService.placeBet({
+                slot,
+                amount,
+                autoCashout
+            });
 
-        // Send to server
-        this.socketService.placeBet({
-            slot,
-            amount,
-            autoCashout
-        });
-
-        // Inject my bet into the simulated list (Internal buffer)
-        const myBet: ActiveBet = {
-            id: `my_slot_${slot}`,
-            name: 'You',
-            avatarClass: 'bg-[#3fb93f]',
-            avatarLetter: 'U',
-            betAmount: amount,
-            cashoutTarget: autoCashout || 9999,
-            status: 'PLAYING',
-            isMe: true
-        };
-        this._activeBets.unshift(myBet);
-        this.activeBets.set([...this._activeBets]); // Sync for immediate user feedback
-        this.totalBetsCount.update(c => c + 1);
+            // Inject my bet into the simulated list (Internal buffer)
+            const myBet: ActiveBet = {
+                id: `my_slot_${slot}`,
+                name: 'You',
+                avatarClass: 'bg-[#3fb93f]',
+                avatarLetter: 'U',
+                betAmount: amount,
+                cashoutTarget: autoCashout || 9999,
+                status: 'PLAYING',
+                isMe: true
+            };
+            this._activeBets.unshift(myBet);
+            this.activeBets.set([...this._activeBets]); // Sync for immediate user feedback
+            this.totalBetsCount.update(c => c + 1);
+        } catch (error) {
+            console.error('Failed to update balance during bet placement', error);
+            // Revert state if failed
+            betSignal.set({ ...betSignal(), status: 'IDLE' });
+        }
     }
 
-    cashOut(slot: 'A' | 'B') {
+    async cashOut(slot: 'A' | 'B') {
         // Validate state
         if (this.gameState() !== 'RUNNING') {
             console.warn('Cannot cashout: game is not running');
@@ -250,7 +272,7 @@ export class CrashGameEngineService implements OnDestroy {
         const multiplier = this.currentMultiplier();
         const payout = bet.amount * multiplier;
 
-        // Update local state
+        // Update local state temporarily to avoid double tapping
         betSignal.set({
             ...bet,
             status: 'CASHED_OUT',
@@ -258,23 +280,69 @@ export class CrashGameEngineService implements OnDestroy {
             payout
         });
 
-        // Add to balance
-        this.balance.update(b => b + payout);
+        try {
+            // Add to universal balance in DB
+            await this.authService.updateBalance(payout);
 
-        // Send to server
-        this.socketService.cashout({ slot });
+            // Send to server
+            this.socketService.cashout({ slot });
 
-        // Update my bet in the simulated list (Internal buffer)
-        for (const b of this._activeBets) {
-            if (b.id === `my_slot_${slot}`) {
-                b.status = 'CASHED_OUT';
-                b.winAmount = payout;
-                b.cashoutMultiplier = multiplier;
-                break;
+            // Update my bet in the simulated list (Internal buffer)
+            for (const b of this._activeBets) {
+                if (b.id === `my_slot_${slot}`) {
+                    b.status = 'CASHED_OUT';
+                    b.winAmount = payout;
+                    b.cashoutMultiplier = multiplier;
+                    break;
+                }
             }
+            this.activeBets.set([...this._activeBets]); // Immediate sync for user feedback
+            this.totalWinAmount.update(w => w + payout);
+        } catch (error) {
+            console.error('Failed to update balance during cashout', error);
         }
-        this.activeBets.set([...this._activeBets]); // Immediate sync for user feedback
-        this.totalWinAmount.update(w => w + payout);
+    }
+
+    async cancelBet(slot: 'A' | 'B') {
+        const betSignal = slot === 'A' ? this.betSlotA : this.betSlotB;
+        const bet = betSignal();
+
+        if (this.gameState() !== 'WAITING') {
+            console.warn('Cannot cancel bet: game has already started or crashed');
+            return;
+        }
+
+        if (bet.status !== 'PLACED') {
+            console.warn('No active bet to cancel');
+            return;
+        }
+
+        const refundAmount = bet.amount;
+
+        try {
+            // Refund balance in DB
+            await this.authService.updateBalance(refundAmount);
+
+            // Notify server
+            this.socketService.cancelBet({ slot });
+
+            // Update local state
+            betSignal.set({
+                id: slot,
+                slot,
+                amount: 0,
+                status: 'IDLE'
+            });
+
+            // Remove my bet from simulated list (Internal buffer)
+            this._activeBets = this._activeBets.filter(b => b.id !== `my_slot_${slot}`);
+            this.activeBets.set([...this._activeBets]);
+            this.totalBetsCount.update(c => Math.max(0, c - 1));
+
+            console.log(`✅ Bet on slot ${slot} cancelled and refunded: ${refundAmount}`);
+        } catch (error) {
+            console.error('Failed to refund balance during bet cancellation', error);
+        }
     }
 
     // --- Helper Methods ---

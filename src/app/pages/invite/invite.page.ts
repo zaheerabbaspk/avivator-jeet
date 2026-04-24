@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonIcon, IonToast, IonHeader } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -70,6 +71,7 @@ import { InviteService, AgentStats, InviteStats, CommissionCard, InviteBanner, M
 })
 export class InvitePage implements OnInit {
   isSpinModalOpen = false;
+  private authService = inject(AuthService);
   private router = inject(Router);
   private inviteService = inject(InviteService);
   
@@ -119,7 +121,14 @@ export class InvitePage implements OnInit {
 
   ngOnInit() {
     this.loadData();
-    // Removed auto-open for cleaner mobile entry
+    // Auto-open lucky draw on page load as requested
+    setTimeout(() => {
+      this.isSpinModalOpen = true;
+    }, 1000);
+  }
+
+  openSpinModal() {
+    this.isSpinModalOpen = true;
   }
 
   loadData() {
@@ -151,7 +160,7 @@ export class InvitePage implements OnInit {
     console.log('Sharing on platform:', platform);
     if (navigator.share) {
       navigator.share({
-        title: 'Join Aviator Jeet!',
+        title: 'Join bp999!',
         text: 'Special invitation reward waiting for you!',
         url: this.referralLink
       });
@@ -159,9 +168,17 @@ export class InvitePage implements OnInit {
   }
 
   handleClaim(commission: CommissionCard) {
-    console.log('Claiming commission:', commission.title);
-    this.toastMessage = 'Claim successful!';
-    this.showCopyToast = true;
+    const result = this.inviteService.claimCommission(commission);
+    
+    if (result.success && result.amount !== undefined) {
+      this.authService.updateBalance(result.amount);
+      this.toastMessage = `Successfully claimed Rs ${result.amount}`;
+      this.showCopyToast = true;
+      this.loadData(); // Refresh UI to show updated numbers
+    } else {
+      this.toastMessage = result.message || 'Nothing to claim';
+      this.showCopyToast = true;
+    }
   }
 
   closeFloatingLogo() {

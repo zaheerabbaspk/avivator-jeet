@@ -1,37 +1,38 @@
-<div class="w-[90px] shrink-0 bg-[#1A1C22] flex flex-col items-center py-4 px-2 gap-4 border-r border-white/5 h-full">
+<div class="offer-sidebar-container bg-[#1A1C22] flex flex-col items-center py-4 px-2 gap-3 border-r border-white/5 h-full">
   <!-- All -->
-  <div class="w-[80px] relative sidebar-item flex items-center justify-center shadow-md !h-[32px] rounded-[-7px]"
+  <div class="sidebar-item-box relative sidebar-item flex items-center justify-center shadow-md !h-[32px] rounded-[-7px]"
     [ngClass]="activeSidebar === 'all' ? 'active' : 'inactive'" (click)="setSidebar('all')">
-    <div class="flex items-center gap-3.5">
+    <div class="flex items-center gap-2">
       <ion-icon name="apps" class="text-[18px]" [class.text-[#3E2723]]="activeSidebar === 'all'"></ion-icon>
-      <span class="text-[14px] tracking-tight" [class.text-[#301B18]]="activeSidebar === 'all'">All</span>
+      <span class="text-[13px] tracking-tight" [class.text-[#301B18]]="activeSidebar === 'all'">All</span>
     </div>
     <div class="bubble-badge" style="top:-4px; right:-2px">3</div>
   </div>
 
   <!-- cooperate -->
   <div
-    class="w-[80px] relative sidebar-item flex items-center justify-center !h-[32px] rounded-[12px] shadow-sm mt-2"
+    class="sidebar-item-box relative sidebar-item flex items-center justify-center !h-[32px] rounded-[12px] shadow-sm mt-1"
     [ngClass]="activeSidebar === 'cooperate' ? 'active' : 'inactive'" (click)="setSidebar('cooperate')">
     <span class="text-[10px] sidebar-label-cooperate tracking-tighter leading-tight text-center">cooperate</span>
     <div class="bubble-badge" style="top:-4px; right:-2px">3</div>
   </div>
 
-  <div class="w-full flex flex-col items-center gap-2.5 mt-1">
-    <button class="sidebar-action-btn" (click)="navigateToHistory.emit()" style="border: 1px solid #F1C15A;">
+  <div class="w-full flex flex-col items-center gap-2 mt-1">
+    <button class="sidebar-action-btn" (click)="navigateToHistory.emit()">
       <span class="text-[11px]">History</span>
     </button>
-    <button class="sidebar-action-btn horizontal gap-1" (click)="refreshRewards.emit()"
-      style="border: 1px solid #F1C15A;">
+    <button class="sidebar-action-btn horizontal gap-1" (click)="refreshRewards.emit()">
       <ion-icon name="reload" class="text-[14px] text-[#F1C15A]" [class.animate-spin]="isLoadingRewards"></ion-icon>
       <div class="flex flex-col items-start leading-[1.0] -mt-0.5">
-        <span class="text-[8.5px]">Refresh</span>
-        <span class="text-[8.5px]">rewards</span>
+        <span class="text-[8px]">Refresh</span>
+        <span class="text-[8px]">rewards</span>
       </div>
     </button>
-    <button class="sidebar-action-btn gap-0.5" (click)="openRedemption.emit()" style="border: 1px solid #F1C15A;">
+    <button class="sidebar-action-btn gap-0.5" (click)="openRedemption.emit()">
       <ion-icon name="ticket" class="text-[16px] text-[#F1C15A]"></ion-icon>
-      <span class="text-[8.5px]">Redempti..</span>
+      <div class="flex flex-col items-center leading-[1.0] -mt-0.5">
+        <span class="text-[8px]">Redeem</span>
+      </div>
     </button>
   </div>
 

@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { InviteService } from './invite.service';
 
 export interface LuckyTask {
   id: string;
@@ -93,32 +96,107 @@ export class LuckyDrawService {
     }
   ]);
 
+  constructor(private authService: AuthService) {
+    this.authService.profile$.subscribe(profile => {
+      if (profile) {
+        this.drawsSubject.next(profile.lucky_spins || 0);
+      } else {
+        this.drawsSubject.next(0);
+      }
+    });
+  }
+
   getBalance(): Observable<number> { return this.balanceSubject.asObservable(); }
   getAvailableDraws(): Observable<number> { return this.drawsSubject.asObservable(); }
   getTasks(): Observable<LuckyTask[]> { return this.tasksSubject.asObservable(); }
   getRecords(): Observable<LuckyRecord[]> { return this.recordsSubject.asObservable(); }
 
-  spin() {
+  async spin() {
     const draws = this.drawsSubject.value;
     if (draws > 0) {
+      // Optimistic update
       this.drawsSubject.next(draws - 1);
       
-      // Add a simulated record
+      // Deduct spin in database
+      try {
+          await this.authService.updateProfile({ lucky_spins: draws - 1 });
+      } catch (err) {
+          console.error('Failed to deduct spin', err);
+          // Revert on failure
+          this.drawsSubject.next(draws);
+          return { success: false, index: -1 };
+      }
+      
+      const items = this.getWheelItems();
+      const randomIndex = Math.floor(Math.random() * items.length);
+      const selectedItem = items[randomIndex];
+
+      // Simulated delay for animation
       setTimeout(() => {
-        const amt = (Math.random() * 50).toFixed(2);
+        let amt = 0;
+        // Logic to interpret labels like '10-100' or 'X2'
+        if (selectedItem.label.includes('-')) {
+          const parts = selectedItem.label.split('-');
+          const min = parseFloat(parts[0]);
+          const max = parseFloat(parts[1]);
+          amt = Math.random() * (max - min) + min;
+        } else if (selectedItem.label === 'X2') {
+          amt = this.balanceSubject.value; // Doubling the current lucky balance
+        }
+
+        const amtStr = amt.toFixed(2);
         const newRecord: LuckyRecord = {
           dateStr: new Date().toLocaleDateString('en-GB'),
           timeStr: new Date().toLocaleTimeString('en-GB'),
-          description: 'Free draw, get ',
-          highlight: amt
+          description: `Lucky draw (${selectedItem.label}), get `,
+          highlight: amtStr
         };
+
         const currentRecs = this.recordsSubject.value;
         this.recordsSubject.next([newRecord, ...currentRecs]);
-        this.balanceSubject.next(this.balanceSubject.value + parseFloat(amt));
-      }, 3000); // Wait for spin animation duration
-      return true; // Spun successfully
+        this.balanceSubject.next(this.balanceSubject.value + parseFloat(amtStr));
+      }, 4500); 
+
+      return { success: true, index: randomIndex };
     }
-    return false; // No draws
+    return { success: false, index: -1 };
+  }
+
+  async getValidInviteCount(): Promise<number> {
+    const user = this.authService.userSubject.value;
+    if (!user) return 0;
+    
+    // Get user's game_id
+    const { data: profile } = await this.authService.supabase
+      .from('profiles')
+      .select('game_id')
+      .eq('id', user.id)
+      .single();
+      
+    if (!profile?.game_id) return 0;
+
+    const { count } = await this.authService.supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('invited_by', profile.game_id);
+
+    return count || 0;
+  }
+
+  async claimBalance() {
+    const amount = this.balanceSubject.value;
+    if (amount <= 0) return { success: false, message: 'No balance to claim' };
+
+    const invites = await this.getValidInviteCount();
+    if (invites < 1) {
+      return { success: false, message: 'You must invite at least 1 friend to claim this balance!' };
+    }
+
+    // Update real balance
+    this.authService.updateBalance(amount);
+    this.balanceSubject.next(0);
+    
+    return { success: true, amount };
   }
 
   getWheelItems(): WheelItem[] {

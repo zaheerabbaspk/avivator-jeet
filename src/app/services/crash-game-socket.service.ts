@@ -137,6 +137,16 @@ export class CrashGameSocketService {
         this.socket.emit('cashout', data);
     }
 
+    cancelBet(data: { slot: 'A' | 'B' }) {
+        if (!this.socket || !this.connected()) {
+            console.error('Cannot cancel bet: not connected to server');
+            return;
+        }
+
+        console.log('🚫 Cancelling bet:', data);
+        this.socket.emit('cancelBet', data);
+    }
+
     disconnect() {
         if (this.socket) {
             this.socket.disconnect();

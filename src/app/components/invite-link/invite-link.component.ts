@@ -12,29 +12,29 @@ import { IonIcon } from '@ionic/angular/standalone';
       </div>
 
       <!-- Main Link Card inside a subtle border-less wrapper if needed -->
-      <div class="flex gap-4">
+      <div class="main-link-layout">
         <!-- QR Section -->
-        <div class="w-[90px] shrink-0 flex flex-col items-center">
-           <div class="w-[85px] aspect-square bg-white rounded-t-[5px] p-1.5 relative overflow-hidden">
+        <div class="qr-container">
+           <div class="qr-box">
               <img src="assets/qr_placeholder.png" class="w-full h-full object-contain" />
            </div>
            <!-- Yellow Save Label -->
-           <div class="w-[85px] bg-[#F1C15A] py-[3px] rounded-b-[5px] text-center shadow-md cursor-pointer active:opacity-80">
-               <span class="text-[#5A3D0A] text-[10px] font-medium leading-tight block">Save</span>
-               <span class="text-[#5A3D0A] text-[10px] font-medium leading-tight block">invitation...</span>
+           <div class="qr-button">
+               <span class="btn-text">Save</span>
+               <span class="btn-text">invitation...</span>
            </div>
         </div>
 
         <!-- Link Section -->
-        <div class="flex-1">
+        <div class="link-section">
            <div>
               <span class="text-[#545E6D] text-[11px] font-medium block mb-[5px]">Referral link</span>
               <div class="flex items-center gap-2">
-                <div class="flex-1 bg-[#1A1D24] rounded-[6px] px-3 py-2 flex items-center justify-between border border-white/[0.04]">
+                <div class="flex-1 bg-[#1A1D24] rounded-[6px] px-3 py-2 flex items-center justify-between border border-white/[0.04] overflow-hidden">
                    <span class="text-[#8E99A7] text-[11px] truncate">{{ referralLink }}</span>
-                   <ion-icon name="chevron-down-outline" class="text-[#8E99A7] text-[13px] ml-1"></ion-icon>
+                   <ion-icon name="chevron-down-outline" class="text-[#8E99A7] text-[13px] ml-1 shrink-0"></ion-icon>
                 </div>
-                <ion-icon name="copy-outline" (click)="copy.emit(referralLink)" class="text-[#F1C15A] text-[17px] cursor-pointer pr-1"></ion-icon>
+                <ion-icon name="copy-outline" (click)="copy.emit(referralLink)" class="text-[#F1C15A] text-[17px] cursor-pointer pr-1 shrink-0"></ion-icon>
               </div>
            </div>
 
@@ -62,7 +62,7 @@ import { IonIcon } from '@ionic/angular/standalone';
                  <div class="w-[34px] h-[34px] rounded-full bg-gradient-to-tr from-[#FFD600] via-[#FF0040] to-[#9900FF] flex items-center justify-center">
                     <ion-icon name="logo-instagram" class="text-white text-[18px]"></ion-icon>
                  </div>
-                 <span class="text-[#E0E0E0] text-[10px]">instagram</span>
+                 <span class="text-[#E0E0E0] text-[10px]">Instagram</span>
               </div>
               <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share.emit('whatsapp')">
                  <div class="w-[34px] h-[34px] rounded-full bg-[#25D366] flex items-center justify-center">
@@ -77,6 +77,75 @@ import { IonIcon } from '@ionic/angular/standalone';
   `,
   styles: [`
     ::-webkit-scrollbar { display: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    
+    .main-link-layout {
+      display: flex;
+      gap: 16px;
+    }
+
+    .qr-container {
+      width: 90px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .qr-box {
+      width: 100%;
+      aspect-ratio: 1;
+      background: white;
+      border-radius: 5px 5px 0 0;
+      padding: 6px;
+      position: relative;
+    }
+
+    .qr-button {
+      width: 100%;
+      background: #F1C15A;
+      padding: 3px 0;
+      border-radius: 0 0 5px 5px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-text {
+      color: #5A3D0A;
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.1;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 2px;
+    }
+
+    .link-section {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @media (max-width: 360px) {
+      .main-link-layout {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .qr-container {
+        width: 120px;
+        align-self: center;
+      }
+
+      .btn-text {
+        font-size: 10px;
+      }
+
+      .link-section {
+        width: 100%;
+      }
+    }
   `],
   standalone: true,
   imports: [CommonModule, IonIcon]

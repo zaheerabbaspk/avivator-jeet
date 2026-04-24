@@ -1,0 +1,69 @@
+<ion-content class="side-menu-content">
+  <div class="scroll-wrapper">
+    <!-- Language Selector -->
+    <div class="lang-selector">
+      <div class="left">
+        <ion-icon name="globe-outline"></ion-icon>
+        <span>English</span>
+      </div>
+      <div class="right">
+        <ion-icon name="caret-down" class="caret" style="font-size: 10px;"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" placeholder="Search">
+    </div>
+
+    <div class="categories-grid">
+      @for (cat of sideMenuService.getCategories(); track cat.id) {
+        <div class="grid-item" (click)="navigateTo(cat.id)">
+          <div class="icon-wrapper">
+            @if (cat.icon.includes('assets/')) {
+              <img [src]="cat.icon" [alt]="cat.label">
+            } @else {
+              <ion-icon [name]="cat.icon" [style.color]="cat.color"></ion-icon>
+            }
+          </div>
+          <span>{{ cat.label }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Actions List -->
+    <div class="action-list">
+      @for (action of sideMenuService.getActions(); track action.id) {
+        <div class="action-item" (click)="navigateTo(action.id)">
+          <ion-icon [name]="action.icon"></ion-icon>
+          <span>{{ action.label }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Offer Center -->
+    <div class="offer-center-header">Offer Center</div>
+    <div class="offer-grid">
+      @for (offer of sideMenuService.getOffers(); track offer.id) {
+        <div class="offer-card image-card" (click)="navigateTo(offer.id)">
+          <img [src]="offer.icon" [alt]="offer.label" class="card-img">
+          <span class="offer-label" [innerHTML]="offer.label"></span>
+          @if (offer.badge) {
+            <ion-badge color="danger" class="offer-badge">{{ offer.badge }}</ion-badge>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Footer Links -->
+    <div class="footer-action-list">
+      @for (link of sideMenuService.getFooterLinks(); track link.id) {
+        <div class="action-item" (click)="navigateTo(link.id)">
+          <ion-icon [name]="link.icon"></ion-icon>
+          <span>{{ link.label }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</ion-content>

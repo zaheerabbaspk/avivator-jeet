@@ -1,10 +1,10 @@
 <ion-content class="[--background:#111419]">
   <!-- Top Background Header -->
-  <div class="relative w-full h-[220px] bg-no-repeat bg-center shrink-0"
-    style="background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/style_1_topbg_yd.avif?version=v7.1.212'); background-size: 100% 100%;">
+  <div class="relative w-full min-h-[220px] bg-no-repeat bg-center shrink-0 pb-2"
+    style="background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/style_1_topbg_yd.avif?version=v7.1.212'); background-size: 100% 100%; padding-top: var(--ion-safe-area-top);">
 
     <!-- Top Nav Icons -->
-    <div class="flex justify-between items-center px-3 pt-4">
+    <div class="flex justify-between items-center px-3 pt-2">
       <button class="bg-transparent text-white/50 active:opacity-50 w-7 h-7 flex items-center justify-start"
         (click)="goBack()">
         <ion-icon name="chevron-back-outline" class="text-lg"></ion-icon>
@@ -30,7 +30,7 @@
       <!-- Avatar -->
       <div class="relative shrink-0">
         <div
-          class="w-[46px] h-[46px] rounded-full border-2 border-[#F0C059]/50 bg-cover bg-center overflow-hidden float:left"
+          class="w-[46px] h-[46px] rounded-full border-2 border-[#F0C059]/50 bg-cover bg-center overflow-hidden"
           style="background-image: url('https://140.150.30.128:5030/siteadmin/default/2D/img_ntx7.avif');">
         </div>
         <div
@@ -41,51 +41,50 @@
       </div>
 
       <!-- Text Info -->
-      <div class="flex flex-col gap-[5px]">
-        <!-- Username row -->
-        <div class="flex items-center gap-1.5">
-          <span class="text-white text-[15px] font-black tracking-tight leading-none">{{ user.username }}</span>
-          <!-- copy box styled same as reference - small grey outlined box -->
-          <span (click)="copyToClipboard(user.username)"
+      <div class="flex flex-col flex-1 min-w-0">
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="text-white text-[15px] font-black tracking-tight leading-none truncate max-w-[150px]">{{ user.fullName || 'User' }}</span>
+          <!-- copy box styled same as reference -->
+          <span (click)="copyToClipboard(user.fullName)"
             class="inline-flex items-center justify-center w-[14px] h-[14px] border border-[#F0C059]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0">
             <ion-icon name="copy-outline" class="text-[#F0C059] text-[8px]"></ion-icon>
           </span>
         </div>
-        <!-- ID + Balance on same row -->
-        <div class="flex items-center gap-2">
-          <div class="flex items-center gap-1.5">
-            <span class="text-[#ADB6C3]/80 text-[18px] font-semibold">ID: {{ user.id }}</span>
-            <!-- copy box styled same as username -->
+        
+        <!-- ID + Balance responsive layout -->
+        <div class="user-row-stats">
+          <div class="flex items-center gap-1.5 pt-0.5 shrink-0">
+            <span class="text-[#ADB6C3]/80 text-[11px] font-bold">ID: </span>
+            <span class="text-white text-[11px] font-bold">{{ user.id }}</span>
             <span (click)="copyToClipboard(user.id)"
               class="inline-flex items-center justify-center w-[14px] h-[14px] border border-[#F0C059]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0">
               <ion-icon name="copy-outline" class="text-[#F0C059] text-[8px]"></ion-icon>
             </span>
           </div>
-          <!-- Balance block - right side with gap -->
-          <div class="flex items-center gap-2 ml-8 shrink-0">
-            <div class="w-[20px] h-[20px] rounded-full overflow-hidden flex-shrink-0 shadow-sm" *ngIf="!isLoadingBalance">
+
+          <!-- Balance block -->
+          <div class="profile-balance-block">
+            <div class="w-[18px] h-[18px] rounded-full overflow-hidden flex-shrink-0 shadow-sm" *ngIf="!isLoadingBalance">
               <img src="https://140.150.30.128:5030/siteadmin/upload/img/PKR.avif" alt="PKR"
                 class="w-full h-full object-cover">
             </div>
-            <span *ngIf="!isLoadingBalance" class="text-white font-black text-[17px] tracking-tight leading-none">0.00</span>
-            <span *ngIf="isLoadingBalance" class="text-[#F0C059] font-black text-[15px] tracking-tight leading-none">Loading</span>
+            <span *ngIf="!isLoadingBalance" class="text-white font-black text-[16px] tracking-tight leading-none overflow-hidden text-ellipsis">{{ user.balance }}</span>
+            <span *ngIf="isLoadingBalance" class="text-[#F0C059] font-black text-[13px] tracking-tight leading-none">Loading</span>
             <ion-icon name="sync-outline"
-              class="text-[#F0C059] text-[16px] cursor-pointer"
+              class="text-[#F0C059] text-[15px] cursor-pointer shrink-0"
               [class.animate-spin]="isLoadingBalance"
               (click)="refreshBalance()"></ion-icon>
           </div>
         </div>
       </div>
-
-
     </div>
 
     <!-- Withdraw / Deposit Action Row -->
-    <div class="flex justify-around items-end px-2 mt-6">
+    <div class="flex justify-around items-end px-2 mt-6 mb-4">
       <!-- Withdraw -->
       <div (click)="navigateTo('/withdraw')"
-        class="flex flex-col items-center gap-1 active:scale-95 transition-transform cursor-pointer">
-        <svg width="32" height="28" viewBox="0 0 53 46.375" fill="#F0C059">
+        class="action-item flex flex-col items-center gap-1 active:scale-95 transition-transform cursor-pointer">
+        <svg width="28" height="24" viewBox="0 0 53 46.375" fill="#F0C059">
           <path
             d="M39.1,35.775H4.632A4.623,4.623,0,0,1,0,31.187v-5.9a7.9,7.9,0,0,0,5.117-7.376A7.9,7.9,0,0,0,0,10.531V4.586A4.623,4.623,0,0,1,4.633,0H39.1A4.625,4.625,0,0,1,42.37,1.347a4.543,4.543,0,0,1,1.355,3.239v5.877a7.876,7.876,0,0,0,0,14.89v5.836A4.618,4.618,0,0,1,39.1,35.774ZM11.925,10.96a1.99,1.99,0,0,0-1.987,1.987V24.872a1.99,1.99,0,0,0,1.987,1.988H31.8a1.99,1.99,0,0,0,1.987-1.988V12.947A1.99,1.99,0,0,0,31.8,10.96ZM26.84,9.037a1.988,1.988,0,0,1,1.489.673h2.693L30.463,7.47a1.984,1.984,0,0,0-2.409-1.448L13.265,9.71H23.7l2.691-.621A1.974,1.974,0,0,1,26.84,9.037Zm2.12,15.551H14.765a2.843,2.843,0,0,0-2.84-2.839V16.071a2.844,2.844,0,0,0,2.84-2.839h14.2a2.843,2.843,0,0,0,2.84,2.839v5.679a2.845,2.845,0,0,0-2.841,2.838Zm-7.1-8.328a2.65,2.65,0,1,0,2.65,2.65A2.653,2.653,0,0,0,21.863,16.26Z"
             transform="translate(4.638 4.969)"></path>
@@ -94,38 +93,38 @@
       </div>
       <!-- Deposit -->
       <div (click)="navigateTo('/deposit')"
-        class="flex flex-col items-center gap-1 relative active:scale-95 transition-transform cursor-pointer">
+        class="action-item flex flex-col items-center gap-1 relative active:scale-95 transition-transform cursor-pointer">
         <div
           class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#EA4E3D] text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow z-30 whitespace-nowrap">
           +0.5%</div>
         <img
           src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/gif_profile_style1.avif?version=v7.1.212"
-          alt="Deposit" class="w-[32px] h-[28px] object-contain">
+          alt="Deposit" class="w-[28px] h-[24px] object-contain">
         <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Deposit</span>
       </div>
     </div>
   </div>
 
   <!-- VIP Card -->
-  <div class="px-3 -mt-9">
+  <div class="px-3 vip-card-container">
     <div (click)="navigateTo('/vip')"
       class="relative w-full h-[100px] bg-[#F1C15A] rounded-xl overflow-hidden shadow-lg active:scale-[0.98] transition-all cursor-pointer">
       <!-- Background subtle curves -->
       <div class="absolute inset-0 opacity-20 pointer-events-none"
         style="background-image: radial-gradient(circle at 0px 50%, rgba(255,255,255,0.8), transparent 60%);"></div>
 
-      <div class="relative flex items-center h-full px-4 z-10">
+      <div class="relative flex items-center justify-between h-full px-4 z-10">
         <!-- Cluster Left: Badge + V0 + Progress -->
-        <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2.5 shrink-0">
           <div
-            class="w-[42px] h-[42px] flex items-center justify-center rounded-full bg-[#00BFA5] border-2 border-white/40 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] shrink-0">
+            class="vip-level-badge">
             <span class="text-white font-black text-[18px] italic leading-none drop-shadow-md">0</span>
           </div>
           <div class="flex flex-col gap-0.5">
-            <span class="text-[#111419] text-[24px]  italic tracking-tighter leading-none select-none">V0</span>
+            <span class="text-[#111419] text-[24px] font-black italic tracking-tighter leading-none select-none">V0</span>
             <!-- Progress Bar -->
             <div
-              class="w-[90px] h-[8px] bg-[#8B6B23]/20 rounded-full overflow-hidden relative border border-[#8B6B23]/10">
+              class="vip-progress-bar">
               <div class="h-full bg-white/40 w-0"></div>
               <span
                 class="absolute inset-0 flex items-center justify-center text-[6px] font-bold text-[#8B6B23] tracking-tighter whitespace-nowrap italic">0.00/10,000.00</span>
@@ -133,19 +132,15 @@
           </div>
         </div>
 
-        <div class="flex-1"></div>
-
         <!-- Right Section -->
-        <div class="flex flex-col items-end gap-1 mr-1">
+        <div class="flex flex-col items-end gap-1 mr-1 shrink-0 overflow-hidden">
           <div class="flex items-baseline gap-1.5">
             <span
-              class="text-[#8B6B23] text-[10px] font-black uppercase tracking-tight select-none leading-none">Bonus</span>
-            <span class="text-[#5C4011] text-[26px]  italic tracking-tight leading-none select-none">50.00</span>
+              class="text-[#8B6B23] text-[9px] font-black uppercase tracking-tight select-none leading-none">Bonus</span>
+            <span class="text-[#5C4011] text-[24px] font-black italic tracking-tight leading-none select-none">{{ user.bonus || '50.00' }}</span>
           </div>
-          <div class="flex items-center gap-0.5">
-            <span class="text-[#8B6B23]/70 text-[7px] font-bold uppercase tracking-tight leading-none">VIP
-              requires</span>
-            <span class="text-[#8B6B23] text-[7px] font-black uppercase leading-none italic">Bets</span>
+          <div class="flex items-center gap-0.5 whitespace-nowrap">
+            <span class="text-[#8B6B23]/70 text-[7px] font-bold uppercase tracking-tight leading-none">Requires</span>
             <span class="text-[#5C4011]/80 text-[8px] font-black leading-none">10,000.00</span>
           </div>
         </div>
