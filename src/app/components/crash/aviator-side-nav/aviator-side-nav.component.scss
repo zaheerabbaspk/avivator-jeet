@@ -1,0 +1,47 @@
+.side-nav-panel {
+    background: #060606;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-left: none;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 1px 0 6px rgba(255, 255, 255, 0.15), inset -1px 0 2px rgba(255, 255, 255, 0.2);
+
+    &.expanded {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0px 8px 0px;
+        width: 50px;
+    }
+
+    &.collapsed {
+        width: 24px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        ion-icon { font-size: 16px; color: rgba(255, 255, 255, 0.9); }
+    }
+}
+
+.side-nav-btn {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 700;
+    gap: 3px;
+    padding: 4px 0;
+    ion-icon { font-size: 18px; }
+}
+
+.side-nav-divider {
+    width: 34px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.02));
+    margin: 6px auto;
+}
+
+.side-nav-spacer { height: 8px; }

@@ -1,14 +1,20 @@
-import { Component, inject, OnInit, OnDestroy, effect, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { Router, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { home, wallet, caretBack, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, removeCircleOutline, addCircleOutline, helpCircleOutline, menuOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, checkmarkSharp, volumeMediumOutline, volumeMuteOutline, musicalNotesOutline, flashOutline, starOutline, bookOutline, documentTextOutline, settingsOutline, closeOutline } from 'ionicons/icons';
-import { Router, ActivatedRoute } from '@angular/router';
 import { CrashGameEngineService } from '../../services/crash-game-engine.service';
 import { SoundService } from '../../services/sound.service';
 import { DepositModalComponent } from '../../components/deposit-modal/deposit-modal.component';
 import { BonusRainModalComponent } from '../../components/bonus-rain-modal/bonus-rain-modal.component';
+
+// New Modular Components
+import { AviatorHeaderComponent } from '../../components/crash/aviator-header/aviator-header.component';
+import { AviatorHistoryComponent } from '../../components/crash/aviator-history/aviator-history.component';
+import { AviatorGameScreenComponent } from '../../components/crash/aviator-game-screen/aviator-game-screen.component';
+import { AviatorBetControlsComponent } from '../../components/crash/aviator-bet-controls/aviator-bet-controls.component';
+import { AviatorSideNavComponent } from '../../components/crash/aviator-side-nav/aviator-side-nav.component';
 
 @Component({
     selector: 'app-crash-game',
@@ -17,15 +23,15 @@ import { BonusRainModalComponent } from '../../components/bonus-rain-modal/bonus
     standalone: true,
     imports: [
         CommonModule,
-        FormsModule,
         IonContent,
-        IonHeader,
-        IonTitle,
-        IonToolbar,
-        IonButton,
-        IonIcon,
         DepositModalComponent,
-        BonusRainModalComponent
+        BonusRainModalComponent,
+        AviatorHeaderComponent,
+        AviatorHistoryComponent,
+        AviatorGameScreenComponent,
+        AviatorBetControlsComponent,
+        AviatorSideNavComponent,
+        IonIcon
     ]
 })
 export class CrashGamePage implements OnInit, OnDestroy {
@@ -40,7 +46,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
     loadingProgress = 0;
     loadingImage = 'https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/web/animated/apng_loading_game.avif';
 
-    // ... (rest of signal/state declarations) ...
+    // UI Overlays
     isSideNavOpen = false;
     isDepositModalOpen = false;
     isGameMenuOpen = false;
@@ -49,27 +55,38 @@ export class CrashGamePage implements OnInit, OnDestroy {
     isBonusRainOpen = signal<boolean>(false);
 
     // Settings State
-    settings = {
+    settings: any = {
         sound: true,
         music: true,
         animation: true
     };
 
-    betAmountA = 16;
+    // Empty bets array for UI (populates dynamically now)
+    mockBets: any[] = [];
 
     // Slot A Signals
+    betAmountA = signal<number>(16);
     autoCashoutA = signal<number>(2.0);
     useAutoCashoutA = signal<boolean>(false);
     useAutoBetA = signal<boolean>(false);
     slotAMode = signal<'manual' | 'auto'>('manual');
 
-    betAmountB = 16;
-
     // Slot B Signals
+    betAmountB = signal<number>(16);
     autoCashoutB = signal<number>(2.0);
     useAutoCashoutB = signal<boolean>(false);
     useAutoBetB = signal<boolean>(false);
     slotBMode = signal<'manual' | 'auto'>('manual');
+    
+    // Dynamic Stats Signals
+    totalBetsCount = signal<number>(0);
+    totalActiveBets = signal<number>(0);
+    totalWinAmount = signal<number>(0);
+
+    // Realistic Base Offsets (Randomized on each round start)
+    baseActivePlayers = signal<number>(0);
+    baseBetsCount = signal<number>(0);
+
 
     // Side Nav Drag State
     sideNavTopPx = 80;
@@ -83,53 +100,13 @@ export class CrashGamePage implements OnInit, OnDestroy {
     private animationStartTime = 0;
     visualMultiplier = signal<number>(1.00);
 
-    startDrag(event: TouchEvent | MouseEvent) {
-        this.isDraggingNav = true;
-        this.draggedDistance = 0;
-        this.touchStartY = 'touches' in event ? event.touches[0].clientY : event.clientY;
-        this.initialTop = this.sideNavTopPx;
-    }
-
-    doDrag(event: TouchEvent | MouseEvent) {
-        if (!this.isDraggingNav) return;
-
-        const currentY = 'touches' in event ? event.touches[0].clientY : event.clientY;
-        const deltaY = currentY - this.touchStartY;
-        this.draggedDistance = Math.abs(deltaY);
-
-        if (this.draggedDistance > 5) {
-            // Check if cancelable before calling preventDefault to avoid passive listener console errors
-            if (event.cancelable) {
-                event.preventDefault();
-            }
-        }
-
-        let newTop = this.initialTop + deltaY;
-
-        // Clamp top bounds (so user doesn't drag it out of the game view)
-        if (newTop < 10) newTop = 10;
-        if (newTop > 200) newTop = 200;
-
-        this.sideNavTopPx = newTop;
-    }
-
-    endDrag() {
-        this.isDraggingNav = false;
-    }
-
-    toggleSideNav(forceOpen?: boolean) {
-        if (this.draggedDistance < 5) {
-            if (forceOpen !== undefined) {
-                this.isSideNavOpen = forceOpen;
-            } else {
-                this.isSideNavOpen = !this.isSideNavOpen;
-            }
-        }
-        this.isDraggingNav = false;
-    }
 
     constructor() {
         addIcons({ home, wallet, caretBack, checkmarkSharp, helpCircleOutline, menuOutline, removeCircleOutline, addCircleOutline, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, volumeMediumOutline, volumeMuteOutline, musicalNotesOutline, flashOutline, starOutline, bookOutline, documentTextOutline, settingsOutline, closeOutline });
+
+        // Initial base numbers for realism
+        this.baseActivePlayers.set(Math.floor(Math.random() * 2000) + 1000);
+        this.baseBetsCount.set(Math.floor(Math.random() * 5000) + 3000);
 
         // Watch for game state changes from server
         effect(() => {
@@ -150,14 +127,25 @@ export class CrashGamePage implements OnInit, OnDestroy {
                 this.animationStartTime = 0;
                 if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
                 this.visualMultiplier.set(1.00);
+                
+                // Clear all bets (remove dummy users) when waiting for next round starts
+                this.mockBets = [];
+                this.totalBetsCount.set(0);
+                this.totalActiveBets.set(0);
+                this.totalWinAmount.set(0);
+
+                // Set new random base numbers for next round realism
+                this.baseActivePlayers.set(Math.floor(Math.random() * 2000) + 1000);
+                this.baseBetsCount.set(Math.floor(Math.random() * 5000) + 3000);
 
                 // Auto Bet Logic
                 if (sAMode === 'auto' && autoA && this.gameEngine.betSlotA().status === 'IDLE') {
-                    this.placeBet('A');
+                    this.internalPlaceBet('A');
                 }
                 if (sBMode === 'auto' && autoB && this.gameEngine.betSlotB().status === 'IDLE') {
-                    this.placeBet('B');
+                    this.internalPlaceBet('B');
                 }
+
             } else if (state === 'RUNNING') {
                 // ONLY play sound if game is not in loading screen
                 if (!this.isLoading) {
@@ -384,6 +372,16 @@ export class CrashGamePage implements OnInit, OnDestroy {
         };
     }
 
+    get planeTailCoordinates() {
+        const { x, y, bobY } = this.planeCoordinates;
+        const actualY = y + bobY;
+        const tailX = x - 11.5;
+        const tailY = (100 - actualY) + 4.5; // must match curvePath tailY exactly
+        return { left: tailX, top: tailY };
+    }
+
+
+
     get curvePath() {
         const { x, y, bobY } = this.planeCoordinates;
         const actualY = y + bobY;
@@ -397,74 +395,67 @@ export class CrashGamePage implements OnInit, OnDestroy {
         return `M 0 100 Q ${tailX * 0.5} 100, ${tailX} ${tailY}`;
     }
 
-    private lastClickedValueA: number | null = null;
-    private lastClickedValueB: number | null = null;
-
-    adjustBet(slot: 'A' | 'B', inputValue: number, mode: 'set' | 'add') {
-        const step = 16;
-        if (slot === 'A') {
-            if (mode === 'set') {
-                // Hybrid Logic: If clicking the same button again, ADD it. If a different button, SET it.
-                if (this.lastClickedValueA === inputValue) {
-                    this.betAmountA += inputValue;
-                } else {
-                    this.betAmountA = inputValue;
-                }
-                this.lastClickedValueA = inputValue;
-            } else {
-                // Plus/Minus buttons step by 16
-                this.betAmountA += (inputValue > 0 ? step : -step);
-                this.lastClickedValueA = null; // Reset hybrid tracking on manual adjustment
-            }
-            if (this.betAmountA < 16) this.betAmountA = 16;
-        } else {
-            if (mode === 'set') {
-                // Hybrid Logic: If clicking the same button again, ADD it. If a different button, SET it.
-                if (this.lastClickedValueB === inputValue) {
-                    this.betAmountB += inputValue;
-                } else {
-                    this.betAmountB = inputValue;
-                }
-                this.lastClickedValueB = inputValue;
-            } else {
-                // Plus/Minus buttons step by 16
-                this.betAmountB += (inputValue > 0 ? step : -step);
-                this.lastClickedValueB = null; // Reset hybrid tracking on manual adjustment
-            }
-            if (this.betAmountB < 16) this.betAmountB = 16;
-        }
-    }
-
-    placeBet(slot: 'A' | 'B') {
-        let amount = slot === 'A' ? this.betAmountA : this.betAmountB;
-
-        // Final safety check to enforce minimum bet
-        if (amount < 16) {
-            amount = 16;
-            if (slot === 'A') this.betAmountA = 16;
-            else this.betAmountB = 16;
-        }
-
-        const auto = slot === 'A'
-            ? (this.useAutoCashoutA() ? this.autoCashoutA() : null)
-            : (this.useAutoCashoutB() ? this.autoCashoutB() : null);
-
-        this.gameEngine.placeBet(slot, amount, auto);
-    }
-
-
-    cashOut(slot: 'A' | 'B') {
-        this.gameEngine.cashOut(slot);
-    }
-
-    cancelBet(slot: 'A' | 'B') {
-        this.gameEngine.cancelBet(slot);
-    }
-
     goBack() {
         this.soundService.stopAll();
         this.router.navigate(['/home'], { queryParams: { showBonus: 'true' } });
     }
+
+
+    handlePlaceBet(slot: 'A' | 'B', event: { amount: number, autoCashout?: number | null }) {
+        if (slot === 'A') {
+            this.betAmountA.set(event.amount);
+            this.useAutoCashoutA.set(!!event.autoCashout);
+            if (event.autoCashout) this.autoCashoutA.set(event.autoCashout);
+        } else {
+            this.betAmountB.set(event.amount);
+            this.useAutoCashoutB.set(!!event.autoCashout);
+            if (event.autoCashout) this.autoCashoutB.set(event.autoCashout);
+        }
+        this.gameEngine.placeBet(slot, event.amount, event.autoCashout);
+
+        // Dynamically add the user's bet to the All Bets list so it shows immediately
+        const newBet = { 
+            avatar: '5', // Mock user avatar
+            name: 'YOU (Me)', // Show as current user
+            bet: event.amount, 
+            mult: null, 
+            win: null 
+        };
+        this.mockBets = [newBet, ...this.mockBets];
+        
+        // Update Stats
+        this.totalBetsCount.update(n => n + 1);
+        this.totalActiveBets.update(n => n + 1);
+    }
+
+    private internalPlaceBet(slot: 'A' | 'B') {
+        const amount = slot === 'A' ? this.betAmountA() : this.betAmountB();
+        const auto = slot === 'A' 
+            ? (this.useAutoCashoutA() ? this.autoCashoutA() : null)
+            : (this.useAutoCashoutB() ? this.autoCashoutB() : null);
+        this.gameEngine.placeBet(slot, amount, auto);
+    }
+
+    handleCashOut(slot: 'A' | 'B') {
+        this.gameEngine.cashOut(slot);
+        
+        // Update the user's bet in the All Bets list to show as won
+        const mult = this.gameEngine.currentMultiplier();
+        const myBet = this.mockBets.find(b => b.name === 'YOU (Me)' && b.mult === null);
+        if (myBet) {
+            myBet.mult = mult.toFixed(2);
+            myBet.win = myBet.bet * mult;
+            
+            // Update Stats
+            this.totalWinAmount.update(w => w + myBet.win);
+            this.totalActiveBets.update(a => a - 1);
+        }
+    }
+
+    handleCancelBet(slot: 'A' | 'B') {
+        this.gameEngine.cancelBet(slot);
+    }
+
 
     // Formatting helpers
     getMultiplierColor(m: number): string {
@@ -477,3 +468,4 @@ export class CrashGamePage implements OnInit, OnDestroy {
         return 'bg-[#201522]'; // Subtle pink tint for high
     }
 }
+

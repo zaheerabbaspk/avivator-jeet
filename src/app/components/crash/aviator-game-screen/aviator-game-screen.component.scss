@@ -1,0 +1,267 @@
+.game-screen-container {
+    height: 45vh;
+    min-height: 240px;
+    max-height: 380px;
+    background: #000;
+}
+
+.sunburst-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    /* Dito copy teal/blue radial background fading to deep black */
+    background: radial-gradient(circle at 50% 50%, #154562 0%, #061118 60%, #000 100%);
+    transition: background 1s ease-in-out;
+
+    &.is-crashed {
+        /* User explicitly requested pure black */
+        background: #000000 !important;
+    }
+
+    &.high-multiplier {
+        background: radial-gradient(circle at 50% 50%, #3e105e 0%, #100418 60%, #000 100%) !important;
+    }
+}
+
+.sunburst-wrapper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.sunburst {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 3000px;
+    height: 3000px;
+    /* Alternating thick black rays and transparent gaps */
+    background: repeating-conic-gradient(from 0deg at center,
+            rgba(0, 0, 0, 0.8) 0deg 6deg,
+            transparent 6deg 12deg);
+    animation: rotate-sunburst-bl 150s linear infinite;
+    transform-origin: center;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+@keyframes rotate-sunburst-bl {
+    from {
+        transform: translate(-50%, 50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, 50%) rotate(360deg);
+    }
+}
+
+.grid-lines {
+    background-size: 50px 50px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+.plane-svg {
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+    animation: plane-shake 0.2s infinite ease-in-out;
+}
+
+@keyframes plane-shake {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-1px);
+    }
+}
+
+.propeller-anim {
+    transform-origin: center;
+    animation: propeller-spin 0.05s linear infinite;
+}
+
+@keyframes propeller-spin {
+    from {
+        transform: scaleY(1);
+    }
+
+    to {
+        transform: scaleY(-1);
+    }
+}
+
+.animate-pulse {
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+.spribe-sunburst {
+    position: absolute;
+    width: 250%;
+    height: 250%;
+    left: -75%;
+    top: -75%;
+    background: repeating-conic-gradient(from 0deg, #141414 0deg 8deg, #0a0a0a 8deg 16deg);
+    animation: rotate-sunburst 180s linear infinite;
+    pointer-events: none;
+    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.5) 0%, black 30%);
+}
+
+.flew-away-text {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+.multiplier-text {
+    color: #fff; // Default white for RUNNING
+    font-size: 68px;
+    font-weight: 900;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    letter-spacing: -2px;
+    line-height: 1;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    
+    .x-char {
+        font-size: 60px;
+        margin-left: 2px;
+        font-weight: 900;
+    }
+
+    // Crashed state override
+    &.crashed-red {
+        color: #ef4444;
+        text-shadow: none;
+    }
+}
+
+.ufc-logo-sm {
+    color: #ef4444;
+    font-size: 26px;
+    font-weight: 900;
+    font-family: Impact, sans-serif;
+    line-height: 0.9;
+    font-style: italic;
+    transform: skewX(-5deg);
+}
+
+.aviator-logo-with-plane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.plane-icon-red {
+    width: 36px;
+    height: 16px;
+    background: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/web/img/v1/aviator_logo.svg') no-repeat center;
+    background-size: contain;
+    filter: brightness(0) saturate(100%) invert(18%) sepia(85%) saturate(5451%) hue-rotate(349deg) brightness(91%) contrast(97%);
+    margin-bottom: -2px;
+}
+
+.aviator-text-red {
+    color: #ef4444;
+    font-size: 15px;
+    font-weight: 900;
+    font-family: 'Arial Black', sans-serif;
+    font-style: italic;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.spribe-box-v2 {
+    background: #192010;
+    position: relative;
+    border: 1px solid #497d22;
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    min-width: 120px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.spribe-s-icon-v2 {
+    width: 16px;
+    height: 16px;
+    color: #c4c4c4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    /* Dotted pattern effect */
+    background-image: radial-gradient(#fff 1px, transparent 1px);
+    background-size: 2px 2px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(255,255,255,0.8);
+}
+
+.official-pill-v2 {
+    background: #11160a;
+    border: 1px solid #365c17;
+    border-radius: 4px;
+    padding: 2px 4px 2px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 2px;
+    width: 100%;
+}
+
+.check-v2 {
+    width: 11px;
+    height: 11px;
+    background: #13c913;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 8px;
+}
+
+.plane-img {
+    width: 120px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    transform: rotate(0deg);
+    transition: none !important;
+}

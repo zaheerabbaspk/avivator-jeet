@@ -1,0 +1,44 @@
+@if (!isLoading) {
+<div class="relative w-full z-40">
+    <!-- Normal Bar -->
+    <div class="flex gap-2.5 overflow-x-auto px-4 py-1.5 no-scrollbar items-center border-b border-white/5"
+        style="background:#0d0d0d; min-height: 28px;">
+        @for (m of history.slice(0, 20); track $index) {
+        <div [class]="'text-[12px] font-black shrink-0 ' + getMultiplierColor(m)">
+            {{ m | number:'1.2-2' }}x
+        </div>
+        }
+        
+        <!-- Menu dot -->
+        <div class="ml-auto w-6 h-4 flex items-center justify-center rounded-[4px] shrink-0 cursor-pointer"
+            style="background: rgba(255,255,255,0.1);" (click)="toggleExpand.emit()">
+            <ion-icon name="ellipsis-horizontal" style="color:rgba(255,255,255,0.6); font-size:10px;"></ion-icon>
+        </div>
+    </div>
+
+    <!-- Expanded Overlay -->
+    <div class="absolute left-0 top-0 w-full bg-[#18191a] rounded-b-xl shadow-2xl transition-transform duration-300 origin-top overflow-hidden"
+        style="border: 1px solid rgba(255,255,255,0.05); border-top: none;"
+        [style.transform]="isExpanded ? 'scaleY(1)' : 'scaleY(0)'"
+        [style.opacity]="isExpanded ? '1' : '0'"
+        [style.pointer-events]="isExpanded ? 'auto' : 'none'">
+        
+        <div class="flex justify-between items-center px-4 py-2" style="background:#18191a;">
+            <span class="text-white/50 text-[11px] font-semibold">Round History</span>
+            <div class="w-5 h-5 flex items-center justify-center rounded-full cursor-pointer" style="background: rgba(255,255,255,0.08);" (click)="toggleExpand.emit()">
+                <ion-icon name="close-outline" style="color: rgba(255,255,255,0.6); font-size: 14px;"></ion-icon>
+            </div>
+        </div>
+
+        <div class="px-4 py-3 pb-5">
+            <div class="flex flex-wrap gap-x-3.5 gap-y-2">
+                @for (m of history; track $index) {
+                <div [class]="'text-[12px] font-black ' + getMultiplierColor(m)">
+                    {{ m | number:'1.2-2' }}x
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,95 @@
+<div class="bet-panel">
+    <!-- Tabs -->
+    <div class="relative flex items-center justify-center mb-4 min-h-[30px]">
+        <div class="bet-tabs absolute left-1/2 -translate-x-1/2">
+            <button class="bet-tab" [class.active]="mode() === 'manual'" (click)="mode.set('manual')">Bet</button>
+            <button class="bet-tab" [class.active]="mode() === 'auto'" (click)="mode.set('auto')">Auto</button>
+        </div>
+    </div>
+
+    <div class="flex gap-3 items-stretch">
+        <!-- Left: Amount -->
+        <div class="flex flex-col bet-left-col w-[140px] shrink-0">
+            <div class="amount-control w-full">
+                <button (click)="adjustBet(-16, 'add')" class="ctrl-btn minus" [disabled]="gameState !== 'WAITING'">
+                    <ion-icon name="remove"></ion-icon>
+                </button>
+                <div class="flex-1 text-center">
+                    <input type="number" [ngModel]="betAmount()" (ngModelChange)="betAmount.set($event)"
+                        class="amount-input" [disabled]="gameState !== 'WAITING'">
+                </div>
+                <button (click)="adjustBet(16, 'add')" class="ctrl-btn plus" [disabled]="gameState !== 'WAITING'">
+                    <ion-icon name="add"></ion-icon>
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+                <button (click)="adjustBetQuick(64)" class="quick-btn" [disabled]="gameState !== 'WAITING'">64</button>
+                <button (click)="adjustBetQuick(160)" class="quick-btn" [disabled]="gameState !== 'WAITING'">160</button>
+                <button (click)="adjustBetQuick(320)" class="quick-btn" [disabled]="gameState !== 'WAITING'">320</button>
+                <button (click)="adjustBetQuick(1600)" class="quick-btn" [disabled]="gameState !== 'WAITING'">1,600</button>
+            </div>
+        </div>
+
+        <!-- Right: Action -->
+        <div class="flex-1 flex min-h-[76px]">
+            @if (betData.status === 'IDLE') {
+            <button (click)="handleAction()" [disabled]="gameState !== 'WAITING'" class="action-btn bet-btn">
+                <span class="label">{{ mode() === 'auto' ? 'AUTO' : 'Bet' }}</span>
+                <span class="value">{{ betAmount() | number:'1.2-2' }} PKR</span>
+            </button>
+            } @else if (betData.status === 'PLACED') {
+                @if (gameState === 'WAITING') {
+                <button (click)="handleAction()" class="action-btn cancel-btn">
+                    <span class="label">CANCEL</span>
+                    <span class="value">{{ betData.amount | number:'1.2-2' }} PKR</span>
+                </button>
+                } @else if (gameState === 'RUNNING') {
+                <button (click)="handleAction()" class="action-btn cashout-btn">
+                    <span class="label">CASH OUT</span>
+                    <span class="value">{{ (betData.amount * currentMultiplier) | number:'1.2-2' }} PKR</span>
+                </button>
+                } @else {
+                <button class="action-btn inactive-btn" disabled>
+                    <span class="label">WAITING</span>
+                </button>
+                }
+            } @else if (betData.status === 'CASHED_OUT') {
+            <div class="action-btn success-btn">
+                <span class="label">CASHOUT</span>
+                <span class="value">{{ betData.payout | number:'1.2-2' }} PKR</span>
+            </div>
+            } @else {
+            <div class="action-btn lost-btn">
+                <span class="label">LOST</span>
+                <span class="value">{{ betData.amount | number:'1.2-2' }} PKR</span>
+            </div>
+            }
+        </div>
+    </div>
+
+
+    <!-- Auto Controls (if mode is auto) -->
+    @if (mode() === 'auto') {
+    <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between px-1">
+        <div class="flex items-center gap-2 cursor-pointer" (click)="autoBet.set(!autoBet())">
+            <span class="text-[12px] font-bold" [style.color]="autoBet() ? '#fff' : '#7a7e8e'">Auto Bet</span>
+            <div class="aj-switch" [class.active]="autoBet()">
+                <div class="switch-handle"></div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 cursor-pointer" (click)="useAutoCashout.set(!useAutoCashout())">
+                <span class="text-[12px] font-bold" [style.color]="useAutoCashout() ? '#fff' : '#7a7e8e'">Auto Cash Out</span>
+                <div class="aj-switch" [class.active]="useAutoCashout()">
+                    <div class="switch-handle"></div>
+                </div>
+            </div>
+            <div class="multiplier-input-wrap" [class.disabled]="!useAutoCashout()">
+                <input type="number" [(ngModel)]="autoCashoutValue" [disabled]="!useAutoCashout()" placeholder="1.1">
+                <span class="suffix">x</span>
+            </div>
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,189 @@
+.bet-panel {
+    background: #1b1c1d;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bet-tabs {
+    display: flex;
+    background: #141516; /* very dark grey */
+    border-radius: 999px;
+    padding: 2px;
+    width: 140px; /* narrowed */
+}
+
+.bet-tab {
+    flex: 1;
+    padding: 4px 0;
+    border-radius: 999px;
+    font-size: 12px; /* slightly smaller */
+    font-weight: 500;
+    color: #8c8f95;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+        background: #333538; /* active state grey */
+        color: #fff;
+    }
+}
+
+.amount-control {
+    display: flex;
+    align-items: center;
+    background: #000000;
+    border-radius: 999px;
+    padding: 2px;
+    height: 38px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.amount-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+}
+
+.ctrl-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #25262a; /* dark grey, matching screenshot */
+    color: #a5aab1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 16px;
+    &:active { transform: scale(0.9); }
+}
+
+.quick-btn {
+    background: #202226; /* dark grey instead of black */
+    border-radius: 999px;
+    padding: 4px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #a0a4a8;
+    border: none;
+    height: 28px;
+}
+
+.action-btn {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    border: none; /* No solid border! */
+    
+    .label { font-size: 20px; font-weight: 400; line-height: 1.1; margin-bottom: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    .value { font-size: 19px; font-weight: 500; line-height: 1.1; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+
+    &:active { transform: scale(0.98); }
+}
+
+.bet-btn { 
+    /* The exact glossy gradient and inner shadow from the real app */
+    background: linear-gradient(180deg, #32c620 0%, #27a318 100%);
+    color: white;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.cashout-btn { background: #f97316; color: white; border-color: #fb923c; }
+.cancel-btn { background: #cb1c2b; color: white; border-color: #ef4444; }
+.success-btn { background: #111111; color: #3fb93f; border-color: #3fb93f; }
+.lost-btn { background: #111111; color: #ef4444; border-color: #ef4444; }
+
+.aj-switch {
+    width: 32px;
+    height: 18px;
+    background: #2a2a2a;
+    border-radius: 999px;
+    position: relative;
+    padding: 2px;
+    .switch-handle {
+        width: 14px;
+        height: 14px;
+        background: #7a7e8e;
+        border-radius: 50%;
+    }
+    &.active {
+        background: #3fb93f;
+        .switch-handle { transform: translateX(14px); background: #fff; }
+    }
+}
+
+
+.multiplier-input-wrap {
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    input {
+        width: 40px;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-weight: 700;
+        text-align: right;
+        outline: none;
+    }
+    .suffix { color: rgba(255,255,255,0.4); margin-left: 2px; font-weight: 700; }
+    &.disabled { opacity: 0.3; pointer-events: none; }
+}
+
+/* Responsive Scaling for Small Mobile Screens */
+@media (max-width: 380px) {
+    .bet-panel {
+        padding: 8px;
+    }
+    
+    .amount-control {
+        height: 34px;
+    }
+    
+    .ctrl-btn {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .amount-input {
+        font-size: 14px;
+    }
+    
+    .quick-btn {
+        font-size: 12px;
+        height: 24px;
+    }
+    
+    .action-btn .label {
+        font-size: 16px;
+    }
+    
+    .action-btn .value {
+        font-size: 15px;
+    }
+    
+    .bet-tabs {
+        width: 120px;
+    }
+    
+    .bet-tab {
+        font-size: 11px;
+    }
+}

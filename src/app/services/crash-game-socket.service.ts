@@ -67,6 +67,8 @@ export class CrashGameSocketService {
         }
     }
 
+    private localTimer: any;
+
     private setupEventListeners() {
         if (!this.socket) return;
 
@@ -80,20 +82,42 @@ export class CrashGameSocketService {
         this.socket.on('disconnect', () => {
             console.log('❌ Disconnected from game server');
             this.connected.set(false);
+            if (this.localTimer) clearInterval(this.localTimer);
         });
 
         this.socket.on('connect_error', (error) => {
             console.error('Connection error:', error);
             this.connected.set(false);
             this.connectionError.set('Unable to connect to server');
+            if (this.localTimer) clearInterval(this.localTimer);
         });
 
         // Game events
         this.socket.on('gameStateUpdate', (data: GameStateUpdate) => {
             console.log('📡 Game state update:', data);
             this.gameState.set(data.state);
+            
+            if (this.localTimer) {
+                clearInterval(this.localTimer);
+                this.localTimer = null;
+            }
+
             if (data.timeLeft !== undefined) {
                 this.timeLeft.set(data.timeLeft);
+                if (data.state === 'WAITING' && data.timeLeft > 0) {
+                    // Start local countdown for smooth UI progress bar
+                    this.localTimer = setInterval(() => {
+                        this.timeLeft.update(t => {
+                            const next = t - 0.1;
+                            if (next <= 0) {
+                                clearInterval(this.localTimer);
+                                this.localTimer = null;
+                                return 0;
+                            }
+                            return next;
+                        });
+                    }, 100);
+                }
             }
             if (data.roundId) {
                 this.roundId.set(data.roundId);

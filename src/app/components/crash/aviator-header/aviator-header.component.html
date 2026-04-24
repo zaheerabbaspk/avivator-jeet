@@ -1,0 +1,25 @@
+<div class="crash-header" style="padding-top: calc(env(safe-area-inset-top) + 8px);">
+    @if (!isLoading) {
+    <!-- LEFT: Branding -->
+    <div class="flex items-center relative w-[76px] h-[22px] ml-1">
+        <!-- Fallback text behind the SVG -->
+        <span class="absolute inset-0 font-black italic text-[20px] leading-none text-[#e61e32] tracking-tighter flex items-center" style="font-family: 'Arial Black', sans-serif;">Aviator</span>
+        <!-- SVG Logo -->
+        <div class="absolute inset-0 bg-no-repeat bg-contain bg-left filter-red" style="background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/web/img/v1/aviator_logo.svg'); z-index: 1;"></div>
+    </div>
+
+    <!-- RIGHT: Balance + Hamburger -->
+    <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
+            <span class="text-[#2fa22f] text-[14px] font-[900] font-sans tracking-tight tabular-nums" style="margin-top: 1px;">{{ balance | number:'1.2-2' }}</span>
+            <span class="text-[#9ca3af] text-[11px] font-[600] font-sans tracking-wide" style="margin-top: 2px;">PKR</span>
+        </div>
+
+        <!-- Menu Toggle -->
+        <div class="flex items-center justify-center cursor-pointer opacity-80 hover:opacity-100 ml-1.5"
+            (click)="toggleMenu.emit()">
+            <ion-icon name="menu-outline" style="font-size: 20px; color: #8a8d91;"></ion-icon>
+        </div>
+    </div>
+    }
+</div>

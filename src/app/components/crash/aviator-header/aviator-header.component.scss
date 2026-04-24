@@ -1,0 +1,15 @@
+.crash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 8px;
+    background: #191b1d; /* Matching the dark header from screenshot */
+    border-bottom: 1px solid #101112;
+}
+
+.filter-red {
+    /* Exact #e61e32 shade filter */
+    filter: brightness(0) saturate(100%) invert(21%) sepia(85%) saturate(4889%) hue-rotate(345deg) brightness(94%) contrast(93%);
+}
