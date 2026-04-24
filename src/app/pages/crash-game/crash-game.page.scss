@@ -31,25 +31,24 @@ ion-content {
 
 @keyframes spribe-dot-anim {
     0%, 100% {
-        transform: scale(1);
-        background-color: #600000;
-        box-shadow: none;
+        transform: scale(0.3);
+        background-color: #5c0606;
     }
     50% {
-        transform: scale(1.6);
+        transform: scale(1);
         background-color: #ff0000;
-        box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
     }
 }
 
 .spribe-dot {
-    width: 6px;
-    height: 6px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background-color: #600000;
-    animation: spribe-dot-anim 1.2s infinite ease-in-out;
-    &.delay-1 { animation-delay: 0.2s; }
-    &.delay-2 { animation-delay: 0.4s; }
+    background-color: #5c0606;
+    transform: scale(0.3);
+    animation: spribe-dot-anim 1.5s infinite ease-in-out;
+    &.delay-1 { animation-delay: 0.3s; }
+    &.delay-2 { animation-delay: 0.6s; }
 }
 
 .aj-switch {

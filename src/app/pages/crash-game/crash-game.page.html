@@ -13,18 +13,114 @@
     <div class="spribe-loading-overlay">
         <!-- PHASE 1: SPLASH (Powered by Spribe) -->
         @if (loadingPhase === 'splash') {
-        <div class="flex flex-col items-center justify-center relative z-10 w-full h-full animate-fade-in">
-            <span class="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Powered by</span>
-            <div class="flex items-center gap-3">
-                <span class="text-white font-black text-[28px] tracking-wider"
-                    style="font-family: 'Oswald', sans-serif;">SPRIBE</span>
-            </div>
-            <!-- Three dots indicator -->
-            <div class="flex gap-2.5 mt-10">
-                <div class="w-1.5 h-1.5 bg-white/20 rounded-full dot-anim"></div>
-                <div class="w-2.5 h-2.5 bg-[#ef4444] rounded-full shadow-[0_0_12px_rgba(239,68,68,0.9)] dot-anim delay-1">
+        <div class="flex flex-col items-center justify-center relative z-10 w-full h-full animate-fade-in" style="background: #000000;">
+            <div class="flex flex-col items-center transform scale-[0.8]">
+                <span class="text-[#606060] text-[9px] font-bold uppercase tracking-[0.08em] mb-2">Powered by</span>
+                <div class="flex items-center gap-2.5">
+                    <!-- High-Fidelity 15x15 Checkerboard Spribe 'S' Logo -->
+                <svg width="34" height="34" viewBox="0 0 150 150" fill="white" xmlns="http://www.w3.org/2000/svg" class="opacity-90">
+                    <circle cx="65" cy="5" r="3.5" opacity="1"/>
+                    <circle cx="85" cy="5" r="3.5" opacity="1"/>
+                    <circle cx="35" cy="15" r="2" opacity="0.11"/>
+                    <circle cx="55" cy="15" r="3.5" opacity="1"/>
+                    <circle cx="75" cy="15" r="3.5" opacity="1"/>
+                    <circle cx="95" cy="15" r="3.5" opacity="1"/>
+                    <circle cx="115" cy="15" r="3.5" opacity="1"/>
+                    <circle cx="25" cy="25" r="3.5" opacity="1"/>
+                    <circle cx="45" cy="25" r="3.5" opacity="1"/>
+                    <circle cx="65" cy="25" r="2" opacity="0.20"/>
+                    <circle cx="85" cy="25" r="2" opacity="0.20"/>
+                    <circle cx="105" cy="25" r="3.5" opacity="1"/>
+                    <circle cx="125" cy="25" r="3.5" opacity="1"/>
+                    <circle cx="15" cy="35" r="3.5" opacity="1"/>
+                    <circle cx="35" cy="35" r="3.5" opacity="1"/>
+                    <circle cx="55" cy="35" r="2" opacity="0.22"/>
+                    <circle cx="75" cy="35" r="2" opacity="0.24"/>
+                    <circle cx="95" cy="35" r="2" opacity="0.22"/>
+                    <circle cx="115" cy="35" r="2" opacity="0.17"/>
+                    <circle cx="135" cy="35" r="2" opacity="0.11"/>
+                    <circle cx="25" cy="45" r="3.5" opacity="1"/>
+                    <circle cx="45" cy="45" r="2" opacity="0.23"/>
+                    <circle cx="65" cy="45" r="2" opacity="0.27"/>
+                    <circle cx="85" cy="45" r="2" opacity="0.27"/>
+                    <circle cx="105" cy="45" r="2" opacity="0.23"/>
+                    <circle cx="125" cy="45" r="2" opacity="0.17"/>
+                    <circle cx="15" cy="55" r="3.5" opacity="1"/>
+                    <circle cx="35" cy="55" r="3.5" opacity="1"/>
+                    <circle cx="55" cy="55" r="2" opacity="0.29"/>
+                    <circle cx="75" cy="55" r="2" opacity="0.32"/>
+                    <circle cx="95" cy="55" r="2" opacity="0.29"/>
+                    <circle cx="115" cy="55" r="2" opacity="0.22"/>
+                    <circle cx="135" cy="55" r="2" opacity="0.15"/>
+                    <circle cx="5" cy="65" r="2" opacity="0.12"/>
+                    <circle cx="25" cy="65" r="3.5" opacity="1"/>
+                    <circle cx="45" cy="65" r="3.5" opacity="1"/>
+                    <circle cx="65" cy="65" r="3.5" opacity="1"/>
+                    <circle cx="85" cy="65" r="3.5" opacity="1"/>
+                    <circle cx="105" cy="65" r="2" opacity="0.27"/>
+                    <circle cx="125" cy="65" r="2" opacity="0.20"/>
+                    <circle cx="145" cy="65" r="2" opacity="0.12"/>
+                    <circle cx="15" cy="75" r="2" opacity="0.16"/>
+                    <circle cx="35" cy="75" r="3.5" opacity="1"/>
+                    <circle cx="55" cy="75" r="3.5" opacity="1"/>
+                    <circle cx="75" cy="75" r="3.5" opacity="1"/>
+                    <circle cx="95" cy="75" r="3.5" opacity="1"/>
+                    <circle cx="115" cy="75" r="2" opacity="0.24"/>
+                    <circle cx="135" cy="75" r="2" opacity="0.16"/>
+                    <circle cx="5" cy="85" r="2" opacity="0.12"/>
+                    <circle cx="25" cy="85" r="2" opacity="0.20"/>
+                    <circle cx="45" cy="85" r="2" opacity="0.27"/>
+                    <circle cx="65" cy="85" r="3.5" opacity="1"/>
+                    <circle cx="85" cy="85" r="3.5" opacity="1"/>
+                    <circle cx="105" cy="85" r="3.5" opacity="1"/>
+                    <circle cx="125" cy="85" r="3.5" opacity="1"/>
+                    <circle cx="145" cy="85" r="2" opacity="0.12"/>
+                    <circle cx="15" cy="95" r="2" opacity="0.15"/>
+                    <circle cx="35" cy="95" r="2" opacity="0.22"/>
+                    <circle cx="55" cy="95" r="2" opacity="0.29"/>
+                    <circle cx="75" cy="95" r="2" opacity="0.32"/>
+                    <circle cx="95" cy="95" r="2" opacity="0.29"/>
+                    <circle cx="115" cy="95" r="2" opacity="0.22"/>
+                    <circle cx="135" cy="95" r="3.5" opacity="1"/>
+                    <circle cx="25" cy="105" r="2" opacity="0.17"/>
+                    <circle cx="45" cy="105" r="2" opacity="0.23"/>
+                    <circle cx="65" cy="105" r="2" opacity="0.27"/>
+                    <circle cx="85" cy="105" r="2" opacity="0.27"/>
+                    <circle cx="105" cy="105" r="2" opacity="0.23"/>
+                    <circle cx="125" cy="105" r="3.5" opacity="1"/>
+                    <circle cx="15" cy="115" r="2" opacity="0.11"/>
+                    <circle cx="35" cy="115" r="2" opacity="0.17"/>
+                    <circle cx="55" cy="115" r="2" opacity="0.22"/>
+                    <circle cx="75" cy="115" r="2" opacity="0.24"/>
+                    <circle cx="95" cy="115" r="2" opacity="0.22"/>
+                    <circle cx="115" cy="115" r="2" opacity="0.17"/>
+                    <circle cx="135" cy="115" r="3.5" opacity="1"/>
+                    <circle cx="25" cy="125" r="3.5" opacity="1"/>
+                    <circle cx="45" cy="125" r="3.5" opacity="1"/>
+                    <circle cx="65" cy="125" r="2" opacity="0.20"/>
+                    <circle cx="85" cy="125" r="2" opacity="0.20"/>
+                    <circle cx="105" cy="125" r="3.5" opacity="1"/>
+                    <circle cx="125" cy="125" r="3.5" opacity="1"/>
+                    <circle cx="35" cy="135" r="3.5" opacity="1"/>
+                    <circle cx="55" cy="135" r="2" opacity="0.15"/>
+                    <circle cx="75" cy="135" r="2" opacity="0.16"/>
+                    <circle cx="95" cy="135" r="2" opacity="0.15"/>
+                    <circle cx="115" cy="135" r="3.5" opacity="1"/>
+                    <circle cx="65" cy="145" r="3.5" opacity="1"/>
+                    <circle cx="85" cy="145" r="3.5" opacity="1"/>
+                </svg>
+                <div class="flex flex-col mt-0.5">
+                    <!-- Adjusted SPRIBE font to look taller and tighter like the reference -->
+                    <span class="text-white font-black text-[27px] tracking-wide leading-none" style="transform: scaleY(1.15); transform-origin: bottom left; display: inline-block;">SPRIBE</span>
+                    <span class="text-white/70 text-[5px] tracking-[0.22em] leading-none mt-1.5 ml-[1px]" style="font-family: Arial, sans-serif;">INSIGHTFUL ENTERTAINMENT</span>
                 </div>
-                <div class="w-1.5 h-1.5 bg-white/20 rounded-full dot-anim delay-2"></div>
+            </div>
+            <!-- Three red dots indicator with wider gap -->
+            <div class="flex gap-4 items-center mt-8">
+                <div class="spribe-dot"></div>
+                <div class="spribe-dot delay-1"></div>
+                <div class="spribe-dot delay-2"></div>
+            </div>
             </div>
         </div>
         }

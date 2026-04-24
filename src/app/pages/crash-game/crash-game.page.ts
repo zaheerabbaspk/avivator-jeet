@@ -232,9 +232,9 @@ export class CrashGamePage implements OnInit, OnDestroy {
                             if (this.gameEngine.gameState() === 'RUNNING') {
                                 this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
                             }
-                        }, 2000); // Increased connection delay from 1500ms
+                        }, 4000); // Increased connection delay significantly
 
-                    }, 3500); // Increased Spribe delay from 2500ms
+                    }, 3500); // Spribe delay
                 }
             });
         };
