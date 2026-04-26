@@ -4,12 +4,18 @@ import { IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel,
 import { addIcons } from 'ionicons';
 import { 
   chevronBackOutline, 
+  chevronForwardOutline,
+  chevronDownOutline,
+  chevronUpOutline,
+  syncOutline,
+  closeOutline,
   calendarOutline, 
   funnelOutline,
   walletOutline,
   cashOutline,
   trendingUpOutline,
-  giftOutline
+  giftOutline,
+  swapVerticalOutline
 } from 'ionicons/icons';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,53 +31,67 @@ import { FooterNavComponent } from '../../components/footer-nav/footer-nav.compo
 export class RecordsPage {
   private router = inject(Router);
 
-  selectedSegment = 'all';
-  selectedDate: string | null = null;
-  isDatePickerOpen = false;
+  selectedTab = 'statement';
+  isLoading = false;
+  isDateFilterOpen = false;
+  activeDatePreset = 'today';
+  selectedDateLabel = 'Today';
 
-  records = [
-    { id: 1, type: 'Deposit', amount: '500.00', date: '2024-04-09 10:30', status: 'Success', icon: 'cash-outline', color: '#00CFFF' },
-    { id: 2, type: 'Bet', amount: '-100.00', date: '2024-04-09 09:15', status: 'Settled', icon: 'trending-up-outline', color: '#f7c04a' },
-    { id: 3, type: 'Reward', amount: '50.00', date: '2024-04-08 22:45', status: 'Claimed', icon: 'gift-outline', color: '#d2fe07' },
-    { id: 4, type: 'Withdraw', amount: '-200.00', date: '2024-04-08 14:20', status: 'Pending', icon: 'wallet-outline', color: '#ef4444' }
-  ];
+  // Mock Stats
+  stats = {
+    deposits: '0.00',
+    withdrawals: '0.00',
+    received: '0.00',
+    betNumber: 0,
+    validBets: '0.00',
+    tax: '0.00',
+    winLoss: '0.00'
+  };
 
   constructor() {
     addIcons({ 
       chevronBackOutline, 
+      chevronForwardOutline,
+      chevronDownOutline,
+      chevronUpOutline,
+      syncOutline,
+      closeOutline,
       calendarOutline, 
       funnelOutline,
       walletOutline,
       cashOutline,
       trendingUpOutline,
-      giftOutline
+      giftOutline,
+      swapVerticalOutline
     });
   }
 
-  get filteredRecords() {
-    let filtered = this.records;
-    
-    // Filter by category
-    if (this.selectedSegment !== 'all') {
-      filtered = filtered.filter(r => r.type.toLowerCase() === this.selectedSegment);
-    }
-    
-    // Filter by date
-    if (this.selectedDate) {
-      const targetDate = this.selectedDate.split('T')[0]; // Format: YYYY-MM-DD
-      filtered = filtered.filter(r => r.date.startsWith(targetDate));
-    }
-    
-    return filtered;
+  toggleDateFilter() {
+    this.isDateFilterOpen = !this.isDateFilterOpen;
   }
 
-  onDateChange(event: any) {
-    this.selectedDate = event.detail.value;
-    this.isDatePickerOpen = false;
+  selectPreset(preset: string) {
+    this.activeDatePreset = preset;
+    this.selectedDateLabel = preset.charAt(0).toUpperCase() + preset.slice(1);
+    this.isDateFilterOpen = false;
   }
 
-  clearDateFilter() {
-    this.selectedDate = null;
+  confirmDate() {
+    if (this.activeDatePreset) {
+      this.selectedDateLabel = this.activeDatePreset.charAt(0).toUpperCase() + this.activeDatePreset.slice(1);
+    } else {
+      this.selectedDateLabel = 'Custom';
+    }
+    this.isDateFilterOpen = false;
+  }
+
+  refreshBalance() {
+    this.isLoading = true;
+    setTimeout(() => this.isLoading = false, 2000);
+  }
+
+  navigateToRetrieve() {
+    this.selectedTab = 'retrieve';
   }
 
   goBack() {

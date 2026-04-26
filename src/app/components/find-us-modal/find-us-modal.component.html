@@ -1,0 +1,79 @@
+<ion-modal [isOpen]="isOpen" class="find-us-modal" (didDismiss)="dismiss()">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="modal-card">
+        <!-- Title Bar -->
+        <div class="modal-title-bar">
+          <div class="title-content">
+            <ion-icon name="search-outline" class="title-icon-ion"></ion-icon>
+            <span>Find us</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="modal-content">
+          <!-- Info Box -->
+          <div class="info-box">
+            <ion-icon name="checkmark-circle" class="check-icon"></ion-icon>
+            <p>In case the website cannot be opened, please save our URL or email address to avoid losing your way home!</p>
+          </div>
+
+          <!-- URL Section -->
+          <div class="url-section">
+            <div class="section-header">
+              <div class="header-left">
+                <ion-icon name="globe-outline" class="header-icon-ion"></ion-icon>
+                <span>Save URL</span>
+              </div>
+              <div class="copy-all" (click)="copyAll()">
+                <ion-icon name="copy-outline"></ion-icon>
+                <span>Copy all</span>
+              </div>
+            </div>
+
+            <div class="domain-list">
+              <h3 class="simple-title">Simple domain name</h3>
+              <ul class="simple-domains">
+                <li>No777.me</li>
+                <li>No777.org</li>
+                <li>No777.win</li>
+              </ul>
+
+              <div class="home-urls">
+                <div class="url-item">
+                  <span class="label">Home URL</span>
+                  <span class="value">www.12no777.com</span>
+                  <ion-icon name="copy-outline" class="copy-icon" (click)="copyToClipboard('www.12no777.com')"></ion-icon>
+                </div>
+                <div class="url-item">
+                  <span class="label">Home URL</span>
+                  <span class="value">www.13no777.com</span>
+                  <ion-icon name="copy-outline" class="copy-icon" (click)="copyToClipboard('www.13no777.com')"></ion-icon>
+                </div>
+                <div class="url-item">
+                  <span class="label">Home URL</span>
+                  <span class="value">www.14no777.com</span>
+                  <ion-icon name="copy-outline" class="copy-icon" (click)="copyToClipboard('www.14no777.com')"></ion-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Overlay -->
+      <div class="footer-overlay">
+        <div class="checkbox-item">
+          <div class="custom-checkbox"></div>
+          <span>Don't show again today</span>
+        </div>
+        
+        <div class="close-container" (click)="dismiss()">
+          <div class="close-btn">
+            <ion-icon name="close-outline"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

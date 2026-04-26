@@ -33,7 +33,7 @@ import {
   logOutOutline,
   syncOutline,
   caretDownOutline,
-  notificationsOutline
+  notificationsOutline, caretDownSharp, arrowDownCircle, arrowUpCircle
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -42,6 +42,7 @@ import { RewardModalComponent } from '../../components/reward-modal/reward-modal
 import { FooterNavComponent } from '../../components/footer-nav/footer-nav.component';
 import { ProfileEditModalComponent } from '../../components/profile-edit-modal/profile-edit-modal.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -54,13 +55,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 export class ProfilePage {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   isLoggedIn = false;
   isAuthModalOpen = false;
   isRewardModalOpen = false;
   isProfileEditModalOpen = false;
-  showCopyToast = false;
-  toastMessage = '';
   isLoadingBalance = false;
 
   user = {
@@ -73,43 +73,12 @@ export class ProfilePage {
     vipLevel: 'V0',
     progress: 0.00,
     required: 100.00,
+    requiredBets: '0.00',
     bonus: '0.00'
   };
 
   constructor() {
-    addIcons({
-      walletOutline,
-      cashOutline,
-      trendingUpOutline,
-      briefcaseOutline,
-      documentTextOutline,
-      settingsOutline,
-      shareSocialOutline,
-      personOutline,
-      shieldCheckmarkOutline,
-      searchOutline,
-      globeOutline,
-      helpCircleOutline,
-      chatbubbleOutline,
-      phonePortraitOutline,
-      chevronForwardOutline,
-      chevronBackOutline,
-      headsetOutline,
-      chatbubbleEllipsesOutline,
-      pencilOutline,
-      copyOutline,
-      refreshOutline,
-      shieldHalfOutline,
-      giftOutline,
-      peopleOutline,
-      logInOutline,
-      personAddOutline,
-      mailOutline,
-      logOutOutline,
-      syncOutline,
-      caretDownOutline,
-      notificationsOutline
-    });
+    addIcons({ chevronBackOutline, headsetOutline, chatbubbleOutline, pencilOutline, copyOutline, refreshOutline, arrowDownCircle, arrowUpCircle, chevronForwardOutline, logOutOutline, caretDownSharp, syncOutline, walletOutline, cashOutline, trendingUpOutline, briefcaseOutline, documentTextOutline, settingsOutline, shareSocialOutline, personOutline, shieldCheckmarkOutline, searchOutline, globeOutline, helpCircleOutline, phonePortraitOutline, chatbubbleEllipsesOutline, shieldHalfOutline, giftOutline, peopleOutline, logInOutline, personAddOutline, mailOutline, caretDownOutline, notificationsOutline });
 
     // Subscribe to auth state
     this.authService.user$.subscribe(user => {
@@ -195,15 +164,13 @@ export class ProfilePage {
       vipLevel: 'V0',
       progress: 0.00,
       required: 100.00,
+      requiredBets: '0.00',
       bonus: '0.00'
     };
   }
 
   copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text).then(() => {
-      this.toastMessage = `Copied: ${text}`;
-      this.showCopyToast = true;
-    });
+    this.toastService.copyToClipboard(text);
   }
 
   navigateTo(path: string) {
@@ -226,17 +193,15 @@ export class ProfilePage {
         phone: data.phone,
         email: data.email
       });
-      
+
       this.user.fullName = data.fullName;
       this.user.phone = data.phone;
       this.user.email = data.email;
 
-      this.toastMessage = 'Profile updated successfully!';
-      this.showCopyToast = true;
+      this.toastService.showSuccess('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
-      this.toastMessage = 'Failed to update profile';
-      this.showCopyToast = true;
+      this.toastService.showSuccess('Failed to update profile');
     }
   }
 
@@ -258,7 +223,7 @@ export class ProfilePage {
       }, 800);
     }
   }
- 
+
   logout() {
     this.authService.logout();
     this.navigateTo('/home');

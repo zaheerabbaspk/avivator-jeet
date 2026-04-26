@@ -1,99 +1,190 @@
 <ion-modal [isOpen]="isOpen" [backdropDismiss]="false" class="auth-modal">
   <ng-template>
-    <div class="modal-wrapper">
-      <div class="modal-container">
-        <!-- Logo & Yellow Text -->
-        <div class="modal-header">
-          <div class="logo-container">
-            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center shadow-[2px_2px_0px_#000]">
-              <span class="text-black font-black text-sm italic">BP</span>
-            </div>
-            <div class="flex flex-col ml-2">
-              <span class="text-white font-black text-xl italic leading-none">bp999</span>
-            </div>
+    <div class="modal-layout">
+      <!-- Top Header Bar -->
+      <div class="modal-top-bar">
+        <ion-icon name="chevron-back" class="back-btn" (click)="dismiss()"></ion-icon>
+      </div>
+
+      <div class="modal-wrapper">
+        <div class="modal-container">
+          
+          <!-- Premium Header -->
+          <div class="bonus-header">
+            <p class="bonus-title">Free bonus for <span class="green-text">Rs 777</span></p>
+            <p class="bonus-subtitle">Invite 1 person And get a reward of <span class="green-text">Rs 5,000</span></p>
           </div>
-          <p class="yellow-text">Sign Up on bp999. BET — Play instantly, Win Big!</p>
-        </div>
 
         <!-- Tabs -->
         <div class="auth-tabs">
           <div class="tab" [class.active]="authMode === 'register'" (click)="setAuthMode('register')">
             Register
-            <div class="indicator" *ngIf="authMode === 'register'"></div>
           </div>
           <div class="tab" [class.active]="authMode === 'login'" (click)="setAuthMode('login')">
             Login
-            <div class="indicator" *ngIf="authMode === 'login'"></div>
           </div>
+          <div class="tab-indicator" [class.to-right]="authMode === 'login'"></div>
         </div>
 
         <!-- Form -->
         <div class="auth-form">
-          <p class="field-label">Support Phone number/Profile Register</p>
+          <p class="field-label">Support Phone number/Profile {{ authMode === 'login' ? 'Login' : 'Register' }}</p>
           
+          <div class="input-group phone-group">
+            <div class="flag-prefix" *ngIf="authMode === 'login'">
+              <img src="https://flagcdn.com/w40/pk.png" alt="PK" class="flag-img">
+              <span class="country-code">+92</span>
+            </div>
+            <ion-icon name="person" class="left-icon grey" *ngIf="authMode === 'register'"></ion-icon>
+            <span class="required-star">*</span>
+            <input type="tel" 
+                   [(ngModel)]="account" 
+                   (input)="validatePhone($event)"
+                   [placeholder]="authMode === 'login' ? '3081687789' : 'Please enter Phone number/Profile'" 
+                   maxlength="10"
+                   class="main-input">
+            <ion-icon name="close-circle" *ngIf="account" (click)="account = ''" class="clear-icon"></ion-icon>
+          </div>
+          <div class="field-error" *ngIf="showErrors && !account">
+            <ion-icon name="alert-circle"></ion-icon>
+            <span>Please enter Phone number/Profile</span>
+          </div>
+
+          <!-- Options (Login Only) -->
+          <div class="auth-options" *ngIf="authMode === 'login'">
+            <div class="option-item">
+              <ion-checkbox [checked]="true" labelPlacement="end">This is the mobile phone <br> number</ion-checkbox>
+            </div>
+            <div class="option-item">
+              <ion-checkbox [checked]="false" labelPlacement="end">This is the account</ion-checkbox>
+            </div>
+          </div>
+
+          <div class="login-types" *ngIf="authMode === 'register'">
+            <div class="type-item active">
+              <ion-icon name="lock-closed" class="type-icon gold"></ion-icon>
+              <span>Password registration</span>
+            </div>
+            <div class="type-item">
+              <div class="code-badge-icon">123</div>
+              <span>Code register</span>
+            </div>
+          </div>
+          
+          <div class="login-types" *ngIf="authMode === 'login'">
+            <div class="type-item active">
+              <ion-icon name="lock-closed" class="type-icon gold"></ion-icon>
+              <span>Password Login</span>
+            </div>
+            <div class="type-item">
+              <div class="code-badge-icon">123</div>
+              <span>Code login</span>
+            </div>
+          </div>
+
+          <!-- Password Input -->
           <div class="input-group">
-            <ion-icon name="person-outline" class="left-icon"></ion-icon>
-            <ion-input name="account" [(ngModel)]="account" type="text" placeholder="*Please enter Phone number/Profile"></ion-input>
+            <ion-icon name="lock-closed" class="left-icon grey"></ion-icon>
+            <span class="required-star">*</span>
+            <input [type]="passwordType" 
+                   [(ngModel)]="password" 
+                   placeholder="Enter password"
+                   class="main-input">
+            <div class="input-actions">
+              <ion-icon name="close-circle" *ngIf="password" (click)="password = ''" class="clear-icon"></ion-icon>
+              <ion-icon [name]="passwordType === 'password' ? 'eye-off-outline' : 'eye-outline'" 
+                        (click)="togglePasswordVisibility()" 
+                        class="eye-icon"></ion-icon>
+            </div>
+          </div>
+          <div class="field-error" *ngIf="showErrors && !password">
+            <ion-icon name="alert-circle"></ion-icon>
+            <span>6-16 characters, at least two of English/numbers/symbols</span>
           </div>
 
-          <p class="field-label" *ngIf="authMode === 'register'">
-            <ion-icon name="lock-closed" style="color: #ea580c; font-size: 14px;"></ion-icon>
-            Password registration
-          </p>
+          <!-- Register Specific Fields -->
+          <ng-container *ngIf="authMode === 'register'">
+            <div class="strength-meter">
+              <span class="strength-label">Strength</span>
+              <div class="strength-bars">
+                <div class="bar" [class.filled]="passwordStrength >= 1"></div>
+                <div class="bar" [class.filled]="passwordStrength >= 2"></div>
+                <div class="bar" [class.filled]="passwordStrength >= 3"></div>
+                <div class="bar" [class.filled]="passwordStrength >= 4"></div>
+              </div>
+            </div>
 
-          <div class="input-group">
-            <ion-icon name="lock-closed-outline" class="left-icon"></ion-icon>
-            <ion-input name="password" [(ngModel)]="password" [type]="passwordType" placeholder="*Enter password"></ion-input>
-            <ion-icon [name]="passwordType === 'password' ? 'eye-outline' : 'eye-off-outline'" 
-                      (click)="togglePasswordVisibility()" 
-                      class="right-icon"></ion-icon>
+            <div class="input-group">
+              <ion-icon name="lock-closed" class="left-icon grey"></ion-icon>
+              <span class="required-star">*</span>
+              <input [type]="confirmPasswordType" 
+                     [(ngModel)]="confirmPassword" 
+                     placeholder="Enter password again"
+                     class="main-input">
+              <div class="input-actions">
+                <ion-icon [name]="confirmPasswordType === 'password' ? 'eye-off-outline' : 'eye-outline'" 
+                          (click)="toggleConfirmPasswordVisibility()" 
+                          class="eye-icon"></ion-icon>
+              </div>
+            </div>
+            <div class="field-error" *ngIf="showErrors && password !== confirmPassword">
+              <ion-icon name="alert-circle"></ion-icon>
+              <span>Confirm password cannot be empty or does not match</span>
+            </div>
+
+            <div class="input-group">
+              <ion-icon name="person-add" class="left-icon grey"></ion-icon>
+              <span class="required-star">*</span>
+              <input type="text" 
+                     [(ngModel)]="realName" 
+                     placeholder="Please enter your real name"
+                     class="main-input">
+            </div>
+            <p class="warning-text">Must have the same name as your withdrawal bank account</p>
+
+            <div class="agree-container">
+              <ion-checkbox [checked]="true" labelPlacement="end">
+                <span class="agree-text">I am over 18 years old, I have read and agree to <span class="link">《User Agreement》</span></span>
+              </ion-checkbox>
+            </div>
+          </ng-container>
+
+          <div class="remember-container" *ngIf="authMode === 'login'">
+            <ion-checkbox [checked]="true" labelPlacement="end">Remember account password</ion-checkbox>
           </div>
 
-          <!-- Confirm Password (Register Only) -->
-          <div class="input-group" *ngIf="authMode === 'register'">
-            <ion-icon name="lock-closed-outline" class="left-icon"></ion-icon>
-            <ion-input name="confirmPassword" [(ngModel)]="confirmPassword" [type]="confirmPasswordType" placeholder="*Enter password again"></ion-input>
-            <ion-icon [name]="confirmPasswordType === 'password' ? 'eye-outline' : 'eye-off-outline'" 
-                      (click)="toggleConfirmPasswordVisibility()" 
-                      class="right-icon"></ion-icon>
+          <!-- Action Button Area -->
+          <div class="btn-area">
+            <button class="login-btn" [disabled]="isLoading" (click)="handleAuthAction()">
+              {{ isLoading ? 'Processing...' : (authMode === 'register' ? 'Register' : 'Login') }}
+            </button>
+            <div class="btn-badge" *ngIf="authMode === 'register'">
+              <div class="gift-box">
+                <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/common/common/deposit/img_jlqp_cw.avif?manualVersion=1&version=9fc77fa46d" alt="Gift" class="gift-img">
+                <span class="badge-text">7-777</span>
+              </div>
+            </div>
           </div>
-
-          <!-- Nickname / Name (Register Only) -->
-          <div class="input-group" *ngIf="authMode === 'register'">
-            <ion-icon name="person-circle-outline" class="left-icon"></ion-icon>
-            <ion-input name="realName" [(ngModel)]="realName" type="text" placeholder="*Enter your name or nickname"></ion-input>
-          </div>
-
-
-          <!-- Checkbox -->
-          <div class="agree-container" *ngIf="authMode === 'register'">
-            <ion-checkbox [checked]="true" labelPlacement="end">
-              <span class="agree-text">I am over 18 years old and have read and agreed to <span class="link">User Agreement</span></span>
-            </ion-checkbox>
-          </div>
-
-          <!-- Error Message -->
-          <div class="error-container" *ngIf="errorMessage">
-            <p class="error-text">{{ errorMessage }}</p>
-          </div>
-
-          <!-- Action Button -->
-          <button class="action-btn" [disabled]="isLoading" (click)="handleAuthAction()">
-            {{ isLoading ? 'Processing...' : (authMode === 'register' ? 'Register' : 'Login') }}
-          </button>
 
           <!-- Footer Links -->
           <div class="modal-footer-links">
-            <span>Customer Service</span>
-            <span>Demo</span>
+            <span class="footer-link">Customer Service</span>
+            <span class="footer-link">Demo</span>
+            <span class="footer-link" *ngIf="authMode === 'login'">Forgot Password</span>
           </div>
-        </div>
-      </div>
 
-      <!-- Close Button -->
-      <div class="close-btn-container" (click)="dismiss()">
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </div>
-    </div>
+          <!-- Quick Login -->
+          <div class="quick-login">
+            <div class="divider">
+              <span class="divider-text">{{ authMode === 'login' ? 'Quick login' : 'Binding registration' }}</span>
+            </div>
+            <div class="google-login-btn">
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google">
+            </div>
+          </div> <!-- End quick-login -->
+        </div> <!-- End auth-form -->
+      </div> <!-- End modal-container -->
+    </div> <!-- End modal-wrapper -->
+    </div> <!-- End modal-layout -->
   </ng-template>
 </ion-modal>

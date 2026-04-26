@@ -15,8 +15,13 @@
 }
 
 @keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .animate-marquee {
@@ -25,13 +30,23 @@
 }
 
 @keyframes spin-once {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin {
@@ -51,6 +66,7 @@
 /* Custom scrollbar hiding */
 ion-content::part(scroll) {
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -58,8 +74,8 @@ ion-content::part(scroll) {
 
 /* Bangladeshi/Pakistani Flag Glow */
 .flag-container {
-  box-shadow: 0 0 8px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Ensure sticky footer nav background matches profile theme */
@@ -111,7 +127,9 @@ app-footer-nav {
 }
 
 .vip-card-container {
-  margin-top: -36px; /* Default -mt-9 */
+  margin-top: -24px;
+  /* Safe default for large screens */
+  /* Default -mt-9 */
   position: relative;
   z-index: 20;
 }
@@ -124,32 +142,132 @@ app-footer-nav {
   }
 
   .profile-balance-block {
-    width: 100%;
-    justify-content: space-between;
-    margin-left: 0 !important;
+    margin-left: 8px !important;
   }
 
   .vip-level-badge {
     width: 36px;
     height: 36px;
-    span { font-size: 15px !important; }
+
+    span {
+      font-size: 15px !important;
+    }
   }
 
   .vip-progress-bar {
     width: 70px;
   }
 
+  .vip-level-badge {
+    width: 32px;
+    height: 32px;
+
+    span {
+      font-size: 14px !important;
+    }
+  }
+
   .vip-card-container {
-    margin-top: 10px !important; /* Move it down on small screens */
+    margin-top: -24px !important;
+
+    .relative.h-\[100px\] {
+      height: 85px !important;
+    }
+
+    .text-\[24px\] {
+      font-size: 16px !important;
+    }
+
+    .text-\[20px\] {
+      font-size: 14px !important;
+    }
+
+    .text-\[10px\],
+    .text-\[8px\] {
+      font-size: 8px !important;
+    }
+  }
+
+  .action-row {
+    margin-top: 10px !important;
+    margin-bottom: 6px !important;
+
+    @media (max-height: 750px) {
+      margin-top: 2px !important;
+      margin-bottom: 0px !important;
+    }
   }
 
   .action-item {
-    span { font-size: 9px !important; }
-    img, svg {
-      transform: scale(0.9);
+    span {
+      font-size: 8px !important;
+    }
+
+    img,
+    svg {
+      transform: scale(0.7);
     }
   }
+
+  /* Header text reduction */
+  .text-\[16px\] {
+    font-size: 14px !important;
+  }
+
+  .text-\[14px\] {
+    font-size: 12px !important;
+  }
+
+  .text-\[18px\] {
+    font-size: 14px !important;
+  }
 }
+
+/* Aggressive Scaling for Short Devices */
+@media (max-height: 720px) {
+  .vip-card-container {
+    margin-top: -42px !important;
+
+    .vip-card-inner {
+      height: 80px !important;
+      min-height: 80px !important;
+    }
+  }
+
+  .action-item {
+    span {
+      font-size: 8px !important;
+    }
+
+    img,
+    svg {
+      transform: scale(0.7) !important;
+    }
+  }
+
+  .menu-list-item {
+    height: 40px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+.action-row {
+  margin-top: 2px !important;
+  margin-bottom: -2px !important;
+}
+
+.action-item {
+  span {
+    font-size: 8px !important;
+  }
+
+  img,
+  svg {
+    transform: scale(0.7) !important;
+  }
+}
+
 
 /* Micro-interactions */
 .active-press:active {
@@ -158,7 +276,8 @@ app-footer-nav {
 }
 
 /* Text rendering improvements */
-span, div {
+span,
+div {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }

@@ -1,31 +1,24 @@
 .game-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 12px;
   padding: 10px 14px 20px;
   width: 100%;
   margin: 0 auto;
 
   @media (max-width: 380px) {
-    gap: 10px;
-    padding: 8px 10px 16px;
-  }
-
-  @media (max-width: 360px) {
     gap: 8px;
-    padding: 6px 8px 12px;
+    padding: 8px 10px 16px;
   }
 }
 
 .game-card {
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.1s ease;
-
-  @media (max-width: 360px) {
-    border-radius: 10px;
-  }
+  background: #1e2024;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 
   &:active {
     transform: scale(0.96);
@@ -33,14 +26,29 @@
 
   .card-img-wrap {
     position: relative;
-    aspect-ratio: 10 / 14.5;
+    aspect-ratio: 10 / 14; // Professional vertical casino card height
     overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
-      object-fit: fill;
+      object-fit: cover; // Better for varying game image sizes
       display: block;
+    }
+
+    .card-badge {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        color: #1a1000;
+        font-size: 8px;
+        font-weight: 900;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        z-index: 20;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .card-title-overlay {
@@ -48,42 +56,20 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 14px 4px 6px;
-      background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 40%, transparent 100%);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 800;
+      padding: 12px 6px 6px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
       text-align: center;
       z-index: 10;
-
-      @media (max-width: 380px) {
-        font-size: 11px;
-        padding: 10px 3px 5px;
-      }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       @media (max-width: 360px) {
         font-size: 10px;
-        padding: 8px 2px 4px;
-      }
-    }
-
-    .card-center-badge {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(220, 38, 38, 0.9);
-      color: #fff;
-      font-size: 8px;
-      font-weight: 900;
-      padding: 2px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      z-index: 5;
-
-      @media (max-width: 360px) {
-        font-size: 7px;
-        padding: 1px 6px;
+        padding: 8px 4px 4px;
       }
     }
   }

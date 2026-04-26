@@ -18,7 +18,13 @@ export class OfferSidebarComponent {
   @Output() refreshRewards = new EventEmitter<void>();
   @Output() openRedemption = new EventEmitter<void>();
 
+  isLogoVisible: boolean = true;
+
   setSidebar(id: string) {
     this.sidebarChange.emit(id);
+  }
+
+  removeLogo() {
+    this.isLogoVisible = false;
   }
 }

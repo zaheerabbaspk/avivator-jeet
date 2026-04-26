@@ -1,0 +1,97 @@
+<ion-modal [isOpen]="isOpen" class="announcement-modal" (didDismiss)="dismiss()">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="modal-card">
+        <!-- Tabs -->
+        <div class="tabs-header">
+          <div class="tab-item" [class.active]="activeTab === 'vip'" (click)="setTab('vip')">
+            <ion-icon name="mail" class="tab-icon"></ion-icon>
+            <span class="tab-text">🎁VIP MEMBERSHIP PRIVILEGES🎁</span>
+          </div>
+          <div class="tab-item" [class.active]="activeTab === 'invite'" (click)="setTab('invite')">
+            <ion-icon name="mail" class="tab-icon"></ion-icon>
+            <span class="tab-text">🔴INVITE 1 PERSON AND EARN Rs5,000</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-body">
+          <div class="scroll-content">
+            <div class="info-row">
+              <span class="label">Click on the channel:</span>
+              <span class="emoji">👉</span>
+              <span class="value green">Telegram</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Click on the channel:</span>
+              <span class="emoji">👉</span>
+              <span class="value green">WhatsApp</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Click to follow:</span>
+              <span class="emoji">👉</span>
+              <span class="value green">Facebook</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Download the official APP website:</span>
+              <span class="emoji">👉</span>
+              <span class="value green">NO777.app</span>
+            </div>
+
+            <div class="section-title gold">
+              🎁VIP MEMBERSHIP PRIVILEGES🎁
+            </div>
+
+            <div class="stat-row">
+              <span class="label">Daily salary</span>
+              <span class="value blue">Rs500,000</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">weekly salary</span>
+              <span class="value blue">Rs1,000,000</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Monthly salary</span>
+              <span class="value blue">Rs5,000,000</span>
+            </div>
+
+            <div class="sub-section">
+              Play slot machines
+            </div>
+
+            <div class="check-row">
+              <div class="check-box">✅</div>
+              <div class="check-text">
+                Get <span class="red">Rs5,000,000</span> by coding every day
+              </div>
+            </div>
+            <div class="check-row">
+              <div class="check-box">✅</div>
+              <div class="check-text">
+                Lucky bet <span class="red">1,000X</span>
+              </div>
+            </div>
+            <div class="check-row">
+              <div class="check-box">✅</div>
+              <div class="check-text">
+                You can get <span class="red">10%</span> recovery ransom money every day
+              </div>
+            </div>
+          </div>
+
+          <!-- Side Arrow -->
+          <div class="side-arrow">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <div class="close-container" (click)="dismiss()">
+        <div class="close-btn">
+          <ion-icon name="close"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

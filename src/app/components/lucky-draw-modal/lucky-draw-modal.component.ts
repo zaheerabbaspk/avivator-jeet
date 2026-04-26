@@ -21,6 +21,7 @@ import { LuckyDrawService, LuckyTask, LuckyRecord, WheelItem } from '../../servi
 export class LuckyDrawModalComponent implements OnInit {
   @Input() isOpen = false;
   @Output() modalClose = new EventEmitter<void>();
+  @Output() openInviteBonus = new EventEmitter<void>();
 
   balance = 0;
   availableDraws = 0;
@@ -73,8 +74,8 @@ export class LuckyDrawModalComponent implements OnInit {
   }
 
   goInvite() {
+    this.openInviteBonus.emit();
     this.close();
-    this.router.navigate(['/invite']);
   }
 
   async spin() {

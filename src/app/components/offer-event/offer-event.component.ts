@@ -13,4 +13,5 @@ import { OfferCardData } from '../../services/offers.service';
 export class OfferEventComponent {
   @Input() offers: OfferCardData[] = [];
   @Output() offerClick = new EventEmitter<OfferCardData>();
+  @Output() shareClick = new EventEmitter<OfferCardData>();
 }

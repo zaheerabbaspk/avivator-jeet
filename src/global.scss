@@ -13,8 +13,44 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+/* Utility: Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
+
+/* App Global Responsiveness */
+html {
+    overflow-x: hidden;
+    max-width: 100%;
+    -webkit-text-size-adjust: 100%;
+    /* Reduced minimum font size for small screens to prevent zooming */
+    font-size: clamp(10.5px, 3.2vw, 16px);
+
+    /* Scale down even more on shorter screens to save vertical space */
+    @media (max-height: 1000px) {
+        font-size: clamp(9.5px, 3vw, 14px);
+    }
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Ensure main containers don't exceed 420px on desktop but are fluid on mobile */
+.responsive-container {
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+}
 
 /* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
@@ -41,7 +77,7 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 /* Premium Modal Overrides */
-.auth-modal, .reward-modal {
+.reward-modal {
     --background: transparent !important;
     --box-shadow: none !important;
     --overflow: visible !important;
@@ -67,16 +103,17 @@
 .premium-alert {
     --background: #1e1e26 !important;
     --border-radius: 20px !important;
-    
+
     .alert-wrapper {
         background: #1e1e26 !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
-        box-shadow: 0 12px 48px rgba(0,0,0,0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6) !important;
     }
 
     .alert-head {
         padding-top: 28px !important;
         padding-bottom: 12px !important;
+
         .alert-title {
             color: #ffffff !important;
             font-size: 20px !important;
@@ -87,7 +124,7 @@
     }
 
     .alert-message {
-        color: rgba(255,255,255,0.7) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
         font-size: 15px !important;
         font-weight: 500 !important;
         text-align: center !important;
@@ -98,7 +135,7 @@
     .alert-button-group {
         padding: 0 20px 20px !important;
         justify-content: center !important;
-        
+
         .alert-button {
             width: 100% !important;
             height: 52px !important;
@@ -110,7 +147,7 @@
             margin: 0 !important;
             text-transform: uppercase !important;
             box-shadow: 0 4px 15px rgba(240, 192, 64, 0.3) !important;
-            
+
             .alert-button-inner {
                 justify-content: center !important;
             }
@@ -146,3 +183,60 @@
     }
 }
 
+/* Success Toast Styles (Matching Reference) */
+.success-toast {
+    --background: #ffffff !important;
+    --color: #1e2024 !important;
+    --border-radius: 10px !important;
+    --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    --width: fit-content !important;
+    --min-width: 160px !important;
+    --max-width: 80% !important;
+    --min-height: 10px !important; // Force smaller height
+    margin-top: 50px !important;
+    display: flex !important;
+    justify-content: center !important;
+
+    &::part(container) {
+        border-radius: 8px !important;
+        padding: 0 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 32px !important;
+        height: 32px !important;
+    }
+
+    &::part(message) {
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        padding: 0 !important;
+        color: #1e2024 !important;
+        margin-left: 8px !important;
+        line-height: 1 !important;
+    }
+
+    &::part(button) {
+        color: #28a745 !important;
+        --color: #28a745 !important;
+        font-size: 18px !important;
+        opacity: 1 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        pointer-events: none !important;
+    }
+}
+
+/* Responsive Sidebar Width (Proportional to screen) */
+ion-menu {
+    --width: 100%;
+    /* Covers 72% of the screen on all mobiles */
+    --max-width: 130px;
+    /* Don't let it get too huge on tablets */
+    --min-width: 190px;
+    /* Ensure it's usable on very tiny screens */
+}
+
+ion-menu::part(container) {
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}

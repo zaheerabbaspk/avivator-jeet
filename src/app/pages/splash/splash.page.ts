@@ -20,37 +20,35 @@ export class SplashPage implements OnInit {
 
   private startLoading() {
     let current = 0;
-    
+
+    // Faster loading duration
     const tick = () => {
-      // Logic for "hitch and jump" progress
-      // pauses at certain levels to simulate real loading
-      let push = Math.random() * 2;
-      
-      if (current < 10) push = Math.random() * 5;
-      else if (current > 30 && current < 40) push = Math.random() * 0.5; // Simulate slow sync
-      else if (current > 80 && current < 85) push = 0.1; // Simulate finalize
-      else if (current > 85) push = Math.random() * 8; // Burst to finish
-      
+      let push = Math.random() * 3.0;
+
+      if (current < 20) push = Math.random() * 8;
+      else if (current > 40 && current < 60) push = 1.5; // Reduced pause
+      else if (current > 85) push = Math.random() * 12;
+
       current += push;
-      
+
       if (current >= 100) {
         current = 100;
         this.progress.set(100);
         this.navigateToHome();
         return;
       }
-      
+
       this.progress.set(current);
-      setTimeout(tick, Math.random() * 100 + 20);
+      setTimeout(tick, 30); // Faster ticks
     };
 
     tick();
   }
 
   private navigateToHome() {
-    // Slight pause at 100% for "Complete" feel
+    // Shorter pause at 100%
     setTimeout(() => {
       this.router.navigate(['/home'], { replaceUrl: true });
-    }, 800);
+    }, 400);
   }
 }

@@ -26,6 +26,8 @@ import { OfferMissionComponent } from '../../components/offer-mission/offer-miss
 import { OfferVipComponent } from '../../components/offer-vip/offer-vip.component';
 import { OfferUnclaimedComponent } from '../../components/offer-unclaimed/offer-unclaimed.component';
 import { OfferHistoryComponent } from '../../components/offer-history/offer-history.component';
+import { LuckyDrawModalComponent } from '../../components/lucky-draw-modal/lucky-draw-modal.component';
+import { InviteBonusModalComponent } from '../../components/invite-bonus-modal/invite-bonus-modal.component';
 import { OffersService, OfferCardData, Mission, VipTier, HistoryRecord, UnclaimedSummary } from '../../services/offers.service';
 
 @Component({
@@ -47,7 +49,9 @@ import { OffersService, OfferCardData, Mission, VipTier, HistoryRecord, Unclaime
     OfferMissionComponent,
     OfferVipComponent,
     OfferUnclaimedComponent,
-    OfferHistoryComponent
+    OfferHistoryComponent,
+    LuckyDrawModalComponent,
+    InviteBonusModalComponent
   ]
 })
 export class OffersPage implements OnInit {
@@ -60,6 +64,8 @@ export class OffersPage implements OnInit {
   activeSubTab = 'all';
   activeSidebar = 'all';
   isTreasureModalOpen = false;
+  isLuckyDrawModalOpen = false;
+  isInviteBonusModalOpen = false;
 
   tabs = [
     { id: 'event', label: 'Event', badge: '3' },
@@ -126,6 +132,12 @@ export class OffersPage implements OnInit {
   goBack() { this.router.navigate(['/home']); }
   openOffer(_: any) { this.showTreasure(); }
   showTreasure() { this.isTreasureModalOpen = true; }
+  openLuckyDraw() { this.isLuckyDrawModalOpen = true; }
+
+  handleOpenInviteBonus() {
+    this.isLuckyDrawModalOpen = false;
+    this.isInviteBonusModalOpen = true;
+  }
 
   // Refresh Logic
   refreshRewards() {

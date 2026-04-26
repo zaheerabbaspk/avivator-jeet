@@ -1,0 +1,72 @@
+<ion-modal [isOpen]="isOpen" class="first-deposit-reward-modal" (didDismiss)="dismiss()">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="modal-card">
+        <!-- Title Bar -->
+        <div class="modal-title-bar">
+          First Deposit Extra Reward
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="modal-content">
+          <div class="header-section">
+            <div class="task-title">First recharge task</div>
+            <div class="refresh-btn">
+              <ion-icon name="refresh-outline"></ion-icon>
+              <span>Refresh rewards</span>
+            </div>
+          </div>
+          <div class="subtitle">Only the first deposit after sign up is eligible for a reward</div>
+
+          <div class="task-list">
+            @for (task of tasks; track task.id) {
+              <div class="task-card">
+                <div class="task-icon">
+                  <img src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/event/tx_icon_ljcz.avif?manualVersion=1&version=bee955fc65" alt="wallet">
+                </div>
+                <div class="task-info">
+                  <div class="task-name">First Deposit ≥ {{ task.minDeposit | number }},<br>Reward</div>
+                  <div class="task-reward-range">{{ task.minReward | number:'1.2-2' }} - {{ task.maxReward | number:'1.2-2' }}</div>
+                  <div class="progress-container">
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(task.currentProgress / task.minDeposit) * 100"></div>
+                    </div>
+                    <div class="progress-text">{{ task.currentProgress }}/{{ task.minDeposit | number }}</div>
+                  </div>
+                </div>
+                <div class="btn-wrap">
+                  <button class="deposit-btn" (click)="handleDeposit(task.minDeposit)">Deposit</button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="modal-footer">
+          <div class="footer-btn-row">
+            <button class="footer-btn outline">History</button>
+            <button class="footer-btn solid">Details</button>
+          </div>
+          <div class="checkbox-row">
+            <div class="checkbox-item">
+              <div class="custom-checkbox"></div>
+              <span>Don't show again today</span>
+            </div>
+            <div class="checkbox-item">
+              <div class="custom-checkbox"></div>
+              <span>Never remind</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <div class="close-container" (click)="dismiss()">
+        <div class="close-btn">
+          <ion-icon name="close"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

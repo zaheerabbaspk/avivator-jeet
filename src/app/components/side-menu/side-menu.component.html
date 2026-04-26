@@ -21,8 +21,8 @@
       @for (cat of sideMenuService.getCategories(); track cat.id) {
         <div class="grid-item" (click)="navigateTo(cat.id)">
           <div class="icon-wrapper">
-            @if (cat.icon.includes('assets/')) {
-              <img [src]="cat.icon" [alt]="cat.label">
+            @if (cat.icon.includes('assets/') || cat.icon.includes('https://') || cat.icon.includes('http://')) {
+              <img [src]="cat.icon" [alt]="cat.label" class="cat-icon-img">
             } @else {
               <ion-icon [name]="cat.icon" [style.color]="cat.color"></ion-icon>
             }

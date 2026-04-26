@@ -1,9 +1,11 @@
-<app-offer-header 
-  [tabs]="tabs" 
-  [activeTab]="activeTab" 
-  (tabChange)="activeTab = $event" 
-  (back)="goBack()">
-</app-offer-header>
+<ion-header class="ion-no-border">
+  <app-offer-header 
+    [tabs]="tabs" 
+    [activeTab]="activeTab" 
+    (tabChange)="activeTab = $event" 
+    (back)="goBack()">
+  </app-offer-header>
+</ion-header>
 
 <ion-content class="[--background:#111419] [--padding-bottom:10px] offers-list-scroll">
   <div class="flex h-full">
@@ -27,7 +29,8 @@
           @case ('event') {
             <app-offer-event 
               [offers]="offers" 
-              (offerClick)="openOffer($event)">
+              (offerClick)="openOffer($event)"
+              (shareClick)="openLuckyDraw()">
             </app-offer-event>
           }
 
@@ -88,4 +91,6 @@
   </div>
 </ion-content>
 
+<app-lucky-draw-modal [isOpen]="isLuckyDrawModalOpen" (modalClose)="isLuckyDrawModalOpen = false" (openInviteBonus)="handleOpenInviteBonus()"></app-lucky-draw-modal>
+<app-invite-bonus-modal [isOpen]="isInviteBonusModalOpen" (modalClose)="isInviteBonusModalOpen = false"></app-invite-bonus-modal>
 <app-footer-nav activeTab="offers"></app-footer-nav>

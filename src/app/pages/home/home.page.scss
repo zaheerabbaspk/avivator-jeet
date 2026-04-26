@@ -44,6 +44,12 @@ ion-content {
     .fire-icon {
       font-size: 16px;
     }
+
+    .blockchain-icon {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
   }
 
   .section-nav {
@@ -68,6 +74,53 @@ ion-content {
       font-weight: 700;
       padding: 0 2px;
     }
+  }
+}
+
+.blockchain-section, .cards-section, .section-container {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  margin: 12px 0;
+  padding-bottom: 8px;
+
+  .section-header {
+    padding-top: 12px;
+  }
+}
+
+.section-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.jackpot-banner {
+  position: relative;
+  margin: 0 12px 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 90px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .jackpot-amount {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
   }
 }
 

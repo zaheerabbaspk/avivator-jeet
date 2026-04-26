@@ -1,0 +1,257 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-container {
+    width: 90%;
+    max-width: 25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content {
+    width: 100%;
+    background: #013b25;
+    /* Dark green background */
+    border: 1px solid #14593f;
+    border-radius: 0.75rem;
+    padding: 1rem 0.75rem;
+    position: relative;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+    background-image: radial-gradient(circle at 50% -20%, #036b44 0%, #013b25 60%);
+}
+
+/* Carousel */
+.carousel-wrapper {
+    width: 100%;
+    position: relative;
+    margin-bottom: 0.75rem;
+}
+
+.carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: 0.75rem;
+    padding: 0 2rem;
+    /* Give room for side slides */
+    margin: 0 -0.75rem;
+    align-items: center;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.carousel-slide {
+    flex: 0 0 75%;
+    /* 75% width ensures left/right are partially visible */
+    scroll-snap-align: center;
+    border-radius: 0.625rem;
+    overflow: hidden;
+
+
+    /* Intense shadow for center card */
+
+
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    .poster-img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+    }
+}
+
+.carousel-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+
+    .dot {
+        width: 0.375rem;
+        height: 0.375rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: background 0.3s ease;
+
+        &.active {
+            background: #ffffff;
+        }
+    }
+}
+
+/* Invite Info */
+.invite-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0 0.25rem;
+
+    .invite-title {
+        color: #ffffff;
+        font-size: 0.8125rem;
+        font-weight: 600;
+    }
+
+    .code-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+
+        .code-label {
+            color: #ffffff;
+        }
+
+        .code-value {
+            color: #ffffff;
+        }
+
+        .copy-icon {
+            font-size: 1rem;
+            color: #eab343;
+            /* Gold */
+            cursor: pointer;
+        }
+    }
+}
+
+/* Link Box */
+.link-box-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+
+    .link-input {
+        flex: 1;
+        background: #012b1b;
+        /* Darker green */
+        border: 1px solid #14593f;
+        border-radius: 0.375rem;
+        padding: 0.625rem 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .link-text {
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-icon {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+    }
+
+    .copy-icon.large {
+        font-size: 1.25rem;
+        color: #eab343;
+        cursor: pointer;
+    }
+}
+
+/* Social Actions */
+.social-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 0.25rem;
+
+    .action-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.375rem;
+        cursor: pointer;
+
+        .icon-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+
+            &.white-circle {
+                background: #ffffff;
+
+                .blue-text {
+                    color: #1877F2;
+                }
+            }
+
+            &.telegram {
+                background: #2AABEE;
+                color: #ffffff;
+            }
+
+            &.facebook {
+                background: #1877F2;
+                color: #ffffff;
+            }
+
+            &.instagram {
+                background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+                color: #ffffff;
+            }
+
+            &.whatsapp {
+                background: #25D366;
+                color: #ffffff;
+            }
+        }
+
+        .action-label {
+            color: #ffffff;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.1;
+        }
+    }
+}
+
+/* Close Button */
+.close-btn-wrapper {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+
+    .close-circle {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: #ffffff;
+        font-size: 1.5rem;
+    }
+}

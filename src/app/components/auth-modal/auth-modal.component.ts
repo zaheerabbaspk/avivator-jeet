@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonModal, IonInput, IonCheckbox, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { personOutline, lockClosedOutline, eyeOutline, eyeOffOutline, closeCircleOutline, gift } from 'ionicons/icons';
+import { personOutline, lockClosedOutline, eyeOutline, eyeOffOutline, closeCircleOutline, gift, closeCircle, lockClosed, appsOutline, personAdd, person, chevronBack, alertCircle } from 'ionicons/icons';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
@@ -31,8 +31,40 @@ export class AuthModalComponent {
   errorMessage = '';
   isLoading = false;
 
+  showErrors = false;
+
   constructor() {
-    addIcons({ personOutline, lockClosedOutline, eyeOutline, eyeOffOutline, closeCircleOutline, gift });
+    addIcons({ personOutline, lockClosedOutline, eyeOutline, eyeOffOutline, closeCircleOutline, gift, closeCircle, lockClosed, appsOutline, personAdd, person, chevronBack, alertCircle });
+  }
+
+  get passwordStrength(): number {
+    let strength = 0;
+    if (this.password.length > 0) strength++;
+    if (this.password.length >= 6) strength++;
+    if (/[A-Za-z]/.test(this.password) && /[0-9]/.test(this.password)) strength++;
+    if (/[^A-Za-z0-9]/.test(this.password)) strength++;
+    // In screenshot, it's a dummy visual or maybe 2 bars filled. Let's just return 2 if there's any password, or calculate.
+    // If password empty, show 0. If it has some text like the screenshot "..........", it shows 2 bars.
+    return this.password.length > 0 ? Math.max(2, Math.min(4, strength)) : 0;
+  }
+
+  validatePhone(event: any) {
+    let val = event.target.value;
+    
+    // Remove any non-numeric characters
+    val = val.replace(/\D/g, '');
+
+    if (val.startsWith('0')) {
+      alert('Mobile number should not start with 0. Please enter remaining 10 digits.');
+      val = val.substring(1);
+    }
+
+    // Limit to 10 digits
+    if (val.length > 10) {
+      val = val.substring(0, 10);
+    }
+
+    this.account = val;
   }
 
   setAuthMode(mode: 'login' | 'register') {
@@ -56,11 +88,60 @@ export class AuthModalComponent {
     return trimmed;
   }
 
+  private async getAdvancedFingerprint(): Promise<string> {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return btoa(navigator.userAgent).substring(0, 32);
+    
+    // Draw a unique shape with different fills
+    ctx.textBaseline = "top";
+    ctx.font = "14px 'Arial'";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#f60";
+    ctx.fillRect(125, 1, 62, 20);
+    ctx.fillStyle = "#069";
+    ctx.fillText("bp999-fingerprint", 2, 15);
+    ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+    ctx.fillText("bp999-fingerprint", 4, 17);
+    
+    const canvasData = canvas.toDataURL();
+    const rawData = [
+      canvasData,
+      navigator.userAgent,
+      navigator.language,
+      screen.colorDepth,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset(),
+      this.getOrSetDeviceId()
+    ].join('###');
+
+    return btoa(rawData).substring(0, 64);
+  }
+
+  private async getPublicIp(): Promise<string> {
+    try {
+      const response = await fetch('https://api64.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip || '0.0.0.0';
+    } catch (e) {
+      return '0.0.0.0';
+    }
+  }
+
+  private getOrSetDeviceId(): string {
+    let deviceId = localStorage.getItem('app_device_id');
+    if (!deviceId) {
+      deviceId = 'dev_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('app_device_id', deviceId);
+    }
+    return deviceId;
+  }
+
   async handleAuthAction() {
     this.errorMessage = '';
+    this.showErrors = true;
     
     if (!this.account || !this.password) {
-      this.errorMessage = 'Please fill in all fields';
       return;
     }
 
@@ -109,8 +190,25 @@ export class AuthModalComponent {
           return;
         }
 
+        // Strict Anti-Fraud Layer (IP + Canvas Fingerprint + DeviceID)
+        const fingerprint = await this.getAdvancedFingerprint();
+        const deviceId = this.getOrSetDeviceId();
+        const ip = await this.getPublicIp();
+
+        const { data: existingBonusUser } = await this.authService.supabase
+          .from('profiles')
+          .select('id')
+          .or(`device_fingerprint.eq.${fingerprint},device_id.eq.${deviceId},registration_ip.eq.${ip}`)
+          .limit(1);
+
+        let initialBalance = 0;
+        if (invitedByUuid && !existingBonusUser) {
+          initialBalance = 480;
+        } else {
+          console.warn('Fraud check failed or not invited. Balance: 0');
+        }
+
         // Step 2: Immediately upsert the profile row using the returned user ID
-        // This must happen BEFORE onAuthStateChange fires refreshProfile
         const { error: profileError } = await this.authService.supabase
           .from('profiles')
           .upsert({
@@ -119,9 +217,12 @@ export class AuthModalComponent {
             email: sanitizedAccount,
             game_id: generatedGameId,
             status: 'active',
-            balance: 0,
+            balance: initialBalance,
             package: 'Free',
             invited_by: invitedByUuid,
+            device_fingerprint: fingerprint,
+            device_id: deviceId,
+            registration_ip: ip,
             lucky_spins: 0,
             updated_at: new Date().toISOString()
           });

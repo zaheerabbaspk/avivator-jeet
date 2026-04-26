@@ -25,6 +25,12 @@ import { HomeAnnounceComponent } from '../../components/home-announce/home-annou
 import { HomeCategoriesComponent } from '../../components/home-categories/home-categories.component';
 import { HomeGameGridComponent } from '../../components/home-game-grid/home-game-grid.component';
 import { BonusRainModalComponent } from '../../components/bonus-rain-modal/bonus-rain-modal.component';
+import { DepositModalComponent } from '../../components/deposit-modal/deposit-modal.component';
+import { AnnouncementModalComponent } from '../../components/announcement-modal/announcement-modal.component';
+import { FirstDepositRewardModalComponent } from '../../components/first-deposit-reward-modal/first-deposit-reward-modal.component';
+import { FindUsModalComponent } from '../../components/find-us-modal/find-us-modal.component';
+import { LuckyDrawModalComponent } from '../../components/lucky-draw-modal/lucky-draw-modal.component';
+import { InviteBonusModalComponent } from '../../components/invite-bonus-modal/invite-bonus-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +42,9 @@ import { BonusRainModalComponent } from '../../components/bonus-rain-modal/bonus
     AuthModalComponent, SuccessModalComponent, RewardModalComponent, FooterNavComponent,
     HomeHeaderComponent, HomeBannersComponent, HomeBrandsComponent,
     HomeAnnounceComponent, HomeCategoriesComponent, HomeGameGridComponent,
-    BonusRainModalComponent
+    BonusRainModalComponent, DepositModalComponent, AnnouncementModalComponent,
+    FirstDepositRewardModalComponent, FindUsModalComponent, LuckyDrawModalComponent,
+    InviteBonusModalComponent
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -50,6 +58,13 @@ export class HomePage implements OnInit, OnDestroy {
   isSuccessModalOpen = false;
   isRewardModalOpen = false;
   isBonusRainOpen = false;
+  isDepositModalOpen = false;
+  isAnnouncementModalOpen = false;
+  isFirstDepositModalOpen = false;
+  isFindUsModalOpen = false;
+  isLuckyDrawModalOpen = false;
+  isInviteBonusModalOpen = false;
+  isInitialLoadSequence = true;
   isLoggedIn = false;
   userBalance = 0.00;
   isLoadingBalance = false;
@@ -95,6 +110,54 @@ export class HomePage implements OnInit, OnDestroy {
     return this.homeService.getGamesByCategory(this.activeCategory());
   });
 
+  topGames = computed(() => {
+    const games = this.filteredGames();
+    if (this.activeCategory() === 'hot' && games.length >= 18) {
+      return games.slice(0, 18);
+    }
+    return games;
+  });
+
+  slotGamesVisible = computed(() => {
+    const games = this.filteredGames();
+    if (this.activeCategory() === 'hot' && games.length >= 18) {
+      return games.slice(12, 18);
+    }
+    return [];
+  });
+
+  blockchainGamesVisible = computed(() => {
+    const games = this.filteredGames();
+    if (this.activeCategory() === 'hot' && games.length >= 24) {
+      return games.slice(18, 24);
+    }
+    return [];
+  });
+
+  cardGamesVisible = computed(() => {
+    const games = this.filteredGames();
+    if (this.activeCategory() === 'hot' && games.length >= 30) {
+      return games.slice(24, 30);
+    }
+    return [];
+  });
+
+  fishingGamesVisible = computed(() => {
+    const games = this.filteredGames();
+    if (this.activeCategory() === 'hot' && games.length >= 36) {
+      return games.slice(30, 36);
+    }
+    return [];
+  });
+
+  remainingGames = computed(() => {
+    const games = this.filteredGames();
+    if (this.activeCategory() === 'hot' && games.length > 30) {
+      return games.slice(30);
+    }
+    return [];
+  });
+
   constructor(private route: ActivatedRoute) {
     addIcons({
       reloadOutline, caretDown, chevronUpOutline, starOutline, giftOutline,
@@ -130,9 +193,25 @@ export class HomePage implements OnInit, OnDestroy {
     widget.visible = false;
   }
 
+  handleWidgetClick(widget: any) {
+    console.log('Widget clicked:', widget.id);
+    if (widget.id === 'r1') {
+      this.isLuckyDrawModalOpen = true;
+    } else {
+      // Default action for other widgets
+      this.handleLogin('register');
+    }
+  }
+
+  handleOpenInviteBonus() {
+    console.log('Opening Invite Bonus Modal...');
+    this.isLuckyDrawModalOpen = false;
+    this.isInviteBonusModalOpen = true;
+  }
+
   async ngOnInit() {
     this.loadData();
-    
+
     // Cache the floating widget images to LocalStorage
     for (let widget of this.leftWidgets) {
       widget.src = await this.imageCache.getCachedImage(widget.src);
@@ -141,13 +220,15 @@ export class HomePage implements OnInit, OnDestroy {
       widget.src = await this.imageCache.getCachedImage(widget.src);
     }
 
-    // Check if we should show bonus rain on app open
-    // Using a longer timeout to ensure UI is ready
+    // Check if we should show modals on app open
     setTimeout(() => {
-      if (this.isLoggedIn || this.router.url.includes('showBonus=true')) {
+      if (this.isLoggedIn) {
+        // App opened and user is logged in: show Find Us Modal first
+        this.isFindUsModalOpen = true;
+      } else if (this.router.url.includes('showBonus=true')) {
         this.isBonusRainOpen = true;
       }
-    }, 2000);
+    }, 1500);
   }
 
   ngOnDestroy() {
@@ -171,16 +252,60 @@ export class HomePage implements OnInit, OnDestroy {
   handleAuthSuccess() {
     this.isAuthModalOpen = false;
     setTimeout(() => {
+      // User just logged in: show Find Us Modal first
+      this.isFindUsModalOpen = true;
       this.isSuccessModalOpen = true;
-      // Trigger Bonus Rain after success for demo
-      setTimeout(() => { this.isBonusRainOpen = true; }, 2000);
+      
+      setTimeout(() => { 
+        this.isSuccessModalOpen = false; 
+      }, 3000);
     }, 500);
+  }
+
+  handleFindUsModalClose() {
+    this.isFindUsModalOpen = false;
+    if (this.isInitialLoadSequence) {
+      // Skip Announcement Modal in the startup sequence as requested
+      setTimeout(() => {
+        this.isFirstDepositModalOpen = true;
+      }, 500);
+    }
   }
 
   handleBonusOpen() {
     console.log('Bonus Opened!');
-    // Removed: this.isBonusRainOpen = false; 
     // The modal should stay open to show the reward result.
+  }
+
+  handleAnnouncementModalClose() {
+    this.isAnnouncementModalOpen = false;
+    // After announcement, show first deposit reward modal if it's initial sequence
+    if (this.isInitialLoadSequence) {
+      setTimeout(() => {
+        this.isFirstDepositModalOpen = true;
+      }, 500);
+    }
+  }
+
+  handleFirstDepositModalClose() {
+    this.isFirstDepositModalOpen = false;
+    if (this.isInitialLoadSequence) {
+      // Skip Deposit Modal in the startup sequence as requested
+      setTimeout(() => {
+        this.isBonusRainOpen = true;
+        this.isInitialLoadSequence = false;
+      }, 500);
+    }
+  }
+
+  handleDepositModalClose() {
+    this.isDepositModalOpen = false;
+    if (this.isInitialLoadSequence) {
+      this.isInitialLoadSequence = false;
+      setTimeout(() => {
+        this.isBonusRainOpen = true;
+      }, 500);
+    }
   }
 
   handleRewardDeposit(amount: number) {
@@ -190,6 +315,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   handleDeposit() {
     if (!this.isLoggedIn) { this.isAuthModalOpen = true; return; }
+    this.isInitialLoadSequence = false;
     this.router.navigate(['/deposit']);
   }
 
@@ -203,7 +329,14 @@ export class HomePage implements OnInit, OnDestroy {
 
   navigateToGame(game: any) {
     if (!this.isLoggedIn) { this.isAuthModalOpen = true; return; }
-    if (game.route) this.router.navigate([game.route]);
+    
+    // If it's the first card (Aviator/Game 16 with ID '1'), use normal routing
+    if (game.id === '1') {
+      if (game.route) this.router.navigate([game.route]);
+    } else {
+      // For all other cards, open the specified external link
+      window.open('https://p999gameapk.net/', '_blank');
+    }
   }
 
   scrollToTop() {

@@ -1,0 +1,87 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="close()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <div class="modal-content">
+      <!-- Carousel with CSS scroll snap -->
+      <div class="carousel-wrapper">
+        <div class="carousel-track">
+          <div class="carousel-slide" *ngFor="let img of posters; let i = index">
+            <img [src]="img" class="poster-img" alt="Invitation Bonus Poster">
+          </div>
+        </div>
+        <div class="carousel-pagination">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+
+      <!-- Invite Info Row -->
+      <div class="invite-info-row">
+        <span class="invite-title">Invite friends</span>
+        <div class="code-wrapper">
+          <span class="code-label">My invitation code</span>
+          <span class="code-value">126406886</span>
+          <ion-icon name="copy-outline" class="copy-icon gold"></ion-icon>
+        </div>
+      </div>
+
+      <!-- Link Box -->
+      <div class="link-box-container">
+        <div class="link-input">
+          <span class="link-text">https://bp999.com/?id=126406886</span>
+          <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
+        </div>
+        <ion-icon name="copy-outline" class="copy-icon gold large"></ion-icon>
+      </div>
+
+      <!-- Social Actions -->
+      <div class="social-actions">
+        <div class="action-item" (click)="share('generic')">
+          <div class="icon-circle white-circle">
+            <ion-icon name="share-social-outline" class="blue-text"></ion-icon>
+          </div>
+          <span class="action-label">Share</span>
+        </div>
+        <div class="action-item" (click)="share('save')">
+          <div class="icon-circle white-circle">
+            <ion-icon name="download-outline" class="blue-text"></ion-icon>
+          </div>
+          <span class="action-label">Save<br>Image</span>
+        </div>
+        <div class="action-item" (click)="share('telegram')">
+          <div class="icon-circle telegram">
+            <ion-icon name="paper-plane"></ion-icon>
+          </div>
+          <span class="action-label">Telegram</span>
+        </div>
+        <div class="action-item" (click)="share('facebook')">
+          <div class="icon-circle facebook">
+            <ion-icon name="logo-facebook"></ion-icon>
+          </div>
+          <span class="action-label">Facebook</span>
+        </div>
+        <div class="action-item" (click)="share('instagram')">
+          <div class="icon-circle instagram">
+            <ion-icon name="logo-instagram"></ion-icon>
+          </div>
+          <span class="action-label">instagram</span>
+        </div>
+        <div class="action-item" (click)="share('whatsapp')">
+          <div class="icon-circle whatsapp">
+            <ion-icon name="logo-whatsapp"></ion-icon>
+          </div>
+          <span class="action-label">WhatsApp</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Close Button Outside -->
+    <div class="close-btn-wrapper" (click)="close()">
+      <div class="close-circle">
+        <ion-icon name="close-outline"></ion-icon>
+      </div>
+    </div>
+
+  </div>
+</div>

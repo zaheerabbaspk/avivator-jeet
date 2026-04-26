@@ -59,7 +59,8 @@
 
 
 <!-- Lucky Draw Modal Render -->
-<app-lucky-draw-modal [isOpen]="isSpinModalOpen" (modalClose)="isSpinModalOpen = false"></app-lucky-draw-modal>
+<app-lucky-draw-modal [isOpen]="isSpinModalOpen" (modalClose)="isSpinModalOpen = false" (openInviteBonus)="handleOpenInviteBonus()"></app-lucky-draw-modal>
+<app-invite-bonus-modal [isOpen]="isInviteBonusModalOpen" (modalClose)="isInviteBonusModalOpen = false"></app-invite-bonus-modal>
 
 <!-- Floating Brand Logo Overlay -->
 @if (isFloatingLogoVisible) {
@@ -80,11 +81,4 @@
 
 <app-footer-nav activeTab="invite"></app-footer-nav>
 
-<ion-toast
-  [isOpen]="showCopyToast"
-  [message]="toastMessage"
-  [duration]="2000"
-  (didDismiss)="showCopyToast = false"
-  position="top"
-  class="custom-toast"
-></ion-toast>
+

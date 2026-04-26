@@ -1,6 +1,6 @@
 <div class="px-3.5 space-y-4">
   @for (offer of offers; track offer.id) {
   <app-offer-card [offer]="offer" (cardClick)="offerClick.emit(offer)"
-    (shareClick)="offerClick.emit(offer)"></app-offer-card>
+    (shareClick)="shareClick.emit(offer)"></app-offer-card>
   }
 </div>

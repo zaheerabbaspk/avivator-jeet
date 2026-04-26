@@ -1,6 +1,6 @@
 <ion-content class="[--background:#111419]">
   <!-- Top Background Header -->
-  <div class="relative w-full min-h-[220px] bg-no-repeat bg-center shrink-0 pb-2"
+  <div class="relative w-full min-h-[180px] xs:min-h-[200px] sm:min-h-[220px] bg-no-repeat bg-center shrink-0 pb-0"
     style="background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/style_1_topbg_yd.avif?version=v7.1.212'); background-size: 100% 100%; padding-top: var(--ion-safe-area-top);">
 
     <!-- Top Nav Icons -->
@@ -26,89 +26,100 @@
     </div>
 
     <!-- User Info Row -->
-    <div class="flex items-center gap-3 px-4 mt-4">
-      <!-- Avatar -->
-      <div class="relative shrink-0">
-        <div
-          class="w-[46px] h-[46px] rounded-full border-2 border-[#F0C059]/50 bg-cover bg-center overflow-hidden"
-          style="background-image: url('https://140.150.30.128:5030/siteadmin/default/2D/img_ntx7.avif');">
-        </div>
-        <div
-          class="absolute bottom-0 right-[-2px] w-[16px] h-[16px] bg-[#F0C059] rounded-full flex items-center justify-center border border-[#111419] cursor-pointer"
-          (click)="isProfileEditModalOpen = true">
-          <ion-icon name="pencil-outline" class="text-[#111419] text-[8px]"></ion-icon>
-        </div>
-      </div>
+    <ion-grid class="mt-2 xs:mt-4 px-4">
+      <ion-row class="ion-align-items-center ion-nowrap">
+        <!-- Avatar -->
+        <ion-col size="auto" class="ion-no-padding">
+          <div class="relative">
+            <div
+              class="w-[50px] h-[50px] rounded-full border-2 border-[#F1C15A] bg-cover bg-center overflow-hidden"
+              style="background-image: url('https://jtut-ref.avif'); background-image: url('https://140.150.30.128:5030/siteadmin/default/2D/img_ntx7.avif');">
+            </div>
+            <div
+              class="absolute bottom-0 right-[-2px] w-[18px] h-[18px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-[#111419] cursor-pointer"
+              (click)="isProfileEditModalOpen = true">
+              <ion-icon name="pencil-outline" class="text-[#111419] text-[10px]"></ion-icon>
+            </div>
+          </div>
+        </ion-col>
 
-      <!-- Text Info -->
-      <div class="flex flex-col flex-1 min-w-0">
-        <div class="flex items-center gap-1.5 mb-1">
-          <span class="text-white text-[15px] font-black tracking-tight leading-none truncate max-w-[150px]">{{ user.fullName || 'User' }}</span>
-          <!-- copy box styled same as reference -->
-          <span (click)="copyToClipboard(user.fullName)"
-            class="inline-flex items-center justify-center w-[14px] h-[14px] border border-[#F0C059]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0">
-            <ion-icon name="copy-outline" class="text-[#F0C059] text-[8px]"></ion-icon>
-          </span>
-        </div>
-        
-        <!-- ID + Balance responsive layout -->
-        <div class="user-row-stats">
-          <div class="flex items-center gap-1.5 pt-0.5 shrink-0">
-            <span class="text-[#ADB6C3]/80 text-[11px] font-bold">ID: </span>
-            <span class="text-white text-[11px] font-bold">{{ user.id }}</span>
-            <span (click)="copyToClipboard(user.id)"
-              class="inline-flex items-center justify-center w-[14px] h-[14px] border border-[#F0C059]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0">
-              <ion-icon name="copy-outline" class="text-[#F0C059] text-[8px]"></ion-icon>
+        <!-- Text Info -->
+        <ion-col class="ion-no-padding ion-padding-start min-w-0">
+          <div class="flex items-center gap-1 mb-1">
+            <ion-icon name="caret-down-sharp" class="text-white/40 text-[12px]"></ion-icon>
+            <span
+              class="text-white text-[14px] xs:text-[16px] font-black tracking-tight leading-none truncate max-w-[150px]">{{
+              user.fullName || 'jtut7789' }}</span>
+            <span (click)="copyToClipboard(user.fullName)"
+              class="inline-flex items-center justify-center w-[14px] xs:w-[16px] h-[14px] xs:h-[16px] border border-[#F1C15A]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0 ml-1">
+              <ion-icon name="copy-outline" class="text-[#F1C15A] text-[9px] xs:text-[10px]"></ion-icon>
             </span>
           </div>
 
-          <!-- Balance block -->
-          <div class="profile-balance-block">
-            <div class="w-[18px] h-[18px] rounded-full overflow-hidden flex-shrink-0 shadow-sm" *ngIf="!isLoadingBalance">
-              <img src="https://140.150.30.128:5030/siteadmin/upload/img/PKR.avif" alt="PKR"
-                class="w-full h-full object-cover">
+          <div class="flex items-center flex-wrap gap-x-2 gap-y-1">
+            <div class="flex items-center gap-1 shrink-0">
+              <span class="text-white/60 text-[12px] xs:text-[14px] font-bold">ID: </span>
+              <span class="text-white text-[12px] xs:text-[14px] font-bold">{{ user.id || '126406886' }}</span>
+              <span (click)="copyToClipboard(user.id)"
+                class="inline-flex items-center justify-center w-[14px] xs:w-[16px] h-[14px] xs:h-[16px] border border-[#F1C15A]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0">
+                <ion-icon name="copy-outline" class="text-[#F1C15A] text-[9px] xs:text-[10px]"></ion-icon>
+              </span>
             </div>
-            <span *ngIf="!isLoadingBalance" class="text-white font-black text-[16px] tracking-tight leading-none overflow-hidden text-ellipsis">{{ user.balance }}</span>
-            <span *ngIf="isLoadingBalance" class="text-[#F0C059] font-black text-[13px] tracking-tight leading-none">Loading</span>
-            <ion-icon name="sync-outline"
-              class="text-[#F0C059] text-[15px] cursor-pointer shrink-0"
-              [class.animate-spin]="isLoadingBalance"
-              (click)="refreshBalance()"></ion-icon>
+
+            <div class="w-[1px] h-3 bg-white/10 mx-1"></div>
+
+            <div class="flex items-center gap-1.5 min-w-0 ml-2 profile-balance-block">
+              <div class="w-[18px] h-[12px] rounded-sm overflow-hidden flex-shrink-0 shadow-sm border border-white/10">
+                <img src="https://jtut-ref-flag.avif" src="https://140.150.30.128:5030/siteadmin/upload/img/PKR.avif"
+                  alt="PKR" class="w-full h-full object-cover">
+              </div>
+              <span
+                class="text-white font-black text-[14px] xs:text-[18px] tracking-tighter leading-none truncate underline decoration-[#F1C15A]/40 decoration-2 underline-offset-2">{{
+                user.balance || '0.78' }}</span>
+              <ion-icon name="sync-outline" class="text-[#F1C15A] text-[14px] xs:text-[16px] cursor-pointer shrink-0"
+                [class.animate-spin]="isLoadingBalance" (click)="refreshBalance()"></ion-icon>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
     <!-- Withdraw / Deposit Action Row -->
-    <div class="flex justify-around items-end px-2 mt-6 mb-4">
-      <!-- Withdraw -->
-      <div (click)="navigateTo('/withdraw')"
-        class="action-item flex flex-col items-center gap-1 active:scale-95 transition-transform cursor-pointer">
-        <svg width="28" height="24" viewBox="0 0 53 46.375" fill="#F0C059">
-          <path
-            d="M39.1,35.775H4.632A4.623,4.623,0,0,1,0,31.187v-5.9a7.9,7.9,0,0,0,5.117-7.376A7.9,7.9,0,0,0,0,10.531V4.586A4.623,4.623,0,0,1,4.633,0H39.1A4.625,4.625,0,0,1,42.37,1.347a4.543,4.543,0,0,1,1.355,3.239v5.877a7.876,7.876,0,0,0,0,14.89v5.836A4.618,4.618,0,0,1,39.1,35.774ZM11.925,10.96a1.99,1.99,0,0,0-1.987,1.987V24.872a1.99,1.99,0,0,0,1.987,1.988H31.8a1.99,1.99,0,0,0,1.987-1.988V12.947A1.99,1.99,0,0,0,31.8,10.96ZM26.84,9.037a1.988,1.988,0,0,1,1.489.673h2.693L30.463,7.47a1.984,1.984,0,0,0-2.409-1.448L13.265,9.71H23.7l2.691-.621A1.974,1.974,0,0,1,26.84,9.037Zm2.12,15.551H14.765a2.843,2.843,0,0,0-2.84-2.839V16.071a2.844,2.844,0,0,0,2.84-2.839h14.2a2.843,2.843,0,0,0,2.84,2.839v5.679a2.845,2.845,0,0,0-2.841,2.838Zm-7.1-8.328a2.65,2.65,0,1,0,2.65,2.65A2.653,2.653,0,0,0,21.863,16.26Z"
-            transform="translate(4.638 4.969)"></path>
-        </svg>
-        <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Withdraw</span>
-      </div>
-      <!-- Deposit -->
-      <div (click)="navigateTo('/deposit')"
-        class="action-item flex flex-col items-center gap-1 relative active:scale-95 transition-transform cursor-pointer">
-        <div
-          class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#EA4E3D] text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow z-30 whitespace-nowrap">
-          +0.5%</div>
-        <img
-          src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/gif_profile_style1.avif?version=v7.1.212"
-          alt="Deposit" class="w-[28px] h-[24px] object-contain">
-        <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Deposit</span>
-      </div>
-    </div>
+    <ion-grid class="mt-4 xs:mt-6 mb-2 xs:mb-4 px-2 action-row">
+      <ion-row class="ion-align-items-end">
+        <!-- Withdraw -->
+        <ion-col size="6" class="ion-text-center">
+          <div (click)="navigateTo('/withdraw')"
+            class="action-item flex flex-col items-center gap-1 active:scale-95 transition-transform cursor-pointer">
+            <svg width="28" height="24" viewBox="0 0 53 46.375" fill="#F0C059">
+              <path
+                d="M39.1,35.775H4.632A4.623,4.623,0,0,1,0,31.187v-5.9a7.9,7.9,0,0,0,5.117-7.376A7.9,7.9,0,0,0,0,10.531V4.586A4.623,4.623,0,0,1,4.633,0H39.1A4.625,4.625,0,0,1,42.37,1.347a4.543,4.543,0,0,1,1.355,3.239v5.877a7.876,7.876,0,0,0,0,14.89v5.836A4.618,4.618,0,0,1,39.1,35.774ZM11.925,10.96a1.99,1.99,0,0,0-1.987,1.987V24.872a1.99,1.99,0,0,0,1.987,1.988H31.8a1.99,1.99,0,0,0,1.987-1.988V12.947A1.99,1.99,0,0,0,31.8,10.96ZM26.84,9.037a1.988,1.988,0,0,1,1.489.673h2.693L30.463,7.47a1.984,1.984,0,0,0-2.409-1.448L13.265,9.71H23.7l2.691-.621A1.974,1.974,0,0,1,26.84,9.037Zm2.12,15.551H14.765a2.843,2.843,0,0,0-2.84-2.839V16.071a2.844,2.844,0,0,0,2.84-2.839h14.2a2.843,2.843,0,0,0,2.84,2.839v5.679a2.845,2.845,0,0,0-2.841,2.838Zm-7.1-8.328a2.65,2.65,0,1,0,2.65,2.65A2.653,2.653,0,0,0,21.863,16.26Z"
+                transform="translate(4.638 4.969)"></path>
+            </svg>
+            <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Withdraw</span>
+          </div>
+        </ion-col>
+        <!-- Deposit -->
+        <ion-col size="6" class="ion-text-center">
+          <div (click)="navigateTo('/deposit')"
+            class="action-item flex flex-col items-center gap-1 relative active:scale-95 transition-transform cursor-pointer">
+            <div
+              class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#EA4E3D] text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow z-30 whitespace-nowrap">
+              +0.5%</div>
+            <img
+              src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/gif_profile_style1.avif?version=v7.1.212"
+              alt="Deposit" class="w-[28px] h-[24px] object-contain">
+            <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Deposit</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 
   <!-- VIP Card -->
   <div class="px-3 vip-card-container">
     <div (click)="navigateTo('/vip')"
-      class="relative w-full h-[100px] bg-[#F1C15A] rounded-xl overflow-hidden shadow-lg active:scale-[0.98] transition-all cursor-pointer">
+      class="vip-card-inner relative w-full h-[100px] bg-[#F1C15A] rounded-xl overflow-hidden shadow-lg active:scale-[0.98] transition-all cursor-pointer">
       <!-- Background subtle curves -->
       <div class="absolute inset-0 opacity-20 pointer-events-none"
         style="background-image: radial-gradient(circle at 0px 50%, rgba(255,255,255,0.8), transparent 60%);"></div>
@@ -116,15 +127,14 @@
       <div class="relative flex items-center justify-between h-full px-4 z-10">
         <!-- Cluster Left: Badge + V0 + Progress -->
         <div class="flex items-center gap-2.5 shrink-0">
-          <div
-            class="vip-level-badge">
+          <div class="vip-level-badge">
             <span class="text-white font-black text-[18px] italic leading-none drop-shadow-md">0</span>
           </div>
           <div class="flex flex-col gap-0.5">
-            <span class="text-[#111419] text-[24px] font-black italic tracking-tighter leading-none select-none">V0</span>
+            <span
+              class="text-[#111419] text-[24px] font-black italic tracking-tighter leading-none select-none">V0</span>
             <!-- Progress Bar -->
-            <div
-              class="vip-progress-bar">
+            <div class="vip-progress-bar">
               <div class="h-full bg-white/40 w-0"></div>
               <span
                 class="absolute inset-0 flex items-center justify-center text-[6px] font-bold text-[#8B6B23] tracking-tighter whitespace-nowrap italic">0.00/10,000.00</span>
@@ -133,15 +143,17 @@
         </div>
 
         <!-- Right Section -->
-        <div class="flex flex-col items-end gap-1 mr-1 shrink-0 overflow-hidden">
-          <div class="flex items-baseline gap-1.5">
-            <span
-              class="text-[#8B6B23] text-[9px] font-black uppercase tracking-tight select-none leading-none">Bonus</span>
-            <span class="text-[#5C4011] text-[24px] font-black italic tracking-tight leading-none select-none">{{ user.bonus || '50.00' }}</span>
+        <div class="flex flex-col items-end gap-0.5 mr-1 shrink-0 overflow-hidden">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[#8B6B23] text-[10px] font-bold select-none leading-none">Bonus</span>
+            <span class="text-[#5C4011] text-[20px] font-black italic tracking-tight leading-none select-none">{{
+              user.bonus || '50.00' }}</span>
           </div>
           <div class="flex items-center gap-0.5 whitespace-nowrap">
-            <span class="text-[#8B6B23]/70 text-[7px] font-bold uppercase tracking-tight leading-none">Requires</span>
-            <span class="text-[#5C4011]/80 text-[8px] font-black leading-none">10,000.00</span>
+            <span class="text-[#8B6B23]/70 text-[8px] font-bold tracking-tight leading-none">VIP requires</span>
+            <span class="text-[#5C4011] text-[8px] font-black leading-none underline underline-offset-1">Bets</span>
+            <span class="text-[#5C4011]/80 text-[8px] font-black leading-none">{{ user.requiredBets || '9,922.12'
+              }}</span>
           </div>
         </div>
 
@@ -159,7 +171,7 @@
     <div class="bg-[#1E2128] rounded-xl overflow-hidden border border-white/5">
       <!-- My records -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/records')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -169,14 +181,14 @@
           </svg>
           <span class="text-white text-[13px] font-bold">My records</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[#ADB6C3]/35 text-[10px] hidden xs:block text-right leading-snug">Details, bets, reports,
-            recover<br>balance</span>
-          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <div class="flex items-center gap-2 overflow-hidden">
+          <span class="text-[#ADB6C3]/40 text-[10px] text-right leading-[1.2] truncate">Details, bets, reports, recover
+            balance</span>
+          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px] shrink-0"></ion-icon>
         </div>
       </div>
       <!-- Manage withdrawal -->
-      <div class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer">
+      <div class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer menu-list-item" (click)="navigateTo('/withdraw')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
@@ -193,7 +205,7 @@
     <div class="bg-[#1E2128] rounded-xl overflow-hidden border border-white/5">
       <!-- Invite -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer overflow-hidden"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer overflow-hidden menu-list-item"
         (click)="navigateTo('/invite')">
         <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -209,16 +221,15 @@
           </svg>
           <span class="text-white text-[13px] font-bold">Invite</span>
         </div>
-        <div class="flex-1 flex items-center overflow-hidden mx-2">
-          <div class="animate-marquee whitespace-nowrap text-[#F0C059] text-[11px] font-black italic">Invite 1 person Rs
-            5,000 &nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="flex items-center gap-2">
+          <span class="text-[#F1C15A] text-[11px] font-bold whitespace-nowrap">1 person Rs 5,000 Invite</span>
+          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px] shrink-0"></ion-icon>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px] shrink-0"></ion-icon>
       </div>
 
       <!-- Profile -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="isProfileEditModalOpen = true">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -233,7 +244,7 @@
 
       <!-- Security Center -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/security')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -254,7 +265,7 @@
 
       <!-- Find us -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/find-us')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -290,7 +301,7 @@
 
       <!-- FAQ -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/faq')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -305,7 +316,7 @@
 
       <!-- Reward Feedback -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/feedback')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -320,7 +331,7 @@
 
       <!-- Login device -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/login-device')">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
@@ -334,7 +345,7 @@
       </div>
 
       <!-- Quit -->
-      <div (click)="logout()" class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer">
+      <div (click)="logout()" class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer menu-list-item">
         <div class="flex items-center gap-3">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
@@ -352,8 +363,6 @@
 
 <app-footer-nav activeTab="profile"></app-footer-nav>
 <app-auth-modal [isOpen]="isAuthModalOpen" (close)="isAuthModalOpen = false"></app-auth-modal>
-<ion-toast [isOpen]="showCopyToast" [message]="toastMessage" [duration]="2000" (didDismiss)="showCopyToast = false"
-  position="top" class="copy-toast"></ion-toast>
 <app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false"
   (depositClick)="handleRewardDeposit($event)"></app-reward-modal>
 <app-profile-edit-modal [isOpen]="isProfileEditModalOpen" [fullName]="user.fullName" [phone]="user.phone"

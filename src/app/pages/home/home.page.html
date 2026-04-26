@@ -1,11 +1,6 @@
 <ion-header class="ion-no-border">
-  <app-home-header 
-    [isLoggedIn]="isLoggedIn" 
-    [userBalance]="userBalance" 
-    [isLoadingBalance]="isLoadingBalance"
-    (login)="handleLogin($event)"
-    (deposit)="handleDeposit()"
-    (refresh)="refreshBalance()">
+  <app-home-header [isLoggedIn]="isLoggedIn" [userBalance]="userBalance" [isLoadingBalance]="isLoadingBalance"
+    (login)="handleLogin($event)" (deposit)="handleDeposit()" (refresh)="refreshBalance()">
   </app-home-header>
 </ion-header>
 
@@ -21,9 +16,7 @@
     <!-- Announcement Bar -->
     <app-home-announce></app-home-announce>
 
-    <app-home-categories 
-      [categories]="categories" 
-      [activeCategory]="activeCategory()"
+    <app-home-categories [categories]="categories" [activeCategory]="activeCategory()"
       (categoryChange)="handleCategoryChange($event)">
     </app-home-categories>
 
@@ -41,10 +34,92 @@
     </div>
 
     <!-- Game Card Grid -->
-    <app-home-game-grid 
-      [games]="filteredGames()"
-      (gameClick)="navigateToGame($event)">
+    @if (activeCategory() === 'hot' && blockchainGamesVisible().length > 0) {
+    <app-home-game-grid [games]="topGames().slice(0, 12)" (gameClick)="navigateToGame($event)">
     </app-home-game-grid>
+
+    <!-- Slot Section -->
+    <div class="slot-section section-container">
+      <div class="section-header">
+        <div class="section-title">
+          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_dz_1.avif?manualVersion=1&version=12588989f7" alt="Slot" class="slot-icon section-icon">
+          <span>Slot</span>
+        </div>
+        <div class="section-nav">
+          <button class="nav-arr">&lt;</button>
+          <span class="nav-all">All</span>
+          <button class="nav-arr">&gt;</button>
+        </div>
+      </div>
+      <app-home-game-grid [games]="slotGamesVisible()" (gameClick)="navigateToGame($event)">
+      </app-home-game-grid>
+    </div>
+
+    <!-- Blockchain Section -->
+    <div class="blockchain-section">
+      <div class="section-header">
+        <div class="section-title">
+          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qkl_1.avif?manualVersion=1&version=ae3b8216e5" alt="Blockchain" class="blockchain-icon">
+          <span>Blockchain</span>
+        </div>
+        <div class="section-nav">
+          <button class="nav-arr">&lt;</button>
+          <span class="nav-all">All</span>
+          <button class="nav-arr">&gt;</button>
+        </div>
+      </div>
+
+      <div class="jackpot-banner">
+        <img src="https://140.150.30.128:5030/cocos/icon/vjp/1976255651440631810.avif" alt="Jackpot">
+        <div class="jackpot-amount">487,255,256.16</div>
+      </div>
+
+      <app-home-game-grid [games]="blockchainGamesVisible()" (gameClick)="navigateToGame($event)">
+      </app-home-game-grid>
+    </div>
+
+    <app-home-game-grid [games]="remainingGames()" (gameClick)="navigateToGame($event)">
+    </app-home-game-grid>
+
+    <!-- Cards Section -->
+    <div class="cards-section section-container">
+      <div class="section-header">
+        <div class="section-title">
+          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qp_1.avif?manualVersion=1&version=9b85d5fd9e" alt="Cards" class="cards-icon section-icon">
+          <span>Cards</span>
+        </div>
+        <div class="section-nav">
+          <button class="nav-arr">&lt;</button>
+          <span class="nav-all">All</span>
+          <button class="nav-arr">&gt;</button>
+        </div>
+      </div>
+
+      <app-home-game-grid [games]="cardGamesVisible()" (gameClick)="navigateToGame($event)">
+      </app-home-game-grid>
+    </div>
+
+    <!-- Fishing Section -->
+    <div class="fishing-section section-container">
+      <div class="section-header">
+        <div class="section-title">
+          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_by_1.avif?manualVersion=1&version=b8445639f9" alt="Fishing" class="fishing-icon section-icon">
+          <span>Fishing</span>
+        </div>
+        <div class="section-nav">
+          <button class="nav-arr">&lt;</button>
+          <span class="nav-all">All</span>
+          <button class="nav-arr">&gt;</button>
+        </div>
+      </div>
+
+      <app-home-game-grid [games]="fishingGamesVisible()" (gameClick)="navigateToGame($event)">
+      </app-home-game-grid>
+    </div>
+    } @else {
+    <app-home-game-grid [games]="filteredGames()" (gameClick)="navigateToGame($event)">
+    </app-home-game-grid>
+    }
 
   </div>
 
@@ -81,7 +156,9 @@
 
     <div class="footer-license-header">
       <h3>License Compliance</h3>
-      <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/common/common/common/18plus.avif?manualVersion=1&version=10fea753dc" alt="18+">
+      <img
+        src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/common/common/common/18plus.avif?manualVersion=1&version=10fea753dc"
+        alt="18+">
     </div>
 
     <div class="license-divider"></div>
@@ -102,7 +179,10 @@
     </div>
 
     <p class="license-text">
-      bp999 is the most well-known international online gaming operator, providing exciting and fun live dealer casino, chess, electronic, fishing, lottery, sports and other full-category games. It is authorized and regulated by the government of Curacao and operates under license 8048/JAZ issued by Antillephone. Passed all compliance checks and is legally authorized to all operations of games of chance and betting games.
+      bp999 is the most well-known international online gaming operator, providing exciting and fun live dealer casino,
+      chess, electronic, fishing, lottery, sports and other full-category games. It is authorized and regulated by the
+      government of Curacao and operates under license 8048/JAZ issued by Antillephone. Passed all compliance checks and
+      is legally authorized to all operations of games of chance and betting games.
     </p>
 
     <div class="footer-bottom-flex">
@@ -112,10 +192,7 @@
     </div>
   </div>
 
-  <div class="top-fab" (click)="scrollToTop()">
-    <ion-icon name="chevron-up-outline"></ion-icon>
-    <span>TOP</span>
-  </div>
+
 </ion-content>
 
 <!-- Footer Nav -->
@@ -124,29 +201,39 @@
 <!-- Floating Left Icons -->
 <div class="floating-icons left" [class.is-scrolling]="isScrolling()">
   @for (widget of leftWidgets; track widget.id) {
-    @if (widget.visible) {
-      <div class="float-widget">
-        <ion-icon class="close-btn" name="close" (click)="hideWidget(widget, $event)"></ion-icon>
-        <img [src]="widget.src" alt="Promo Left">
-      </div>
-    }
+  @if (widget.visible) {
+  <div class="float-widget">
+    <ion-icon class="close-btn" name="close" (click)="hideWidget(widget, $event)"></ion-icon>
+    <img [src]="widget.src" alt="Promo Left" (click)="handleWidgetClick(widget)">
+  </div>
+  }
   }
 </div>
 
 <!-- Floating Right Icons -->
 <div class="floating-icons right" [class.is-scrolling]="isScrolling()">
   @for (widget of rightWidgets; track widget.id) {
-    @if (widget.visible) {
-      <div class="float-widget">
-        <ion-icon class="close-btn" name="close" (click)="hideWidget(widget, $event)"></ion-icon>
-        <img [src]="widget.src" alt="Promo Right">
-      </div>
-    }
+  @if (widget.visible) {
+  <div class="float-widget">
+    <ion-icon class="close-btn" name="close" (click)="hideWidget(widget, $event)"></ion-icon>
+    <img [src]="widget.src" alt="Promo Right" (click)="handleWidgetClick(widget)">
+  </div>
+  }
   }
 </div>
 
 <!-- Modals -->
-<app-auth-modal [isOpen]="isAuthModalOpen" [authMode]="authMode" (close)="isAuthModalOpen = false" (authSuccess)="handleAuthSuccess()"></app-auth-modal>
-<app-success-modal [isOpen]="isSuccessModalOpen" (close)="isSuccessModalOpen = false" (deposit)="handleDeposit()"></app-success-modal>
-<app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false" (depositClick)="handleRewardDeposit($event)"></app-reward-modal>
-<app-bonus-rain-modal [isOpen]="isBonusRainOpen" (modalClose)="isBonusRainOpen = false" (openBonus)="handleBonusOpen()"></app-bonus-rain-modal>
+<app-auth-modal [isOpen]="isAuthModalOpen" [authMode]="authMode" (close)="isAuthModalOpen = false"
+  (authSuccess)="handleAuthSuccess()"></app-auth-modal>
+<app-success-modal [isOpen]="isSuccessModalOpen" (close)="isSuccessModalOpen = false"
+  (deposit)="handleDeposit()"></app-success-modal>
+<app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false"
+  (depositClick)="handleRewardDeposit($event)"></app-reward-modal>
+<app-bonus-rain-modal [isOpen]="isBonusRainOpen" (modalClose)="isBonusRainOpen = false"
+  (openBonus)="handleBonusOpen()"></app-bonus-rain-modal>
+<app-deposit-modal [isOpen]="isDepositModalOpen" (close)="handleDepositModalClose()"></app-deposit-modal>
+<app-announcement-modal [isOpen]="isAnnouncementModalOpen" (close)="handleAnnouncementModalClose()"></app-announcement-modal>
+<app-first-deposit-reward-modal [isOpen]="isFirstDepositModalOpen" (close)="handleFirstDepositModalClose()" (deposit)="handleDeposit()"></app-first-deposit-reward-modal>
+<app-find-us-modal [isOpen]="isFindUsModalOpen" (didDismiss)="handleFindUsModalClose()"></app-find-us-modal>
+<app-lucky-draw-modal [isOpen]="isLuckyDrawModalOpen" (modalClose)="isLuckyDrawModalOpen = false" (openInviteBonus)="handleOpenInviteBonus()"></app-lucky-draw-modal>
+<app-invite-bonus-modal [isOpen]="isInviteBonusModalOpen" (modalClose)="isInviteBonusModalOpen = false"></app-invite-bonus-modal>

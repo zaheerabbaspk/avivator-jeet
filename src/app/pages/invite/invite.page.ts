@@ -42,7 +42,9 @@ import { MyDataComponent } from '../../components/my-data/my-data.component';
 import { PerformanceTabComponent } from '../../components/performance-tab/performance-tab.component';
 import { CommissionTabComponent } from '../../components/commission-tab/commission-tab.component';
 import { LuckyDrawModalComponent } from '../../components/lucky-draw-modal/lucky-draw-modal.component';
+import { InviteBonusModalComponent } from '../../components/invite-bonus-modal/invite-bonus-modal.component';
 import { InviteService, AgentStats, InviteStats, CommissionCard, InviteBanner, MyDataStats } from '../../services/invite.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-invite',
@@ -66,14 +68,17 @@ import { InviteService, AgentStats, InviteStats, CommissionCard, InviteBanner, M
     MyDataComponent,
     PerformanceTabComponent,
     CommissionTabComponent,
-    LuckyDrawModalComponent
+    LuckyDrawModalComponent,
+    InviteBonusModalComponent
   ]
 })
 export class InvitePage implements OnInit {
   isSpinModalOpen = false;
+  isInviteBonusModalOpen = false;
   private authService = inject(AuthService);
   private router = inject(Router);
   private inviteService = inject(InviteService);
+  private toastService = inject(ToastService);
   
   // State
   activeTab = 'home';
@@ -131,6 +136,11 @@ export class InvitePage implements OnInit {
     this.isSpinModalOpen = true;
   }
 
+  handleOpenInviteBonus() {
+    this.isSpinModalOpen = false;
+    this.isInviteBonusModalOpen = true;
+  }
+
   loadData() {
     this.agentStats = this.inviteService.getAgentStats();
     this.inviteStats = this.inviteService.getInviteStats();
@@ -150,10 +160,7 @@ export class InvitePage implements OnInit {
   }
 
   handleCopy(text: string) {
-    navigator.clipboard.writeText(text).then(() => {
-      this.toastMessage = `Copied!`;
-      this.showCopyToast = true;
-    });
+    this.toastService.copyToClipboard(text);
   }
 
   handleShare(platform: string) {

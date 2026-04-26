@@ -28,12 +28,12 @@ export interface OfferCard {
 export class SideMenuService {
 
   private categories: MenuCategory[] = [
-    { id: 'hot', label: 'Hot', icon: 'assets/icon_dtfl_rm_1.avif', color: '#ff4d4d' },
-    { id: 'slot', label: 'Slot', icon: 'assets/icon_dtfl_dz_1.avif', color: '#f59e0b' },
-    { id: 'blockchain', label: 'Blockchain', icon: 'assets/icon_dtfl_qkl_1.avif', color: '#3b82f6' },
-    { id: 'cards', label: 'Cards', icon: 'assets/icon_dtfl_qp_1.avif', color: '#6366f1' },
-    { id: 'sports', label: 'Sports', icon: 'football', color: '#fff' },
-    { id: 'live', label: 'Live', icon: 'person-circle', color: '#fff' },
+    { id: 'hot', label: 'Hot', icon: 'https://140.150.30.128:5030/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_rm_1.avif?manualVersion=1&version=d8102e6ae1', color: '#ff4d4d' },
+    { id: 'slot', label: 'Slot', icon: 'https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_dz_1.avif?manualVersion=1&version=12588989f7', color: '#ffd700' },
+    { id: 'blockchain', label: 'Blockchain', icon: 'https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qkl_1.avif?manualVersion=1&version=ae3b8216e5', color: '#00ccff' },
+    { id: 'cards', label: 'Cards', icon: 'https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qp_1.avif?manualVersion=1&version=9b85d5fd9e', color: '#c084fc' },
+    { id: 'fishing', label: 'Fishing', icon: 'https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_by_1.avif?manualVersion=1&version=b8445639f9', color: '#4ade80' },
+    { id: 'live', label: 'Live', icon: 'https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_ty_1.avif?manualVersion=1&version=9d860d19e0', color: '#ff4d4d' },
     { id: 'fishing', label: 'Fishing', icon: 'fish', color: '#3b82f6' },
     { id: 'recent', label: 'Recent', icon: 'time', color: '#3b82f6' },
     { id: 'favorites', label: 'Favorites', icon: 'star', color: '#eab308' },
