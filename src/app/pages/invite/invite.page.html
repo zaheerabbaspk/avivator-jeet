@@ -39,6 +39,8 @@
          </app-invite-commission>
       } @else if (activeTab === 'promotion') {
          <app-promotion-sharing 
+            [referralCode]="referralCode"
+            [referralLink]="referralLink"
             (copy)="handleCopy($event)"
             (share)="handleShare($event)">
          </app-promotion-sharing>

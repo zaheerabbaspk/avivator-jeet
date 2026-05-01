@@ -1,12 +1,21 @@
 :host {
   display: block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  width: 100%;
+  background: #0f1520;
+  padding-bottom: var(--ion-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 
 ion-footer {
   background: #0f1520;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6);
-  padding-bottom: var(--ion-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+  padding-bottom: 0; /* Padding moved to host */
+  margin: 0;
 }
 
 .footer-nav {

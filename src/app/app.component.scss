@@ -6,7 +6,7 @@ ion-header::after {
   box-shadow: none !important;
   --box-shadow: none !important;
   --border-width: 0 !important;
-  display: flex !important; /* Ensure header still shows, but without border */
+  display: block !important; /* Changed from flex to block to fix positioning */
 }
 
 ion-header::after {

@@ -96,27 +96,32 @@ export class AuthService {
       try {
         const { data, error } = await this.supabase
           .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .single();
-
-        if (error && error.code === 'PGRST116') {
-          // Profile row not yet created — wait and retry
-          if (attempt < retries - 1) {
-            await new Promise(r => setTimeout(r, 1000));
-            continue;
-          }
-          return; // Give up after retries
-        }
+          .select()
+          .eq('id', userId);
 
         if (error) throw error;
 
-        if (data) {
+        if (data && data.length > 0) {
+          let profileData = data[0];
+
+          // SELF-HEALING: If user has no game_id, generate one and update DB
+          if (!profileData.game_id) {
+            const newGameId = Math.floor(100000000 + Math.random() * 900000000).toString();
+            const { error: patchErr } = await this.supabase
+              .from('profiles')
+              .update({ game_id: newGameId })
+              .eq('id', userId);
+            
+            if (!patchErr) {
+              profileData = { ...profileData, game_id: newGameId };
+            }
+          }
+
           // Emit fresh data to all subscribers
-          this.profileSub.next(data);
-          this.balanceSub.next(data.balance || 0);
+          this.profileSub.next(profileData);
+          this.balanceSub.next(profileData.balance || 0);
           // Persist to localStorage so next launch is instant
-          this.saveToCache(data);
+          this.saveToCache(profileData);
         }
         return; // Success
       } catch (error) {

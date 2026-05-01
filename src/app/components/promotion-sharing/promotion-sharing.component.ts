@@ -10,8 +10,8 @@ import { IonIcon } from '@ionic/angular/standalone';
   imports: [CommonModule, IonIcon]
 })
 export class PromotionSharingComponent {
-  @Input() referralCode = '126406886';
-  @Input() referralLink = 'https://5no777.com/?id=126406886';
+  @Input() referralCode = '---';
+  @Input() referralLink = 'https://bp999.online/?id=---';
   
   @Output() copy = new EventEmitter<string>();
   @Output() share = new EventEmitter<string>();

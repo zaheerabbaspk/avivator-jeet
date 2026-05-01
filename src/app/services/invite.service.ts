@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { AuthService } from './auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 export interface AgentStats {
   account: string;
@@ -46,12 +48,16 @@ export interface InviteBanner {
   providedIn: 'root'
 })
 export class InviteService {
-  private agentStats: AgentStats = {
-    account: '126406886',
+  private authService = inject(AuthService);
+
+  private agentStatsSubject = new BehaviorSubject<AgentStats>({
+    account: '---',
     auditNumber: '1.00',
     mode: 'Infinite range',
-    settlementDate: '14/04/2026'
-  };
+    settlementDate: new Date().toLocaleDateString('en-GB')
+  });
+
+  agentStats$ = this.agentStatsSubject.asObservable();
 
   private inviteStats: InviteStats = {
     totalEarnings: '0.00',
@@ -135,9 +141,19 @@ export class InviteService {
     }
   ];
 
-  constructor() { }
+  constructor() {
+    // Sync with auth profile to show REAL game_id
+    this.authService.profile$.subscribe(profile => {
+      if (profile && profile.game_id) {
+        this.agentStatsSubject.next({
+          ...this.agentStatsSubject.value,
+          account: profile.game_id
+        });
+      }
+    });
+  }
 
-  getAgentStats() { return this.agentStats; }
+  getAgentStats() { return this.agentStatsSubject.value; }
   getInviteStats() { return this.inviteStats; }
   getBanners() { return this.banners; }
   getCommissions() { return this.commissions; }
@@ -221,6 +237,6 @@ export class InviteService {
   }
 
   getReferralLink(account: string) {
-    return `https://5no777.com/?id=${account}`;
+    return `https://bp999.online/?id=${account}`;
   }
 }

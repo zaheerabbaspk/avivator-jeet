@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonIcon, MenuController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { reloadOutline, caretDown, reorderThreeOutline } from 'ionicons/icons';
+import { reloadOutline, caretDown, reorderThreeOutline, walletOutline, arrowDownOutline } from 'ionicons/icons';
 import { SideMenuService } from '../../services/side-menu.service';
 
 @Component({
@@ -21,22 +21,31 @@ export class HomeHeaderComponent {
 
   @Output() login = new EventEmitter<'login' | 'register'>();
   @Output() deposit = new EventEmitter<void>();
+  @Output() withdraw = new EventEmitter<void>();
   @Output() refresh = new EventEmitter<void>();
 
   isMenuOpen = false;
+  showDropdown = false;
 
   constructor() {
-    addIcons({ reloadOutline, caretDown, reorderThreeOutline });
+    addIcons({ reloadOutline, caretDown, reorderThreeOutline, walletOutline, arrowDownOutline });
     this.sideMenuService.menuOpen$.subscribe(isOpen => {
       this.isMenuOpen = isOpen;
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.deposit-btn-wrap')) {
+      this.showDropdown = false;
+    }
   }
 
   async toggleMenu() {
     await this.menuCtrl.toggle('main-menu');
   }
 
-  // To ensure the icon resets if menu is closed by clicking backdrop
   onMenuClosed() {
     this.isMenuOpen = false;
   }
@@ -45,8 +54,19 @@ export class HomeHeaderComponent {
     this.login.emit(mode);
   }
 
+  toggleDropdown(event: Event) {
+    event.stopPropagation();
+    this.showDropdown = !this.showDropdown;
+  }
+
   onDeposit() {
+    this.showDropdown = false;
     this.deposit.emit();
+  }
+
+  onWithdraw() {
+    this.showDropdown = false;
+    this.withdraw.emit();
   }
 
   onRefresh() {

@@ -22,7 +22,13 @@ export class InviteBonusModalComponent {
   posters = [
     'https://140.150.30.128:5030/common/upload/1976890870842892290.avif',
     'https://140.150.30.128:5030/common/upload/1976890922248642561.avif',
-    'https://140.150.30.128:5030/common/upload/1976890870842892290.avif'
+    'https://140.150.30.128:5030/common/upload/1976890870842892290.avif',
+    'https://140.150.30.128:5030/common/upload/1976890922248642561.avif',
+    'https://140.150.30.128:5030/common/upload/1976890870842892290.avif',
+    'https://140.150.30.128:5030/common/upload/1976890922248642561.avif',
+    'https://140.150.30.128:5030/common/upload/1976890870842892290.avif',
+    'https://140.150.30.128:5030/common/upload/1976890922248642561.avif',
+    'https://140.150.30.128:5030/common/upload/1976890870842892290.avif',
   ];
 
   constructor() {
@@ -35,7 +41,7 @@ export class InviteBonusModalComponent {
 
   share(platform: string) {
     const text = encodeURIComponent('Join me on bp999 and get amazing rewards!');
-    const url = encodeURIComponent('https://bp999.com/?id=126406886');
+    const url = encodeURIComponent('https://bp999.online/?id=126406886');
     
     let shareUrl = '';
     
@@ -55,7 +61,7 @@ export class InviteBonusModalComponent {
         break;
       default:
         if (navigator.share) {
-          navigator.share({ title: 'bp999', text: 'Join me!', url: 'https://5no777.com/?id=126406886' });
+          navigator.share({ title: 'bp999', text: 'Join me!', url: 'https://bp999.online/?id=126406886' });
           return;
         }
     }

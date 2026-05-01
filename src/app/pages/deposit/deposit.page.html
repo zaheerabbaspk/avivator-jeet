@@ -1,14 +1,19 @@
 <ion-header class="ion-no-border">
-  <div class="dep-header">
-    <button class="dep-back" (click)="goBack()">
-      <ion-icon name="chevron-back-outline"></ion-icon>
-    </button>
-    <span class="dep-title">Deposit</span>
-    <div class="dep-header-right">
-      <ion-icon name="headset-outline" class="dh-icon"></ion-icon>
-      <div class="dh-icon-wrap">
-        <ion-icon name="document-text-outline" class="dh-icon"></ion-icon>
-        <span class="notify-badge">1</span>
+  <div class="flex flex-col bg-[#111419] border-b border-white/5"
+       style="padding-top: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 10px);">
+    <div class="flex items-center h-[48px] px-2">
+      <button (click)="goBack()" 
+              class="bg-transparent border-none text-[#ADB6C3] text-[22px] px-3 flex items-center cursor-pointer shrink-0 active:opacity-60 ml-[2px]">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+      <span class="text-[#ADB6C3] font-bold text-[12px] whitespace-nowrap tracking-tight ml-2 uppercase">Deposit</span>
+      
+      <div class="flex-1 flex justify-end px-3 gap-4">
+        <ion-icon name="headset-outline" class="text-[22px] text-[#ADB6C3] active:opacity-60 cursor-pointer"></ion-icon>
+        <div class="relative cursor-pointer active:opacity-60">
+          <ion-icon name="document-text-outline" class="text-[22px] text-[#ADB6C3]"></ion-icon>
+          <span class="absolute -top-1 -right-1 bg-[#E64242] text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center">1</span>
+        </div>
       </div>
     </div>
   </div>
@@ -17,129 +22,169 @@
 <ion-content style="--background: #0f0f12">
   <div class="dep-body">
 
-    <!-- ── Payment Method ── -->
-    <div class="sec-row">
-      <span class="sec-label">Payment method</span>
-      <div class="balance-pill">
-        <ion-icon name="logo-whatsapp" class="wa-icon"></ion-icon>
-        <span class="pill-val">{{ userBalance | number:'1.2-2' }}</span>
-        <ion-icon name="reload-outline" class="pill-reload"></ion-icon>
-      </div>
-    </div>
-
-    <div class="methods-grid">
-      <!-- JazzCash -->
-      <div class="method-card" [class.selected]="selectedMethod === 'jazzcash'"
-           (click)="selectedMethod = 'jazzcash'">
-        <div class="method-badge">+0.5%</div>
-        <div class="method-inner">
-          <img src="/assets/new-jazz-seeklogo.png" class="method-logo" alt="JazzCash" />
-          <span class="method-name">JazzCash</span>
+    @if (currentStep === 'amount') {
+      <!-- ── Payment Method ── -->
+      <div class="sec-row">
+        <span class="sec-label">Payment method</span>
+        <div class="balance-pill">
+          <ion-icon name="logo-whatsapp" class="wa-icon"></ion-icon>
+          <span class="pill-val">{{ userBalance | number:'1.2-2' }}</span>
+          <ion-icon name="reload-outline" class="pill-reload"></ion-icon>
         </div>
       </div>
 
-      <!-- EasyPaisa -->
-      <div class="method-card" [class.selected]="selectedMethod === 'easypaisa'"
-           (click)="selectedMethod = 'easypaisa'">
-        <div class="method-badge">+0.5%</div>
-        <div class="method-inner">
-          <img src="/assets/easypaisa-seeklogo.png" class="method-logo ep-logo" alt="EasyPaisa" />
-          <span class="method-name">EasyPaisa</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Deposit Amount ── -->
-    <div class="sec-row mt-sec">
-      <span class="sec-label">Deposit amount</span>
-      <span class="bonus-explain-link">Bonus event explanation</span>
-    </div>
-
-    <div class="amount-grid">
-      @for (item of amounts; track item.val) {
-      <div class="amount-cell" [class.active]="selectedAmount === item.val"
-           (click)="selectAmount(item.val)">
-        <span class="cell-val">{{ item.val | number }}</span>
-        <span class="cell-bonus">{{ item.bonus }}</span>
-      </div>
-      }
-    </div>
-
-    <!-- Rs Input -->
-    <div class="rs-input-wrap" [class.has-value]="selectedAmount || customAmount">
-      <span class="rs-label">Rs</span>
-      <input
-        type="tel"
-        [value]="selectedAmount || customAmount"
-        (input)="onInputChange($event)"
-        placeholder="Min 100~Max 100,000"
-        class="rs-input"
-      />
-    </div>
-
-    <!-- Receive Info Box (shows when amount selected) -->
-    @if (selectedAmount || customAmount) {
-    <div class="receive-info-box">
-      <p class="receive-line">
-        Actually receive
-        <span class="receive-amount">{{ getActualReceive() | number:'1.2-2' }}</span>
-        <span class="receive-hint">(don't forget)</span>,
-        Event bonus
-        <span class="event-bonus">+{{ getEventBonus() | number:'1.2-2' }}</span>
-      </p>
-      <p class="receive-line">
-        Payment bonus
-        <span class="payment-bonus">+{{ getPaymentBonus() | number:'1.2-2' }}</span>
-      </p>
-    </div>
-    }
-
-    <!-- ── Deposit Promotion ── -->
-    <div class="promo-card">
-      <div class="promo-header">
-        <div class="promo-title">
-          <span class="promo-gift">🎁</span>
-          <span class="promo-text">Deposit promotion</span>
-        </div>
-        <div class="timer-pill">
-          <span class="timer-lt">LT</span>
-          <span class="timer-val">{{ timer }}</span>
-        </div>
-      </div>
-
-      <p class="promo-divider">—— Automatically participated in the following activities ——</p>
-
-      <div class="promo-list" [class.expanded]="isPromotionsExpanded">
-        @for (promo of promotions; track $index) {
-        <div class="promo-row" [class.promo-highlight]="promo.highlight">
-          <div class="promo-left">
-            <span class="promo-chest">{{ promo.highlight ? '🎁' : '🎁' }}</span>
-            <div class="promo-label-wrap">
-              <span class="promo-label" [class.promo-label-gold]="promo.highlight">{{ promo.label }}</span>
-              @if (promo.badge) {
-              <div class="promo-row-badge">
-                <span class="promo-badge-red">{{ promo.badge }}</span>
-                <span class="promo-badge-green">{{ promo.badgeDesc }} ✓</span>
-              </div>
-              }
-            </div>
+      <div class="methods-grid">
+        <!-- JazzCash -->
+        <div class="method-card" [class.selected]="selectedMethod === 'jazzcash'"
+             (click)="selectedMethod = 'jazzcash'">
+          <div class="method-badge">+0.5%</div>
+          <div class="method-inner">
+            <img src="/assets/new-jazz-seeklogo.png" class="method-logo" alt="JazzCash" />
+            <span class="method-name">JazzCash</span>
           </div>
-          <span class="promo-desc">{{ promo.desc }}</span>
+        </div>
+
+        <!-- EasyPaisa -->
+        <div class="method-card" [class.selected]="selectedMethod === 'easypaisa'"
+             (click)="selectedMethod = 'easypaisa'">
+          <div class="method-badge">+0.5%</div>
+          <div class="method-inner">
+            <img src="/assets/easypaisa-seeklogo.png" class="method-logo ep-logo" alt="EasyPaisa" />
+            <span class="method-name">EasyPaisa</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Deposit Amount ── -->
+      <div class="sec-row mt-sec">
+        <span class="sec-label">Deposit amount</span>
+        <span class="bonus-explain-link">Bonus event explanation</span>
+      </div>
+
+      <div class="amount-grid">
+        @for (item of amounts; track item.val) {
+        <div class="amount-cell" [class.active]="selectedAmount === item.val"
+             (click)="selectAmount(item.val)">
+          <span class="cell-val">{{ item.val | number }}</span>
+          <span class="cell-bonus">{{ item.bonus }}</span>
         </div>
         }
       </div>
 
-      <!-- Fold / Expand toggle -->
-      <button class="fold-toggle" (click)="isPromotionsExpanded = !isPromotionsExpanded">
-        <span>{{ isPromotionsExpanded ? 'Fold' : 'Expand' }}</span>
-        <ion-icon [name]="isPromotionsExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-      </button>
-    </div>
+      <!-- Rs Input -->
+      <div class="rs-input-wrap" [class.has-value]="selectedAmount || customAmount">
+        <span class="rs-label">Rs</span>
+        <input
+          type="tel"
+          [value]="selectedAmount || customAmount"
+          (input)="onInputChange($event)"
+          placeholder="Min 100~Max 100,000"
+          class="rs-input"
+        />
+      </div>
 
-    <!-- ── Reminder ── -->
-    <p class="reminder-text">
-      Reminder: If the recharge is unsuccessful, please choose another channel.
-    </p>
+      <!-- Receive Info Box (shows when amount selected) -->
+      @if (selectedAmount || customAmount) {
+      <div class="receive-info-box">
+        <p class="receive-line">
+          Actually receive
+          <span class="receive-amount">{{ getActualReceive() | number:'1.2-2' }}</span>
+          <span class="receive-hint">(don't forget)</span>,
+          Event bonus
+          <span class="event-bonus">+{{ getEventBonus() | number:'1.2-2' }}</span>
+        </p>
+        <p class="receive-line">
+          Payment bonus
+          <span class="payment-bonus">+{{ getPaymentBonus() | number:'1.2-2' }}</span>
+        </p>
+      </div>
+      }
+
+      <!-- ── Deposit Promotion ── -->
+      <div class="promo-card">
+        <div class="promo-header">
+          <div class="promo-title">
+            <span class="promo-gift">🎁</span>
+            <span class="promo-text">Deposit promotion</span>
+          </div>
+          <div class="timer-pill">
+            <span class="timer-lt">LT</span>
+            <span class="timer-val">{{ timer }}</span>
+          </div>
+        </div>
+
+        <p class="promo-divider">—— Automatically participated in the following activities ——</p>
+
+        <div class="promo-list" [class.expanded]="isPromotionsExpanded">
+          @for (promo of promotions; track $index) {
+          <div class="promo-row" [class.promo-highlight]="promo.highlight">
+            <div class="promo-left">
+              <span class="promo-chest">{{ promo.highlight ? '🎁' : '🎁' }}</span>
+              <div class="promo-label-wrap">
+                <span class="promo-label" [class.promo-label-gold]="promo.highlight">{{ promo.label }}</span>
+                @if (promo.badge) {
+                <div class="promo-row-badge">
+                  <span class="promo-badge-red">{{ promo.badge }}</span>
+                  <span class="promo-badge-green">{{ promo.badgeDesc }} ✓</span>
+                </div>
+                }
+              </div>
+            </div>
+            <span class="promo-desc">{{ promo.desc }}</span>
+          </div>
+          }
+        </div>
+
+        <!-- Fold / Expand toggle -->
+        <button class="fold-toggle" (click)="isPromotionsExpanded = !isPromotionsExpanded">
+          <span>{{ isPromotionsExpanded ? 'Fold' : 'Expand' }}</span>
+          <ion-icon [name]="isPromotionsExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+        </button>
+      </div>
+
+      <!-- ── Reminder ── -->
+      <p class="reminder-text">
+        Reminder: If the recharge is unsuccessful, please choose another channel.
+      </p>
+    } @else {
+      <!-- ── Step 2: Manual Proof Submission ── -->
+      <div class="proof-container">
+        <!-- Reference Style QR Card -->
+        <div class="qr-card-premium">
+          <div class="qr-main-body">
+            <img src="assets/qr.jpeg" class="qr-img-main" alt="QR Code" />
+          </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="proof-form-premium">
+          <div class="input-group-premium">
+            <label>Transaction ID</label>
+            <div class="input-wrapper">
+              <input type="text" [(ngModel)]="transactionId" placeholder="Enter 12-digit ID" maxlength="12" />
+            </div>
+          </div>
+
+          <div class="input-group-premium">
+            <label>Payment Screenshot</label>
+            <div class="upload-zone" (click)="fileInput.click()">
+              @if (!previewUrl) {
+                <ion-icon name="cloud-upload-outline"></ion-icon>
+                <span>Upload Payment Receipt</span>
+              } @else {
+                <img [src]="previewUrl" class="upload-preview" />
+              }
+              <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden-input" />
+            </div>
+          </div>
+
+        </div>
+
+        <p class="manual-hint">
+          Note: Manual verification can take up to 30 minutes. Please ensure the Transaction ID and Screenshot are correct.
+        </p>
+      </div>
+    }
 
   </div>
 </ion-content>
@@ -147,9 +192,11 @@
 <!-- ── Footer: Deposit Now ── -->
 <ion-footer class="ion-no-border">
   <div class="dep-footer">
-    <button class="deposit-now-btn" [class.enabled]="canDeposit" [disabled]="!canDeposit"
-            (click)="submitDeposit()">
-      Deposit Now
+    <button class="deposit-now-btn" 
+            [class.enabled]="currentStep === 'amount' ? canDeposit : (transactionId && selectedFile)" 
+            [disabled]="(currentStep === 'amount' && !canDeposit) || (currentStep !== 'amount' && (!transactionId || !selectedFile)) || isLoading"
+            (click)="currentStep === 'amount' ? submitDeposit() : submitManualProof()">
+      {{ isLoading ? (currentStep === 'amount' ? 'Processing...' : 'Submitting Proof...') : (currentStep === 'amount' ? 'Deposit Now' : 'Submit Proof Now') }}
     </button>
   </div>
 </ion-footer>

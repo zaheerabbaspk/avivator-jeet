@@ -28,6 +28,7 @@ export class AuthModalComponent {
   password = '';
   confirmPassword = '';
   realName = '';
+  referralCode = ''; // Added for manual referral code input
   errorMessage = '';
   isLoading = false;
 
@@ -48,15 +49,20 @@ export class AuthModalComponent {
     return this.password.length > 0 ? Math.max(2, Math.min(4, strength)) : 0;
   }
 
+  phoneError = '';
+
   validatePhone(event: any) {
+    this.errorMessage = ''; // Clear error when typing
     let val = event.target.value;
     
     // Remove any non-numeric characters
     val = val.replace(/\D/g, '');
 
     if (val.startsWith('0')) {
-      alert('Mobile number should not start with 0. Please enter remaining 10 digits.');
+      this.phoneError = 'Mobile number should not start with 0. Please enter remaining 10 digits.';
       val = val.substring(1);
+    } else {
+      this.phoneError = '';
     }
 
     // Limit to 10 digits
@@ -69,6 +75,8 @@ export class AuthModalComponent {
 
   setAuthMode(mode: 'login' | 'register') {
     this.authMode = mode;
+    this.errorMessage = ''; // Clear error when switching tabs
+    this.showErrors = false;
   }
 
   togglePasswordVisibility() {
@@ -165,16 +173,23 @@ export class AuthModalComponent {
 
         let invitedByUuid: string | null = null;
 
-        // Check for invite code in localStorage
-        const inviteCode = localStorage.getItem('inviteCode');
+        // Check for manual referral code first, then fall back to localStorage (from URL)
+        const inviteCode = this.referralCode || localStorage.getItem('inviteCode');
+        
         if (inviteCode) {
           const { data: inviterData } = await this.authService.supabase
             .from('profiles')
             .select('id')
             .eq('game_id', inviteCode)
             .single();
+            
           if (inviterData?.id) {
             invitedByUuid = inviterData.id;
+          } else if (this.referralCode) {
+            // If they manually typed a code and it's wrong, show error
+            this.errorMessage = 'Invalid referral code. Please check and try again.';
+            this.isLoading = false;
+            return;
           }
         }
 
@@ -203,9 +218,9 @@ export class AuthModalComponent {
 
         let initialBalance = 0;
         if (invitedByUuid && !existingBonusUser) {
-          initialBalance = 480;
-        } else {
-          console.warn('Fraud check failed or not invited. Balance: 0');
+          initialBalance = 500; // Updated reward for being referred
+        } else if (existingBonusUser) {
+          console.warn('Fraud check failed: Multiple accounts detected for this device/IP.');
         }
 
         // Step 2: Immediately upsert the profile row using the returned user ID
@@ -229,7 +244,30 @@ export class AuthModalComponent {
 
         if (profileError) {
           console.error('Profile upsert error:', profileError);
-          // Non-fatal: auth succeeded, profile may self-heal on next refresh
+        }
+
+        // Step 3: Reward the Inviter (Auto-Reward Logic)
+        if (invitedByUuid && !existingBonusUser) {
+          try {
+            // Get inviter's current balance
+            const { data: inviterData } = await this.authService.supabase
+              .from('profiles')
+              .select('balance')
+              .eq('id', invitedByUuid)
+              .single();
+
+            if (inviterData) {
+              const newBalance = (inviterData.balance || 0) + 500;
+              await this.authService.supabase
+                .from('profiles')
+                .update({ balance: newBalance })
+                .eq('id', invitedByUuid);
+              
+              console.log('Inviter reward of Rs 500 added successfully');
+            }
+          } catch (rewardErr) {
+            console.error('Failed to reward inviter:', rewardErr);
+          }
         }
 
         // Step 3: Force refresh auth profile subject so UI shows correct name
@@ -242,20 +280,23 @@ export class AuthModalComponent {
 
       this.authSuccess.emit();
     } catch (error: any) {
-      // Provide friendly error messages
+      this.isLoading = false;
       const msg: string = error?.message || '';
-      console.error('Auth action failed:', error);
+      const code: string = error?.code || '';
+      console.error('Auth action failed:', { error, msg, code });
 
-      if (msg.toLowerCase().includes('failed to fetch')) {
-        this.errorMessage = 'Network Error: Please check your internet connection or try again later.';
-      } else if (msg.includes('Invalid login credentials')) {
+      if (msg.toLowerCase().includes('failed to fetch') || msg.toLowerCase().includes('network')) {
+        this.errorMessage = 'Network Error: Please check your internet connection.';
+      } else if (msg.includes('Invalid login credentials') || code === 'invalid_credentials') {
         this.errorMessage = 'Wrong phone/email or password. Please try again.';
-      } else if (msg.includes('User already registered')) {
-        this.errorMessage = 'This account already exists. Please login instead.';
+      } else if (msg.includes('User already registered') || msg.includes('already in use') || code === '23505') {
+        this.errorMessage = 'This mobile number is already registered. Please login.';
       } else if (msg.includes('Email not confirmed')) {
-        this.errorMessage = 'Please confirm your email before logging in.';
+        this.errorMessage = 'Please confirm your account before logging in.';
+      } else if (msg.includes('rate limit')) {
+        this.errorMessage = 'Too many attempts. Please wait a few minutes and try again.';
       } else {
-        this.errorMessage = msg || 'Authentication failed. Please try again.';
+        this.errorMessage = msg || 'Authentication failed. Please try again later.';
       }
     } finally {
       this.isLoading = false;

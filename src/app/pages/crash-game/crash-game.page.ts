@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { Router, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
+import { App } from '@capacitor/app';
+import { PluginListenerHandle } from '@capacitor/core';
 import { home, wallet, caretBack, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, removeCircleOutline, addCircleOutline, helpCircleOutline, menuOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, checkmarkSharp, volumeMediumOutline, volumeMuteOutline, musicalNotesOutline, flashOutline, starOutline, bookOutline, documentTextOutline, settingsOutline, closeOutline } from 'ionicons/icons';
 import { CrashGameEngineService } from '../../services/crash-game-engine.service';
 import { SoundService } from '../../services/sound.service';
@@ -100,6 +102,8 @@ export class CrashGamePage implements OnInit, OnDestroy {
     private animationStartTime = 0;
     visualMultiplier = signal<number>(1.00);
     private lastState: 'WAITING' | 'RUNNING' | 'CRASHED' | null = null;
+    private visibilityHandler = () => this.handleVisibilityChange();
+    private appStateListener?: PluginListenerHandle;
 
 
     constructor() {
@@ -204,6 +208,22 @@ export class CrashGamePage implements OnInit, OnDestroy {
     ngOnInit() {
         console.log('🎮 Crash game page initialized');
 
+        // Handle visibility change (Minimize app / Switch tab)
+        document.addEventListener('visibilitychange', this.visibilityHandler);
+        
+        // Native App Backgrounding Support via Capacitor
+        App.addListener('appStateChange', ({ isActive }) => {
+            if (!isActive) {
+                console.log('🔇 Native App backgrounded, pausing sounds');
+                this.soundService.stopAll();
+            } else {
+                console.log('🔊 Native App foregrounded, resuming sounds');
+                if (this.gameEngine.gameState() === 'RUNNING' && !this.isLoading) {
+                    this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
+                }
+            }
+        }).then(handle => this.appStateListener = handle);
+
         // Check for bonus rain trigger from URL
         this.route.queryParams.subscribe(params => {
             if (params['showBonus'] === 'true') {
@@ -233,7 +253,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
                                 this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
                             }
                         }, 4000); // Increased connection delay significantly
-
                     }, 3500); // Spribe delay
                 }
             });
@@ -290,7 +309,22 @@ export class CrashGamePage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log('🎮 Crash game page destroyed');
+        document.removeEventListener('visibilitychange', this.visibilityHandler);
+        if (this.appStateListener) {
+            this.appStateListener.remove();
+        }
         this.soundService.stopAll(); // Ensure sound stops on back
+    }
+
+    private handleVisibilityChange() {
+        if (document.hidden) {
+            console.log('🔇 App hidden, pausing sounds');
+            this.soundService.stopAll();
+        } else {
+            if (this.gameEngine.gameState() === 'RUNNING' && !this.isLoading) {
+                this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
+            }
+        }
     }
 
     // UI Actions (Refined for realistic flight)

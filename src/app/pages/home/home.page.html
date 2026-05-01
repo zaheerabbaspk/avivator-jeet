@@ -1,127 +1,149 @@
 <ion-header class="ion-no-border">
   <app-home-header [isLoggedIn]="isLoggedIn" [userBalance]="userBalance" [isLoadingBalance]="isLoadingBalance"
-    (login)="handleLogin($event)" (deposit)="handleDeposit()" (refresh)="refreshBalance()">
+    (login)="handleLogin($event)" (deposit)="handleDeposit()" (withdraw)="handleWithdraw()" (refresh)="refreshBalance()">
   </app-home-header>
 </ion-header>
 
 <ion-content [scrollEvents]="true" (ionScroll)="onContentScroll($event)">
-  <div class="home-body">
-
+  <ion-grid class="home-body ion-no-padding m-0 w-full max-w-full">
+    
     <!-- Hero Banners -->
-    <app-home-banners [slides]="bannerSlides"></app-home-banners>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <app-home-banners [slides]="bannerSlides"></app-home-banners>
+    </ion-col></ion-row>
 
     <!-- Brand Alliances -->
-    <app-home-brands [brands]="brands"></app-home-brands>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <app-home-brands [brands]="brands"></app-home-brands>
+    </ion-col></ion-row>
 
     <!-- Announcement Bar -->
-    <app-home-announce></app-home-announce>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <app-home-announce></app-home-announce>
+    </ion-col></ion-row>
 
-    <app-home-categories [categories]="categories" [activeCategory]="activeCategory()"
-      (categoryChange)="handleCategoryChange($event)">
-    </app-home-categories>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <app-home-categories [categories]="categories" [activeCategory]="activeCategory()"
+        (categoryChange)="handleCategoryChange($event)">
+      </app-home-categories>
+    </ion-col></ion-row>
 
     <!-- Hot Section Header (kept in page for layout control) -->
-    <div class="section-header">
-      <div class="section-title">
-        <span class="fire-icon">🔥</span>
-        <span>Hot</span>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="fire-icon">🔥</span>
+          <span>Hot</span>
+        </div>
+        <div class="section-nav">
+          <button class="nav-arr">&lt;</button>
+          <span class="nav-all">All</span>
+          <button class="nav-arr">&gt;</button>
+        </div>
       </div>
-      <div class="section-nav">
-        <button class="nav-arr">&lt;</button>
-        <span class="nav-all">All</span>
-        <button class="nav-arr">&gt;</button>
-      </div>
-    </div>
+    </ion-col></ion-row>
 
     <!-- Game Card Grid -->
     @if (activeCategory() === 'hot' && blockchainGamesVisible().length > 0) {
-    <app-home-game-grid [games]="topGames().slice(0, 12)" (gameClick)="navigateToGame($event)">
-    </app-home-game-grid>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <app-home-game-grid [games]="topGames().slice(0, 12)" (gameClick)="navigateToGame($event)">
+      </app-home-game-grid>
+    </ion-col></ion-row>
 
     <!-- Slot Section -->
-    <div class="slot-section section-container">
-      <div class="section-header">
-        <div class="section-title">
-          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_dz_1.avif?manualVersion=1&version=12588989f7" alt="Slot" class="slot-icon section-icon">
-          <span>Slot</span>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <div class="slot-section section-container">
+        <div class="section-header">
+          <div class="section-title">
+            <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_dz_1.avif?manualVersion=1&version=12588989f7" alt="Slot" class="slot-icon section-icon">
+            <span>Slot</span>
+          </div>
+          <div class="section-nav">
+            <button class="nav-arr">&lt;</button>
+            <span class="nav-all">All</span>
+            <button class="nav-arr">&gt;</button>
+          </div>
         </div>
-        <div class="section-nav">
-          <button class="nav-arr">&lt;</button>
-          <span class="nav-all">All</span>
-          <button class="nav-arr">&gt;</button>
-        </div>
+        <app-home-game-grid [games]="slotGamesVisible()" (gameClick)="navigateToGame($event)">
+        </app-home-game-grid>
       </div>
-      <app-home-game-grid [games]="slotGamesVisible()" (gameClick)="navigateToGame($event)">
-      </app-home-game-grid>
-    </div>
+    </ion-col></ion-row>
 
     <!-- Blockchain Section -->
-    <div class="blockchain-section">
-      <div class="section-header">
-        <div class="section-title">
-          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qkl_1.avif?manualVersion=1&version=ae3b8216e5" alt="Blockchain" class="blockchain-icon">
-          <span>Blockchain</span>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <div class="blockchain-section">
+        <div class="section-header">
+          <div class="section-title">
+            <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qkl_1.avif?manualVersion=1&version=ae3b8216e5" alt="Blockchain" class="blockchain-icon">
+            <span>Blockchain</span>
+          </div>
+          <div class="section-nav">
+            <button class="nav-arr">&lt;</button>
+            <span class="nav-all">All</span>
+            <button class="nav-arr">&gt;</button>
+          </div>
         </div>
-        <div class="section-nav">
-          <button class="nav-arr">&lt;</button>
-          <span class="nav-all">All</span>
-          <button class="nav-arr">&gt;</button>
+
+        <div class="jackpot-banner">
+          <img src="https://140.150.30.128:5030/cocos/icon/vjp/1976255651440631810.avif" alt="Jackpot">
+          <div class="jackpot-amount">487,255,256.16</div>
         </div>
+
+        <app-home-game-grid [games]="blockchainGamesVisible()" (gameClick)="navigateToGame($event)">
+        </app-home-game-grid>
       </div>
 
-      <div class="jackpot-banner">
-        <img src="https://140.150.30.128:5030/cocos/icon/vjp/1976255651440631810.avif" alt="Jackpot">
-        <div class="jackpot-amount">487,255,256.16</div>
-      </div>
-
-      <app-home-game-grid [games]="blockchainGamesVisible()" (gameClick)="navigateToGame($event)">
+      <app-home-game-grid [games]="remainingGames()" (gameClick)="navigateToGame($event)">
       </app-home-game-grid>
-    </div>
-
-    <app-home-game-grid [games]="remainingGames()" (gameClick)="navigateToGame($event)">
-    </app-home-game-grid>
+    </ion-col></ion-row>
 
     <!-- Cards Section -->
-    <div class="cards-section section-container">
-      <div class="section-header">
-        <div class="section-title">
-          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qp_1.avif?manualVersion=1&version=9b85d5fd9e" alt="Cards" class="cards-icon section-icon">
-          <span>Cards</span>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <div class="cards-section section-container">
+        <div class="section-header">
+          <div class="section-title">
+            <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_qp_1.avif?manualVersion=1&version=9b85d5fd9e" alt="Cards" class="cards-icon section-icon">
+            <span>Cards</span>
+          </div>
+          <div class="section-nav">
+            <button class="nav-arr">&lt;</button>
+            <span class="nav-all">All</span>
+            <button class="nav-arr">&gt;</button>
+          </div>
         </div>
-        <div class="section-nav">
-          <button class="nav-arr">&lt;</button>
-          <span class="nav-all">All</span>
-          <button class="nav-arr">&gt;</button>
-        </div>
-      </div>
 
-      <app-home-game-grid [games]="cardGamesVisible()" (gameClick)="navigateToGame($event)">
-      </app-home-game-grid>
-    </div>
+        <app-home-game-grid [games]="cardGamesVisible()" (gameClick)="navigateToGame($event)">
+        </app-home-game-grid>
+      </div>
+    </ion-col></ion-row>
 
     <!-- Fishing Section -->
-    <div class="fishing-section section-container">
-      <div class="section-header">
-        <div class="section-title">
-          <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_by_1.avif?manualVersion=1&version=b8445639f9" alt="Fishing" class="fishing-icon section-icon">
-          <span>Fishing</span>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <div class="fishing-section section-container">
+        <div class="section-header">
+          <div class="section-title">
+            <img src="https://www.sk777vip2.bet/siteadmin/skin/lobby_asset/2-1-common/common/_sprite/icon_dtfl_by_1.avif?manualVersion=1&version=b8445639f9" alt="Fishing" class="fishing-icon section-icon">
+            <span>Fishing</span>
+          </div>
+          <div class="section-nav">
+            <button class="nav-arr">&lt;</button>
+            <span class="nav-all">All</span>
+            <button class="nav-arr">&gt;</button>
+          </div>
         </div>
-        <div class="section-nav">
-          <button class="nav-arr">&lt;</button>
-          <span class="nav-all">All</span>
-          <button class="nav-arr">&gt;</button>
-        </div>
-      </div>
 
-      <app-home-game-grid [games]="fishingGamesVisible()" (gameClick)="navigateToGame($event)">
-      </app-home-game-grid>
-    </div>
+        <app-home-game-grid [games]="fishingGamesVisible()" (gameClick)="navigateToGame($event)">
+        </app-home-game-grid>
+      </div>
+    </ion-col></ion-row>
     } @else {
-    <app-home-game-grid [games]="filteredGames()" (gameClick)="navigateToGame($event)">
-    </app-home-game-grid>
+    <ion-row class="ion-no-padding m-0"><ion-col size="12" class="ion-no-padding m-0">
+      <app-home-game-grid [games]="filteredGames()" (gameClick)="navigateToGame($event)">
+      </app-home-game-grid>
+    </ion-col></ion-row>
     }
 
-  </div>
+  </ion-grid>
 
   <!-- Site Footer -->
   <div class="site-footer">
@@ -226,7 +248,7 @@
 <app-auth-modal [isOpen]="isAuthModalOpen" [authMode]="authMode" (close)="isAuthModalOpen = false"
   (authSuccess)="handleAuthSuccess()"></app-auth-modal>
 <app-success-modal [isOpen]="isSuccessModalOpen" (close)="isSuccessModalOpen = false"
-  (deposit)="handleDeposit()"></app-success-modal>
+  (deposit)="handleDeposit()" (withdraw)="handleWithdraw()"></app-success-modal>
 <app-reward-modal [isOpen]="isRewardModalOpen" (close)="isRewardModalOpen = false"
   (depositClick)="handleRewardDeposit($event)"></app-reward-modal>
 <app-bonus-rain-modal [isOpen]="isBonusRainOpen" (modalClose)="isBonusRainOpen = false"

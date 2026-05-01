@@ -5,14 +5,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 10px) 12px 6px;
+  padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 8px) 10px 6px;
   background: #0f1520;
   transition: background 0.3s ease;
-  min-height: calc(var(--ion-safe-area-top, 20px) + 44px);
+  min-height: calc(var(--ion-safe-area-top, 20px) + 40px);
 
   @media (max-width: 360px) {
-    padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 8px) 8px 5px;
-    min-height: calc(var(--ion-safe-area-top, 20px) + 40px);
+    padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 6px) 6px 4px;
+    min-height: calc(var(--ion-safe-area-top, 20px) + 36px);
   }
 
   &.logged-in-bg {
@@ -61,11 +61,11 @@
       .lines {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: 2.5px;
 
         span {
           display: block;
-          width: 14px;
+          width: 12px;
           height: 1.5px;
           background: #fff; /* Crisp white like screenshot */
           border-radius: 1px;
@@ -78,24 +78,20 @@
         color: #fff; /* Crisp white like screenshot */
         
         svg {
-          width: 10px;
-          height: 10px;
+          width: 9px;
+          height: 9px;
         }
       }
     }
   }
 
   .logo-aviator {
-    font-size: 20px;
+    font-size: clamp(17px, 5vw, 20px); /* Fluid logo size */
     font-weight: 900;
     color: #fff;
     font-family: 'Inter', system-ui, sans-serif;
     letter-spacing: -0.3px;
     margin-bottom: 2px;
-
-    @media (max-width: 360px) {
-      font-size: 17px;
-    }
   }
 
   .logo-text {
@@ -120,27 +116,29 @@
 
 .header-balance-wrap.v2 {
   background: transparent;
-  border: 1px solid #1e40af;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Matched subtle border from No777 */
   border-radius: 20px;
-  padding: 0 4px;
-  margin-right: 5px;
+  padding: 1px 6px 1px 2px;
+  margin-right: 4px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  height: 26px; /* Matched height from No777 */
+  gap: 4px;
   &.loading-wrap {
     pointer-events: none;
   }
 
   @media (max-width: 360px) {
-    gap: 4px;
-    padding: 0 3px;
+    gap: 3px;
+    padding: 1px 4px 1px 2px;
+    height: 24px;
   }
 
   .flag-circle {
-    width: 18px; /* Reduced base from 22px */
-    height: 18px;
+    width: 15px; /* Reduced to match design */
+    height: 15px;
     background: transparent;
-    border: 2px solid #ffcc00;
+    border: 1px solid #ffcc00; /* Thinner border */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -162,22 +160,18 @@
 
   .balance-value-gold {
     color: #ffcc00;
-    font-size: 13px; /* Reduced base from 15px */
-    font-weight: 800;
+    font-size: clamp(11.5px, 3.2vw, 13px); /* Fluid balance text */
+    font-weight: 500; /* Lighter weight like No777 */
     text-decoration: underline;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 1px;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
     margin-right: -1px;
     line-height: 1;
-    letter-spacing: -0.2px;
-
-    @media (max-width: 360px) {
-      font-size: 11px; /* Reduced from 12px */
-    }
+    letter-spacing: 0px;
   }
 
   .refresh-icon {
-    font-size: 14px; /* Reduced base from 16px */
+    font-size: 13px; /* Reduced */
     color: #31d7f1;
     margin-top: 1px;
     --ionicon-stroke-width: 50px;
@@ -211,40 +205,62 @@
   align-items: center;
 
   .header-deposit-btn-blue {
-    background: #31d7f1;
+    background: #31d7f1; /* Maintained original color */
     color: #fff;
     border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 800;
-    padding: 0 10px;
-    height: 32px;
+    border-radius: 4px; /* Slightly less rounded */
+    font-size: clamp(10.5px, 2.8vw, 12px); /* Fluid font size */
+    font-weight: 600; /* Lighter weight like No777 */
+    height: clamp(24px, 6.5vw, 26px); /* Fluid height */
     display: flex;
     align-items: center;
-    gap: 4px;
     cursor: pointer;
+    overflow: hidden;
 
-    @media (max-width: 360px) {
-      font-size: 12px;
-      padding: 0 8px;
-      height: 28px;
-    }
+    &.split-btn {
+      padding: 0;
+      
+      .deposit-text-part {
+        padding: 0 6px 0 8px; /* Tighter padding */
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        white-space: nowrap;
+        
+        &:active {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
 
-    ion-icon {
-      font-size: 10px;
-      margin-top: 2px;
+      .caret-part {
+        padding: 0 6px 0 4px; /* Tighter padding */
+        height: 100%;
+        display: flex;
+        align-items: center;
+        border-left: 1px solid rgba(255, 255, 255, 0.2);
+        
+        &:active {
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        ion-icon {
+          font-size: 9px;
+          margin-top: 1px;
+        }
+      }
     }
   }
 
   .bonus-badge {
     position: absolute;
-    top: -10px;
+    top: -8px;
     right: -4px;
     background: #ef4444;
     color: #ffcc00;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 900;
-    padding: 1px 4px;
+    padding: 1px 3px;
     border-radius: 4px;
     line-height: 1;
     z-index: 10;
@@ -262,6 +278,57 @@
       border-top: 4px solid #ef4444;
     }
   }
+
+  .deposit-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 100%; /* Match button width */
+    background: #0f1520;
+    border: 1px solid #1e40af;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    overflow: hidden;
+    animation: dropdown-fade 0.15s ease;
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center content like the button */
+      gap: 6px;
+      padding: 10px 8px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      ion-icon {
+        font-size: 14px;
+        color: #31d7f1;
+      }
+
+      &:hover, &:active {
+        background: rgba(49, 215, 241, 0.1);
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      &.withdraw {
+        ion-icon {
+          color: #f0c059;
+        }
+      }
+    }
+  }
+}
+
+@keyframes dropdown-fade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .login-btn {

@@ -39,11 +39,22 @@
                   [class.spinning]="isLoadingBalance"
                   (click)="onRefresh()"></ion-icon>
       </div>
-      <div class="deposit-btn-wrap">
-        <button class="header-deposit-btn-blue" (click)="onDeposit()">
-          Deposit <ion-icon name="caret-down"></ion-icon>
-        </button>
+      <div class="deposit-btn-wrap" style="position:relative">
+        <div class="header-deposit-btn-blue split-btn">
+          <span class="deposit-text-part" (click)="onDeposit()">Deposit</span>
+          <span class="caret-part" (click)="toggleDropdown($event)">
+            <ion-icon name="caret-down" [style.transform]="showDropdown ? 'rotate(180deg)' : 'rotate(0deg)'"
+              style="transition:transform 0.2s;display:inline-block"></ion-icon>
+          </span>
+        </div>
         <div class="bonus-badge">+7%</div>
+        <!-- Dropdown Menu -->
+        <div class="deposit-dropdown" *ngIf="showDropdown" (click)="$event.stopPropagation()">
+          <div class="dropdown-item withdraw" (click)="onWithdraw()">
+            <ion-icon name="arrow-down-outline"></ion-icon>
+            <span>Withdraw</span>
+          </div>
+        </div>
       </div>
     } @else {
       <button class="login-btn" (click)="onLogin('login')">Login</button>

@@ -3,8 +3,9 @@ import { FooterNavComponent } from '../../components/footer-nav/footer-nav.compo
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { IonHeader, IonContent, IonFooter, IonIcon, IonButton } from '@ionic/angular/standalone';
+import { IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   chevronBackOutline,
@@ -14,8 +15,13 @@ import {
   giftOutline,
   chevronDownOutline,
   chevronUpOutline,
-  logoWhatsapp
+  logoWhatsapp,
+  shareSocialOutline,
+  cloudUploadOutline
 } from 'ionicons/icons';
+import { AuthService } from '../../services/auth.service';
+import { SupabaseService } from '../../services/supabase.service';
+import { environment } from '../../../environments/environment';
 
 interface DepositAmount {
   val: number;
@@ -35,11 +41,13 @@ interface Promotion {
   templateUrl: './deposit.page.html',
   styleUrls: ['./deposit.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonFooter, IonIcon, IonButton, FooterNavComponent]
+  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonSpinner, FooterNavComponent]
 })
 export class DepositPage implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private supabaseService = inject(SupabaseService);
+  private authService = inject(AuthService);
 
   selectedMethod = 'jazzcash';
   selectedAmount: number | null = null;
@@ -47,6 +55,13 @@ export class DepositPage implements OnInit, OnDestroy {
   timer: string = '11:19:44.4';
   isPromotionsExpanded = false;
   userBalance = 1.55;
+  isLoading = false;
+  
+  // Manual flow states
+  currentStep: 'amount' | 'proof' = 'amount';
+  transactionId: string = '';
+  selectedFile: File | null = null;
+  previewUrl: string | null = null;
 
   // Amounts exactly matching the screenshot
   amounts: DepositAmount[] = [
@@ -90,7 +105,9 @@ export class DepositPage implements OnInit, OnDestroy {
       giftOutline,
       chevronDownOutline,
       chevronUpOutline,
-      logoWhatsapp
+      logoWhatsapp,
+      shareSocialOutline,
+      cloudUploadOutline
     });
   }
 
@@ -101,6 +118,11 @@ export class DepositPage implements OnInit, OnDestroy {
       if (amount) {
         this.selectAmount(Number(amount));
       }
+    });
+    
+    // Get real balance from auth service
+    this.authService.balance$.subscribe(bal => {
+      this.userBalance = bal;
     });
   }
 
@@ -166,16 +188,85 @@ export class DepositPage implements OnInit, OnDestroy {
   }
 
   goBack() {
+    if (this.currentStep === 'proof') {
+      this.currentStep = 'amount';
+      return;
+    }
     this.router.navigate(['/home']);
   }
 
   get canDeposit() {
-    return this.getCurrentAmount() >= 100;
+    return this.getCurrentAmount() >= 100 && !this.isLoading;
   }
 
-  submitDeposit() {
-    if (this.canDeposit) {
-      this.router.navigate(['/offers'], { queryParams: { showTreasure: 'true' } });
+  async submitDeposit() {
+    if (!this.canDeposit) return;
+    this.currentStep = 'proof';
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async submitManualProof() {
+    if (!this.transactionId || !this.selectedFile) {
+      alert('Please enter Transaction ID and upload a screenshot');
+      return;
+    }
+
+    const user = this.authService.userSubject.value;
+    if (!user) return;
+
+    this.isLoading = true;
+    
+    try {
+      const file = this.selectedFile;
+      const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const fileName = `${user.id}_${Date.now()}_${sanitizedFileName}`;
+      const blob = new Blob([file], { type: file.type });
+      
+      // 1. Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await this.supabaseService.supabase.storage
+        .from('aviator-jeet')
+        .upload(fileName, blob, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get Public URL
+      const { data: { publicUrl } } = this.supabaseService.supabase.storage
+        .from('aviator-jeet')
+        .getPublicUrl(fileName);
+
+      // 2. Save to manual_deposits table via RPC to bypass RLS issues
+      const { data: rpcData, error: rpcError } = await this.supabaseService.supabase
+        .rpc('submit_manual_deposit', {
+          p_user_id: user.id,
+          p_user_email: user.email || '',
+          p_amount: this.getCurrentAmount(),
+          p_transaction_id: this.transactionId,
+          p_proof_url: publicUrl,
+          p_method: this.selectedMethod
+        });
+
+      if (rpcError) throw rpcError;
+      if (rpcData?.status === 'error') throw new Error(rpcData.message);
+
+      this.isLoading = false;
+      alert('Payment proof submitted successfully! Our team will verify it shortly.');
+      this.router.navigate(['/home']);
+
+    } catch (error: any) {
+      this.isLoading = false;
+      console.error('Manual Deposit Error:', error);
+      alert('Failed to submit: ' + (error.message || 'Unknown error'));
     }
   }
 }

@@ -1,208 +1,233 @@
 <ion-content class="[--background:#111419]">
   <!-- Top Background Header -->
-  <div class="relative w-full min-h-[180px] xs:min-h-[200px] sm:min-h-[220px] bg-no-repeat bg-center shrink-0 pb-0"
-    style="background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/style_1_topbg_yd.avif?version=v7.1.212'); background-size: 100% 100%; padding-top: var(--ion-safe-area-top);">
+  <div class="relative w-full bg-no-repeat bg-center shrink-0 pb-[30px]"
+    style="background-image: url('https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/style_1_topbg_yd.avif?version=v7.1.212'); background-size: 100% 100%; padding-top: calc(var(--ion-safe-area-top, 0px) + 10px);">
 
     <!-- Top Nav Icons -->
-    <div class="flex justify-between items-center px-3 pt-2">
-      <button class="bg-transparent text-white/50 active:opacity-50 w-7 h-7 flex items-center justify-start"
-        (click)="goBack()">
-        <ion-icon name="chevron-back-outline" class="text-lg"></ion-icon>
+    <div class="flex items-center h-[clamp(40px,12vw,48px)] px-2">
+      <button (click)="goBack()"
+        class="bg-transparent border-none text-[#ADB6C3] text-[clamp(18px,5.5vw,22px)] px-3 flex items-center cursor-pointer shrink-0 active:opacity-60">
+        <ion-icon name="chevron-back-outline"></ion-icon>
       </button>
-      <div class="flex items-center gap-5 pr-1">
-        <ion-icon name="headset-outline" class="text-lg text-[#F0C059] cursor-pointer"
+
+      <div class="flex-1 flex justify-end px-3 gap-[clamp(8px,3vw,20px)]">
+        <ion-icon name="headset-outline"
+          class="text-[clamp(16px,5vw,22px)] text-[#ADB6C3] active:opacity-60 cursor-pointer"
           (click)="navigateTo('/support')"></ion-icon>
-        <div class="relative cursor-pointer" (click)="navigateTo('/messages')">
-          <svg width="16" height="16" viewBox="0 0 40 40" fill="#F0C059">
+        <div class="relative cursor-pointer active:opacity-60" (click)="navigateTo('/messages')">
+          <svg class="w-[clamp(14px,4.5vw,20px)] h-auto" viewBox="0 0 40 40" fill="#ADB6C3">
             <path
               d="M15.334,30.667A15.333,15.333,0,0,1,4.491,4.491,15.333,15.333,0,0,1,30.667,15.334a15.193,15.193,0,0,1-3.128,9.282c.692,1.029,1.754,2.938,1.092,4.144a1.289,1.289,0,0,1-1.237.612,8.926,8.926,0,0,1-3.6-1.247A15.263,15.263,0,0,1,15.334,30.667Zm7.893-18a2.76,2.76,0,1,0,2.76,2.76A2.763,2.763,0,0,0,23.227,12.667Zm-7.893,0a2.76,2.76,0,1,0,2.76,2.76A2.763,2.763,0,0,0,15.334,12.667Zm-7.907,0a2.76,2.76,0,1,0,2.76,2.76A2.763,2.763,0,0,0,7.427,12.667Z"
               transform="translate(4.667 4.667)"></path>
           </svg>
           <div
-            class="absolute -top-1 -right-1 bg-[#EA4E3D] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-[#111419] leading-none">
+            class="absolute -top-1.5 -right-1.5 bg-[#E64242] text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-[#111419] leading-none">
             2</div>
         </div>
       </div>
     </div>
 
     <!-- User Info Row -->
-    <ion-grid class="mt-2 xs:mt-4 px-4">
-      <ion-row class="ion-align-items-center ion-nowrap">
-        <!-- Avatar -->
-        <ion-col size="auto" class="ion-no-padding">
-          <div class="relative">
-            <div
-              class="w-[50px] h-[50px] rounded-full border-2 border-[#F1C15A] bg-cover bg-center overflow-hidden"
-              style="background-image: url('https://jtut-ref.avif'); background-image: url('https://140.150.30.128:5030/siteadmin/default/2D/img_ntx7.avif');">
-            </div>
-            <div
-              class="absolute bottom-0 right-[-2px] w-[18px] h-[18px] bg-[#F1C15A] rounded-full flex items-center justify-center border border-[#111419] cursor-pointer"
-              (click)="isProfileEditModalOpen = true">
-              <ion-icon name="pencil-outline" class="text-[#111419] text-[10px]"></ion-icon>
-            </div>
-          </div>
-        </ion-col>
+    <div class="flex items-center px-4 mt-[clamp(8px,3vw,20px)]">
+      <!-- Avatar -->
+      <div class="relative shrink-0 mr-2">
+        <div
+          class="w-[clamp(38px,12vw,56px)] h-[clamp(38px,12vw,56px)] rounded-full border-2 border-[#F1C15A] bg-cover bg-center overflow-hidden"
+          style="background-image: url('https://140.150.30.128:5030/siteadmin/default/2D/img_ntx7.avif');">
+        </div>
+        <div
+          class="absolute bottom-0 right-0 w-[clamp(16px,5vw,20px)] h-[clamp(16px,5vw,20px)] bg-[#F1C15A] rounded-full flex items-center justify-center border border-[#111419] cursor-pointer"
+          (click)="isProfileEditModalOpen = true">
+          <ion-icon name="pencil-outline" class="text-[#111419] text-[12px]"></ion-icon>
+        </div>
+      </div>
 
-        <!-- Text Info -->
-        <ion-col class="ion-no-padding ion-padding-start min-w-0">
-          <div class="flex items-center gap-1 mb-1">
-            <ion-icon name="caret-down-sharp" class="text-white/40 text-[12px]"></ion-icon>
+      <!-- Text Info -->
+      <div class="flex flex-col flex-1 min-w-0 justify-center ml-0.5">
+        <!-- Top Line: Username -->
+        <div class="flex items-center gap-1 mb-[clamp(4px,1.5vw,8px)]">
+          <ion-icon name="caret-down-sharp" class="text-white/40 text-[10px]"></ion-icon>
+          <span
+            class="text-white text-[clamp(12px,4vw,16px)] font-normal tracking-tight leading-none truncate max-w-[150px] profile-username">{{
+            user.fullName || 'jtut7789' }}</span>
+          <ion-icon name="copy-outline"
+            class="text-[#F1C15A] text-[clamp(11px,3.5vw,14px)] cursor-pointer active:opacity-60 shrink-0"
+            (click)="copyToClipboard(user.fullName)"></ion-icon>
+        </div>
+
+        <!-- Bottom Line: ID and Balance -->
+        <div class="flex items-center flex-wrap gap-x-5 gap-y-1">
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="text-white/60 text-[clamp(10px,3vw,12px)] font-normal profile-id-label">ID:</span>
+            <span class="text-white text-[clamp(11px,3.5vw,13px)] font-normal profile-id-value">{{ user.id ||
+              '126406886' }}</span>
+            <ion-icon name="copy-outline"
+              class="text-[#F1C15A] text-[clamp(11px,3.5vw,13px)] cursor-pointer active:opacity-60 shrink-0"
+              (click)="copyToClipboard(user.id)"></ion-icon>
+          </div>
+
+          <!-- Balance Block -->
+          <div class="flex items-center gap-1.5 min-w-0 ml-1 profile-balance-block">
+            <div
+              class="flex items-center justify-center w-[14px] h-[14px] xs:w-[16px] xs:h-[16px] rounded-full overflow-hidden flex-shrink-0 shadow-sm border border-white/10">
+              <img src="https://140.150.30.128:5030/siteadmin/upload/img/PKR.avif" alt="PKR"
+                class="w-full h-full object-cover">
+            </div>
             <span
-              class="text-white text-[14px] xs:text-[16px] font-black tracking-tight leading-none truncate max-w-[150px]">{{
-              user.fullName || 'jtut7789' }}</span>
-            <span (click)="copyToClipboard(user.fullName)"
-              class="inline-flex items-center justify-center w-[14px] xs:w-[16px] h-[14px] xs:h-[16px] border border-[#F1C15A]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0 ml-1">
-              <ion-icon name="copy-outline" class="text-[#F1C15A] text-[9px] xs:text-[10px]"></ion-icon>
-            </span>
+              class="text-white font-bold text-[clamp(12px,3.8vw,14px)] tracking-tighter leading-none truncate underline decoration-white/30 decoration-1 underline-offset-4 profile-balance-value">{{
+              user.balance || '0.78' }}</span>
+            <ion-icon name="sync-outline" class="text-[#F1C15A] text-[clamp(13px,4vw,15px)] cursor-pointer shrink-0"
+              [class.animate-spin]="isLoadingBalance" (click)="refreshBalance()"></ion-icon>
           </div>
-
-          <div class="flex items-center flex-wrap gap-x-2 gap-y-1">
-            <div class="flex items-center gap-1 shrink-0">
-              <span class="text-white/60 text-[12px] xs:text-[14px] font-bold">ID: </span>
-              <span class="text-white text-[12px] xs:text-[14px] font-bold">{{ user.id || '126406886' }}</span>
-              <span (click)="copyToClipboard(user.id)"
-                class="inline-flex items-center justify-center w-[14px] xs:w-[16px] h-[14px] xs:h-[16px] border border-[#F1C15A]/70 rounded-[3px] bg-[#2A2F38] cursor-pointer active:opacity-60 shrink-0">
-                <ion-icon name="copy-outline" class="text-[#F1C15A] text-[9px] xs:text-[10px]"></ion-icon>
-              </span>
-            </div>
-
-            <div class="w-[1px] h-3 bg-white/10 mx-1"></div>
-
-            <div class="flex items-center gap-1.5 min-w-0 ml-2 profile-balance-block">
-              <div class="w-[18px] h-[12px] rounded-sm overflow-hidden flex-shrink-0 shadow-sm border border-white/10">
-                <img src="https://jtut-ref-flag.avif" src="https://140.150.30.128:5030/siteadmin/upload/img/PKR.avif"
-                  alt="PKR" class="w-full h-full object-cover">
-              </div>
-              <span
-                class="text-white font-black text-[14px] xs:text-[18px] tracking-tighter leading-none truncate underline decoration-[#F1C15A]/40 decoration-2 underline-offset-2">{{
-                user.balance || '0.78' }}</span>
-              <ion-icon name="sync-outline" class="text-[#F1C15A] text-[14px] xs:text-[16px] cursor-pointer shrink-0"
-                [class.animate-spin]="isLoadingBalance" (click)="refreshBalance()"></ion-icon>
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+        </div>
+      </div>
+    </div>
 
     <!-- Withdraw / Deposit Action Row -->
-    <ion-grid class="mt-4 xs:mt-6 mb-2 xs:mb-4 px-2 action-row">
-      <ion-row class="ion-align-items-end">
-        <!-- Withdraw -->
-        <ion-col size="6" class="ion-text-center">
-          <div (click)="navigateTo('/withdraw')"
-            class="action-item flex flex-col items-center gap-1 active:scale-95 transition-transform cursor-pointer">
-            <svg width="28" height="24" viewBox="0 0 53 46.375" fill="#F0C059">
-              <path
-                d="M39.1,35.775H4.632A4.623,4.623,0,0,1,0,31.187v-5.9a7.9,7.9,0,0,0,5.117-7.376A7.9,7.9,0,0,0,0,10.531V4.586A4.623,4.623,0,0,1,4.633,0H39.1A4.625,4.625,0,0,1,42.37,1.347a4.543,4.543,0,0,1,1.355,3.239v5.877a7.876,7.876,0,0,0,0,14.89v5.836A4.618,4.618,0,0,1,39.1,35.774ZM11.925,10.96a1.99,1.99,0,0,0-1.987,1.987V24.872a1.99,1.99,0,0,0,1.987,1.988H31.8a1.99,1.99,0,0,0,1.987-1.988V12.947A1.99,1.99,0,0,0,31.8,10.96ZM26.84,9.037a1.988,1.988,0,0,1,1.489.673h2.693L30.463,7.47a1.984,1.984,0,0,0-2.409-1.448L13.265,9.71H23.7l2.691-.621A1.974,1.974,0,0,1,26.84,9.037Zm2.12,15.551H14.765a2.843,2.843,0,0,0-2.84-2.839V16.071a2.844,2.844,0,0,0,2.84-2.839h14.2a2.843,2.843,0,0,0,2.84,2.839v5.679a2.845,2.845,0,0,0-2.841,2.838Zm-7.1-8.328a2.65,2.65,0,1,0,2.65,2.65A2.653,2.653,0,0,0,21.863,16.26Z"
-                transform="translate(4.638 4.969)"></path>
-            </svg>
-            <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Withdraw</span>
-          </div>
-        </ion-col>
-        <!-- Deposit -->
-        <ion-col size="6" class="ion-text-center">
-          <div (click)="navigateTo('/deposit')"
-            class="action-item flex flex-col items-center gap-1 relative active:scale-95 transition-transform cursor-pointer">
-            <div
-              class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#EA4E3D] text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow z-30 whitespace-nowrap">
-              +0.5%</div>
-            <img
-              src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/gif_profile_style1.avif?version=v7.1.212"
-              alt="Deposit" class="w-[28px] h-[24px] object-contain">
-            <span class="text-[#ADB6C3] text-[10px] font-bold tracking-tight">Deposit</span>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <div class="flex items-center justify-center mt-[clamp(12px,4vw,24px)] mb-2 gap-[clamp(70px,35vw,110px)]">
+      <!-- Withdraw -->
+      <div (click)="navigateTo('/withdraw')"
+        class="flex flex-col items-center gap-1.5 active:scale-95 transition-transform cursor-pointer">
+        <svg class="w-[clamp(22px,7vw,28px)] h-auto" viewBox="0 0 53 46.375" fill="#F0C059">
+          <path
+            d="M39.1,35.775H4.632A4.623,4.623,0,0,1,0,31.187v-5.9a7.9,7.9,0,0,0,5.117-7.376A7.9,7.9,0,0,0,0,10.531V4.586A4.623,4.623,0,0,1,4.633,0H39.1A4.625,4.625,0,0,1,42.37,1.347a4.543,4.543,0,0,1,1.355,3.239v5.877a7.876,7.876,0,0,0,0,14.89v5.836A4.618,4.618,0,0,1,39.1,35.774ZM11.925,10.96a1.99,1.99,0,0,0-1.987,1.987V24.872a1.99,1.99,0,0,0,1.987,1.988H31.8a1.99,1.99,0,0,0,1.987-1.988V12.947A1.99,1.99,0,0,0,31.8,10.96ZM26.84,9.037a1.988,1.988,0,0,1,1.489.673h2.693L30.463,7.47a1.984,1.984,0,0,0-2.409-1.448L13.265,9.71H23.7l2.691-.621A1.974,1.974,0,0,1,26.84,9.037Zm2.12,15.551H14.765a2.843,2.843,0,0,0-2.84-2.839V16.071a2.844,2.844,0,0,0,2.84-2.839h14.2a2.843,2.843,0,0,0,2.84,2.839v5.679a2.845,2.845,0,0,0-2.841,2.838Zm-7.1-8.328a2.65,2.65,0,1,0,2.65,2.65A2.653,2.653,0,0,0,21.863,16.26Z"
+            transform="translate(4.638 4.969)"></path>
+        </svg>
+        <span class="text-white font-bold text-[clamp(11px,3.2vw,13px)] tracking-tight">Withdraw</span>
+      </div>
+      <!-- Deposit -->
+      <div (click)="navigateTo('/deposit')"
+        class="flex flex-col items-center gap-1.5 relative active:scale-95 transition-transform cursor-pointer">
+        <div
+          class="absolute -top-1 -right-3 bg-[#4ADE80] text-white text-[clamp(7.5px,2.2vw,9px)] font-black px-1 py-[1px] rounded shadow z-30 whitespace-nowrap">
+          +0.5%</div>
+        <img
+          src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/common/profile/gif_profile_style1.avif?version=v7.1.212"
+          alt="Deposit" class="w-[clamp(26px,8vw,32px)] h-auto object-contain">
+        <span class="text-white font-bold text-[clamp(11px,3.2vw,13px)] tracking-tight">Deposit</span>
+      </div>
+    </div>
   </div>
 
   <!-- VIP Card -->
-  <div class="px-3 vip-card-container">
+  <div class="px-3 -mt-[clamp(20px,8vw,30px)] relative z-20">
     <div (click)="navigateTo('/vip')"
-      class="vip-card-inner relative w-full h-[100px] bg-[#F1C15A] rounded-xl overflow-hidden shadow-lg active:scale-[0.98] transition-all cursor-pointer">
-      <!-- Background subtle curves -->
-      <div class="absolute inset-0 opacity-20 pointer-events-none"
-        style="background-image: radial-gradient(circle at 0px 50%, rgba(255,255,255,0.8), transparent 60%);"></div>
+      class="w-full h-[clamp(72px,22vw,84px)] bg-gradient-to-r from-[#F6CF63] to-[#F2B94A] rounded-[14px] overflow-hidden shadow-lg active:scale-[0.98] transition-all cursor-pointer relative">
 
-      <div class="relative flex items-center justify-between h-full px-4 z-10">
-        <!-- Cluster Left: Badge + V0 + Progress -->
-        <div class="flex items-center gap-2.5 shrink-0">
-          <div class="vip-level-badge">
-            <span class="text-white font-black text-[18px] italic leading-none drop-shadow-md">0</span>
-          </div>
-          <div class="flex flex-col gap-0.5">
-            <span
-              class="text-[#111419] text-[24px] font-black italic tracking-tighter leading-none select-none">V0</span>
-            <!-- Progress Bar -->
-            <div class="vip-progress-bar">
-              <div class="h-full bg-white/40 w-0"></div>
-              <span
-                class="absolute inset-0 flex items-center justify-center text-[6px] font-bold text-[#8B6B23] tracking-tighter whitespace-nowrap italic">0.00/10,000.00</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Section -->
-        <div class="flex flex-col items-end gap-0.5 mr-1 shrink-0 overflow-hidden">
-          <div class="flex items-center gap-1.5">
-            <span class="text-[#8B6B23] text-[10px] font-bold select-none leading-none">Bonus</span>
-            <span class="text-[#5C4011] text-[20px] font-black italic tracking-tight leading-none select-none">{{
-              user.bonus || '50.00' }}</span>
-          </div>
-          <div class="flex items-center gap-0.5 whitespace-nowrap">
-            <span class="text-[#8B6B23]/70 text-[8px] font-bold tracking-tight leading-none">VIP requires</span>
-            <span class="text-[#5C4011] text-[8px] font-black leading-none underline underline-offset-1">Bets</span>
-            <span class="text-[#5C4011]/80 text-[8px] font-black leading-none">{{ user.requiredBets || '9,922.12'
-              }}</span>
-          </div>
-        </div>
-
-        <!-- Chevron -->
-        <ion-icon name="chevron-forward-outline" class="text-[#8B6B23]/30 text-[18px] ml-1"></ion-icon>
+      <!-- Background subtle radial lines -->
+      <div class="absolute inset-0 opacity-[0.06] pointer-events-none"
+        style="background-image: repeating-radial-gradient(circle at -5% 50%, transparent, transparent 4px, #000 5px, transparent 6px);">
       </div>
+
+      <ion-grid
+        class="absolute inset-0 z-10 flex flex-col justify-between py-[clamp(6px,2vw,10px)] px-4 m-0 w-full h-full">
+        <!-- Top Row: Badge + V0 on left, Text block + Chevron on right -->
+        <ion-row class="items-center justify-between w-full whitespace-nowrap m-0 p-0">
+
+          <!-- Left: Badge + V0 -->
+          <ion-col size="auto" class="flex items-center gap-2 shrink-0 p-0 m-0">
+            <!-- Badge -->
+            <div
+              class="w-[38px] h-[38px] rounded-full bg-[#00BFA5] border-[1.5px] border-[#F1F3F4] flex items-center justify-center relative overflow-hidden shadow-sm shrink-0">
+              <span class="text-[#F6D066] font-bold text-[16px] z-10 font-sans tracking-tight">0</span>
+              <!-- Fake laurel leaves -->
+              <ion-icon name="leaf"
+                class="absolute left-[2px] bottom-[5px] text-[#F6D066] text-[10px] transform -rotate-[60deg] opacity-80"></ion-icon>
+              <ion-icon name="leaf"
+                class="absolute right-[2px] bottom-[5px] text-[#F6D066] text-[10px] transform rotate-[60deg] opacity-80"></ion-icon>
+              <ion-icon name="leaf"
+                class="absolute left-[3px] top-[9px] text-[#F6D066] text-[7px] transform -rotate-[30deg] opacity-80"></ion-icon>
+              <ion-icon name="leaf"
+                class="absolute right-[3px] top-[9px] text-[#F6D066] text-[7px] transform rotate-[30deg] opacity-80"></ion-icon>
+            </div>
+            <!-- V0 Text -->
+            <span
+              class="text-[#966311] text-[26px] font-black italic tracking-tighter leading-none mt-1 vip-level-text">V0</span>
+          </ion-col>
+
+          <!-- Right: Bonus block & Chevron -->
+          <ion-col size="auto" class="flex items-center gap-2 shrink-0 p-0 m-0">
+            <div class="flex flex-col items-start gap-1">
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-[#865B17] text-[12px] font-bold leading-none">Bonus</span>
+                <span class="text-[#5C4011] text-[16px] font-normal tracking-tight leading-none">{{ user.bonus ||
+                  '50.00' }}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-[#987635] text-[10px] font-normal leading-none">VIP requires</span>
+                <span class="text-[#987635] text-[10px] font-bold underline underline-offset-2 leading-none">Bets</span>
+                <span class="text-[#987635] text-[10px] font-normal leading-none">{{ user.requiredBets || '9,922.12'
+                  }}</span>
+              </div>
+            </div>
+            <!-- Chevron -->
+            <ion-icon name="chevron-forward-outline" class="text-[#987635]/60 text-[18px] shrink-0"></ion-icon>
+          </ion-col>
+        </ion-row>
+
+        <!-- Bottom Row: Progress Bar -->
+        <ion-row class="w-full m-0 p-0 mt-2">
+          <ion-col size="auto" class="p-0 m-0">
+            <div
+              class="relative w-[140px] h-[10px] bg-[#C19B4C]/40 rounded-full overflow-hidden flex items-center shadow-inner mb-0.5">
+              <!-- Fill -->
+              <div class="absolute top-0 left-0 h-full bg-[#10B981] w-[2%] shadow-sm"></div>
+              <!-- Inner text -->
+              <span
+                class="absolute w-full text-center text-[#5C4011] text-[8px] font-medium tracking-tighter z-10 leading-none"
+                style="top: 50%; transform: translateY(-50%);">77.88/10,000.00</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
     </div>
   </div>
 
   <!-- ── Menu List ── -->
 
-  <div class="px-3 mt-1.5 pb-24 space-y-2">
+  <div class="mt-3 pb-24 relative z-10">
 
     <!-- Group 1 -->
-    <div class="bg-[#1E2128] rounded-xl overflow-hidden border border-white/5">
+    <div class="flex flex-col">
       <!-- My records -->
       <div
         class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/records')">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M-4094.821-365.073a9.77,9.77,0,0,1-5.87-10.92,9.771,9.771,0,0,1,9.567-7.886,9.767,9.767,0,0,1,6.91,2.843,9.77,9.77,0,0,1,1.248,12.335,9.769,9.769,0,0,1-8.141,4.364A9.751,9.751,0,0,1-4094.821-365.073Zm-1.244-14.013a6.983,6.983,0,0,0-.925,8.815,6.983,6.983,0,0,0,8.465,2.624,6.984,6.984,0,0,0,4.222-7.793,6.984,6.984,0,0,0-6.822-5.658h-.034A6.986,6.986,0,0,0-4096.064-379.085Zm-15.558,14.172a4.405,4.405,0,0,1-4.378-4.377V-392.91a4.4,4.4,0,0,1,4.378-4.377h19.524a4.4,4.4,0,0,1,4.377,4.377v7.017a11.33,11.33,0,0,0-3.127-.486v-6.6a1.243,1.243,0,0,0-.365-.885,1.235,1.235,0,0,0-.885-.364h-19.524a1.239,1.239,0,0,0-.886.364,1.245,1.245,0,0,0-.364.885v23.624a1.247,1.247,0,0,0,.364.885,1.248,1.248,0,0,0,.886.364h9.8a14.055,14.055,0,0,0,2.571,3.193Zm20.479-4.505s0,0-1.43-.013a5.854,5.854,0,0,0,1.368-2.351,4.982,4.982,0,0,1-1.539.843,2.259,2.259,0,0,1-1.98-.577,2.257,2.257,0,0,1-.687-1.945c.061-1.959,2.253-2.8,4.279-5.3,1.994,2.529,4.225,3.4,4.26,5.35a2.253,2.253,0,0,1-.717,1.93,2.252,2.252,0,0,1-1.985.543,4.566,4.566,0,0,1-1.476-.853,5.915,5.915,0,0,0,1.337,2.383Zm-11.168-11.617h-6.1a1.616,1.616,0,0,1-1.6-1.6,1.579,1.579,0,0,1,.46-1.135,1.577,1.577,0,0,1,1.137-.46h6.1a1.6,1.6,0,0,1,1.6,1.6,1.6,1.6,0,0,1-1.6,1.6Zm5.205-5.274h-11.4a1.617,1.617,0,0,1-1.6-1.6,1.576,1.576,0,0,1,.461-1.137,1.569,1.569,0,0,1,1.136-.46h11.4a1.617,1.617,0,0,1,1.6,1.6,1.576,1.576,0,0,1-.461,1.136,1.572,1.572,0,0,1-1.113.46Z"
               transform="translate(4116 397.287)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">My records</span>
+          <span class="text-white text-[clamp(9px,2.6vw,12px)] font-bold">My records</span>
         </div>
-        <div class="flex items-center gap-2 overflow-hidden">
-          <span class="text-[#ADB6C3]/40 text-[10px] text-right leading-[1.2] truncate">Details, bets, reports, recover
-            balance</span>
-          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px] shrink-0"></ion-icon>
+        <div class="flex items-center gap-1.5 flex-1 justify-end ml-4">
+          <span class="text-[#ADB6C3]/60 text-[clamp(7.5px,2.2vw,9.5px)] text-right leading-[1.3]">Details, bets, reports,
+            recover<br>balance</span>
+          <ion-icon name="chevron-forward-outline" class="text-white/30 text-[14px] shrink-0"></ion-icon>
         </div>
       </div>
       <!-- Manage withdrawal -->
-      <div class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer menu-list-item" (click)="navigateTo('/withdraw')">
-        <div class="flex items-center gap-3">
+      <div class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer menu-list-item"
+        (click)="navigateTo('/withdraw')">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M843.8-759.441l-.2-1.259-.066-.066-1.193.464a1.976,1.976,0,0,1-2.455-.856l-1.593-2.72a2.024,2.024,0,0,1,.464-2.521l1.069-.8v-.141l-.994-.8a1.884,1.884,0,0,1-.464-2.521l1.593-2.72a1.944,1.944,0,0,1,2.389-.856l1.259.464.067-.067.2-1.328a1.924,1.924,0,0,1,1.925-1.657h3.184a1.888,1.888,0,0,1,1.924,1.723l.2,1.262.066.067,1.193-.464a1.976,1.976,0,0,1,2.455.856l1.593,2.72a2.021,2.021,0,0,1-.464,2.521l-1.069.8v.133l1.069.8a2.038,2.038,0,0,1,.53,2.521l-1.593,2.78a2.081,2.081,0,0,1-2.455.855l-1.259-.464-.066.067-.2,1.325a2.067,2.067,0,0,1-1.991,1.593l-.008.015h-3.225A1.892,1.892,0,0,1,843.8-759.441Zm.536-3.641a5.986,5.986,0,0,0,.856.53l.6.265.34,2.117h2.322l.332-2.189.6-.265a5.985,5.985,0,0,0,.855-.53l.53-.4,2.057.8,1.2-2.057-1.726-1.325.066-.663v-1l-.066-.663,1.726-1.328-1.2-2.055-2.057.8-.53-.4a5.98,5.98,0,0,0-.855-.53l-.6-.268-.332-2.187H846.12l-.331,2.187-.6.268a2.992,2.992,0,0,0-.856.53l-.53.4-2.057-.8-1.193,2.055,1.726,1.328-.066.663v1.069l.066.663-1.726,1.325,1.193,2.057,2.057-.8Zm8.3-9.163C852.629-772.179,852.7-772.179,852.629-772.246Zm-16.724,8.531H825.87a3.845,3.845,0,0,1-2.737-1.134A3.9,3.9,0,0,1,822-767.595v-17.257a3.855,3.855,0,0,1,1.135-2.746,3.857,3.857,0,0,1,2.741-1.135h25.582a3.854,3.854,0,0,1,2.74,1.135,3.854,3.854,0,0,1,1.135,2.746v8.606a11.98,11.98,0,0,0-3.119-2v-.5h-1.357a12.02,12.02,0,0,0-3.486-.514,12.023,12.023,0,0,0-3.486.514H825.119v11.3a.773.773,0,0,0,.761.761l9.5-.093a11.991,11.991,0,0,0,.524,3.073h0Zm-10.016-21.829a.766.766,0,0,0-.762.761v2.9h27.079v-2.9a.775.775,0,0,0-.762-.761H825.889Zm19.177,18.208a2.256,2.256,0,0,1,2.256-2.256,2.256,2.256,0,0,1,2.256,2.256,2.279,2.279,0,0,1-2.256,2.256A2.256,2.256,0,0,1,845.066-767.336Zm-16.225-5.581a1.4,1.4,0,0,1-.55-.118,1.434,1.434,0,0,1-.762-.8,1.412,1.412,0,0,1-.095-.552,1.493,1.493,0,0,1,1.471-1.471h4.625a1.474,1.474,0,0,1,.548.106,1.462,1.462,0,0,1,.479.319,1.411,1.411,0,0,1,.317.48,1.445,1.445,0,0,1,.106.567,1.493,1.493,0,0,1-1.475,1.467Z"
               transform="translate(-819.333 794.065)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Manage withdrawal</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Manage withdrawal</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
       </div>
     </div>
 
+    <!-- Group 2 Spacer -->
+    <div class="h-2 w-full bg-[#1A1D24]"></div>
+
     <!-- Group 2 -->
-    <div class="bg-[#1E2128] rounded-xl overflow-hidden border border-white/5">
+    <div class="flex flex-col">
       <!-- Invite -->
       <div
         class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer overflow-hidden menu-list-item"
@@ -219,146 +244,150 @@
               d="M23.0775 32.9002L21.6643 33.3244C20.9421 33.5411 20.1808 33.1314 19.9636 32.4094L19.1146 29.5836C18.8978 28.8614 19.3075 28.0995 20.0296 27.8823L21.4422 27.4582L23.0775 32.9002Z">
             </path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Invite</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Invite</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[#F1C15A] text-[11px] font-bold whitespace-nowrap">1 person Rs 5,000 Invite</span>
-          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px] shrink-0"></ion-icon>
+        <div class="flex items-center gap-2 overflow-hidden flex-1 justify-end ml-4">
+          <span class="text-[#F1C15A] text-[clamp(8px,2.4vw,11px)] font-bold">,000 Invite 1 person Rs !</span>
+          <ion-icon name="chevron-forward-outline" class="text-white/30 text-[clamp(14px,4vw,18px)] shrink-0"></ion-icon>
         </div>
       </div>
 
       <!-- Profile -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="isProfileEditModalOpen = true">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M-236.922-967.117h-17.693a1.646,1.646,0,0,1-1.644-1.644v-2.621a12.083,12.083,0,0,1,.953-4.721,12.131,12.131,0,0,1,2.6-3.854,12.115,12.115,0,0,1,3.855-2.6,12.728,12.728,0,0,1,4.722-.953h7.208a1.646,1.646,0,0,1,1.643,1.645,1.645,1.645,0,0,1-1.643,1.644h-7.208a8.85,8.85,0,0,0-8.84,8.84v.977h16.048a1.645,1.645,0,0,1,1.643,1.644A1.645,1.645,0,0,1-236.922-967.117Zm3.964-.263a1.5,1.5,0,0,1-1.066-.443,1.514,1.514,0,0,1-.442-1.136l.173-3.956a1.511,1.511,0,0,1,.442-1.006l8.884-8.885a1.508,1.508,0,0,1,1.072-.443,1.505,1.505,0,0,1,1.071.443l3.785,3.785a1.519,1.519,0,0,1,0,2.143l-8.885,8.883a1.521,1.521,0,0,1-1.006.442l-3.956.172Zm9.062-12.211h0l-7.4,7.4-.073,1.718,1.718-.076,7.394-7.394-1.642-1.643Zm-13.677-5.873a9.518,9.518,0,0,1-9.508-9.506,9.518,9.518,0,0,1,9.508-9.508,9.518,9.518,0,0,1,9.507,9.508A9.517,9.517,0,0,1-237.574-985.464Zm0-15.726a6.227,6.227,0,0,0-6.22,6.22,6.226,6.226,0,0,0,6.22,6.218,6.225,6.225,0,0,0,6.218-6.218A6.226,6.226,0,0,0-237.574-1001.19Z"
               transform="translate(256.259 1004.478)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Profile</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Profile</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
       </div>
 
       <!-- Security Center -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/security')">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M14.135,37.067c-15.395-5.378-17-17.957-16.822-27.23.017-.835.038-1.874.038-2.813A1.587,1.587,0,0,1-1.07,5.431c5.337,0,11.24-1.663,14.621-4.977a1.564,1.564,0,0,1,2.206,0c3.379,3.311,9.233,4.915,14.572,4.915a1.588,1.588,0,0,1,1.58,1.594c0,.862.017,1.753.037,2.812h0c.175,9.273-1.378,21.911-16.775,27.29a1.556,1.556,0,0,1-1.036,0ZM.5,8.576C.5,8.857.485,9.335.474,9.9c.152,9.387,1.475,19.263,14.18,23.972,12.7-4.709,13.923-14.224,14.131-24.034-.01-.545-.017-.937-.023-1.321-4.954-.261-10.667-1.455-14.108-4.4C11.211,7.061,5.449,8.316.5,8.576Zm11.96,14.666L8.949,19.7a1.6,1.6,0,0,1,0-2.252,1.572,1.572,0,0,1,2.234,0l2.394,2.411,5.9-5.948a1.563,1.563,0,0,1,1.117-.466h0a1.559,1.559,0,0,1,1.117.467,1.6,1.6,0,0,1,0,2.252l-7.017,7.074a1.575,1.575,0,0,1-2.237,0Z"
               transform="translate(5.37 1.422)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Security Center</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Security Center</span>
         </div>
-        <div class="flex items-center gap-1.5">
-          <img src="https://140.150.30.128:5030/siteadmin/skin/lobby_asset/common/web/profile/style_1_icon_kf_hot.png"
-            class="w-5 h-5 object-contain" onerror="this.style.display='none'">
-          <span
-            class="bg-[#4ADE80] text-[#111419] text-[9px] px-1.5 py-0.5 rounded font-black italic select-none">7-777</span>
-          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <div class="flex items-center gap-1.5 shrink-0 ml-4">
+          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
         </div>
       </div>
 
       <!-- Find us -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/find-us')">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M-7655.966-439.331l-4.256-4.255a16.014,16.014,0,0,1-9.976,3.475,16.106,16.106,0,0,1-16.088-16.087,16.106,16.106,0,0,1,16.088-16.088A16.107,16.107,0,0,1-7654.11-456.2a16.011,16.011,0,0,1-3.476,9.976l4.256,4.255a1.864,1.864,0,0,1,0,2.636,1.86,1.86,0,0,1-1.318.546A1.86,1.86,0,0,1-7655.966-439.331Zm-23.414-26.051a12.9,12.9,0,0,0-3.8,9.184,12.9,12.9,0,0,0,3.8,9.181,12.9,12.9,0,0,0,9.183,3.8,12.9,12.9,0,0,0,9.181-3.8,12.9,12.9,0,0,0,3.806-9.181,12.9,12.9,0,0,0-3.806-9.184,12.9,12.9,0,0,0-9.181-3.8A12.9,12.9,0,0,0-7679.38-465.381Zm1.078,16.534a1.064,1.064,0,0,1-1.063-1.064,1.064,1.064,0,0,1,1.063-1.065h.814V-458.9a1.693,1.693,0,0,1,1.691-1.691h2.692v-2.067a1.692,1.692,0,0,1,1.689-1.69h6.262a1.692,1.692,0,0,1,1.691,1.69v11.684h.814a1.064,1.064,0,0,1,1.063,1.065,1.064,1.064,0,0,1-1.063,1.064Zm7.326-2.354h5.385v-11.021h-5.385Zm-4.382,0h2.254v-7.263h-2.254Zm6.266-2.423a1.065,1.065,0,0,1-1.065-1.064,1.065,1.065,0,0,1,1.065-1.065h1.878a1.064,1.064,0,0,1,1.063,1.065,1.064,1.064,0,0,1-1.063,1.064Zm0-3.726a1.065,1.065,0,0,1-1.065-1.064,1.065,1.065,0,0,1,1.065-1.065h1.878a1.064,1.064,0,0,1,1.063,1.065,1.064,1.064,0,0,1-1.063,1.064Z"
               transform="translate(7689.535 475.535)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Find us</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Find us</span>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[#ADB6C3]/35 text-[10px] hidden xs:block italic">Prevent it from opening</span>
-          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <div class="flex items-center gap-2 overflow-hidden flex-1 justify-end ml-4">
+          <span class="text-[#ADB6C3]/35 text-[10px] hidden xs:block italic truncate">Prevent it from opening</span>
+          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
         </div>
       </div>
 
       <!-- Language -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer"
         (click)="navigateTo('/language')">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M1.9 20C1.85497 15.1543 3.73655 10.4892 7.13089 7.0307C10.5252 3.57222 15.1543 1.60365 20 1.55798C24.8457 1.60365 29.4748 3.57222 32.8691 7.0307C36.2634 10.4892 38.145 15.1543 38.1 20C38.145 24.8457 36.2634 29.5108 32.8691 32.9693C29.4748 36.4277 24.8457 38.3963 20 38.442C15.1543 38.3963 10.5252 36.4277 7.13089 32.9693C3.73655 29.5108 1.85497 24.8457 1.9 20ZM23.8 34.527C26.3192 33.8432 28.6091 32.4964 30.431 30.627C32.8032 28.2147 34.2922 25.0726 34.657 21.709H28.657C28.3332 26.3659 26.6438 30.824 23.8 34.526V34.527ZM9.574 30.627C11.3959 32.4964 13.6858 33.8432 16.205 34.527C13.3607 30.8246 11.6712 26.3656 11.348 21.708H5.348C5.71245 25.071 7.20068 28.2127 9.572 30.625L9.574 30.627ZM20 33.801C23.0644 30.4732 24.9276 26.216 25.293 21.707H14.708C15.0731 26.2159 16.936 30.4731 20 33.801ZM34.654 18.292C34.2892 14.9284 32.8002 11.7863 30.428 9.37398C28.6061 7.50457 26.3162 6.15781 23.797 5.47398C26.6416 9.17636 28.3313 13.6353 28.655 18.293L34.654 18.292ZM25.292 18.292C24.9266 13.7834 23.0638 9.52665 20 6.19898C16.9356 9.52677 15.0724 13.784 14.707 18.293L25.292 18.292ZM11.344 18.292C11.667 13.6344 13.356 9.17553 16.2 5.47298C13.6808 6.15681 11.3909 7.50357 9.569 9.37298C7.19675 11.7853 5.70778 14.9274 5.343 18.291L11.344 18.292Z">
             </path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Language</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Language</span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0 ml-4">
           <span class="text-[#ADB6C3]/35 text-[10px] hidden xs:block">English</span>
-          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+          <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
         </div>
       </div>
 
       <!-- FAQ -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/faq')">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M2312.484,1427.833a18.333,18.333,0,1,1,18.333,18.334A18.353,18.353,0,0,1,2312.484,1427.833Zm3.334,0a15,15,0,1,0,15-15A15.015,15.015,0,0,0,2315.819,1427.833Zm12.635,9.393a2.265,2.265,0,1,1,2.265,2.266A2.266,2.266,0,0,1,2328.453,1437.226Zm.292-5.424s-.057-1.793,0-2.578c.133-1.043,1.419-1.367,2.041-1.49.005,0,2.867-.227,3.479-2.324a3.013,3.013,0,0,0-2.14-3.7,3.2,3.2,0,0,0-3.6,1.77,2.1,2.1,0,0,1-2.5,1.258,1.805,1.805,0,0,1-1.147-2.231,7,7,0,0,1,3.172-3.822,6.792,6.792,0,0,1,9.854,7.7c-.709,2.633-2.87,3.79-5.39,4.229v1.186a1.885,1.885,0,0,1-3.771,0Z"
               transform="translate(-2310.817 -1407.833)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">FAQ</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">FAQ</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
       </div>
 
       <!-- Reward Feedback -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/feedback')">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M-7457.668-2774a5.289,5.289,0,0,1-5.333-5.231v-23.538a5.288,5.288,0,0,1,5.333-5.23h13.335a1.668,1.668,0,0,1,1.667,1.667,1.668,1.668,0,0,1-1.667,1.667v.015h-13.335a1.984,1.984,0,0,0-2,1.962v23.458a1.984,1.984,0,0,0,2,1.962h24a1.983,1.983,0,0,0,2-1.962v-13.435a1.668,1.668,0,0,1,1.667-1.667,1.668,1.668,0,0,1,1.667,1.667v13.435a5.289,5.289,0,0,1-5.334,5.231Zm6.447-10.494a1.627,1.627,0,0,1-.384-1.592l1.911-6.342a1.606,1.606,0,0,1,.4-.672l14.771-15.491a4.769,4.769,0,0,1,6.777,0,4.866,4.866,0,0,1,0,6.833l-14.754,15.476a1.6,1.6,0,0,1-.7.412l-6.446,1.8a1.645,1.645,0,0,1-.43.057A1.6,1.6,0,0,1-7451.221-2784.491Zm4.468-6.61-.949,3.15,3.244-.905,1.027-1.079-2.458-2.074Zm14.489-15.206-.309.31-11.047,11.6,2.459,2.075,11.157-11.712a1.623,1.623,0,0,0,0-2.276,1.589,1.589,0,0,0-1.132-.472A1.577,1.577,0,0,0-7432.264-2806.308Z"
               transform="translate(7465 2811.997)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Reward Feedback</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Reward Feedback</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
       </div>
 
       <!-- Login device -->
       <div
-        class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 border-b border-white/5 cursor-pointer menu-list-item"
         (click)="navigateTo('/login-device')">
-        <div class="flex items-center gap-3">
-          <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
-            <path
-              d="M-66.605,21.413A3.72,3.72,0,0,1-70.32,17.7V-.239a3.719,3.719,0,0,1,3.715-3.715h10.89A3.72,3.72,0,0,1-52-.239V17.7a3.72,3.72,0,0,1-3.716,3.716Zm-.64-21.651V17.7a.641.641,0,0,0,.64.64h10.89a.64.64,0,0,0,.641-.64V-.239a.641.641,0,0,0-.641-.64h-10.89A.641.641,0,0,0-67.246-.239Zm-3.965,21.493H-78.33a1.561,1.561,0,0,1-1.56-1.559,1.562,1.562,0,0,1,1.56-1.56h1.455l.617-2.932h-8A3.748,3.748,0,0,1-88,11.459V-7.257A3.748,3.748,0,0,1-84.257-11h25.578a3.748,3.748,0,0,1,3.743,3.743v1.871h-3.119V-7.257a.624.624,0,0,0-.624-.624H-84.257a.624.624,0,0,0-.624.624V11.459a.624.624,0,0,0,.624.624h12.335V15.2h-1.785l-.617,2.932H-71.9V19.5a2.555,2.555,0,0,0,.691,1.75h0Zm8.477-6.582a1.559,1.559,0,0,1,1.559-1.559,1.56,1.56,0,0,1,1.56,1.559,1.56,1.56,0,0,1-1.56,1.56A1.56,1.56,0,0,1-62.734,14.673Z"
-              transform="translate(90 14.794)"></path>
-          </svg>
-          <span class="text-white text-[13px] font-bold">Login device</span>
+        <div class="flex items-center gap-3 shrink-0 relative">
+          <div class="relative">
+            <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
+              <path
+                d="M-66.605,21.413A3.72,3.72,0,0,1-70.32,17.7V-.239a3.719,3.719,0,0,1,3.715-3.715h10.89A3.72,3.72,0,0,1-52-.239V17.7a3.72,3.72,0,0,1-3.716,3.716Zm-.64-21.651V17.7a.641.641,0,0,0,.64.64h10.89a.64.64,0,0,0,.641-.64V-.239a.641.641,0,0,0-.641-.64h-10.89A.641.641,0,0,0-67.246-.239Zm-3.965,21.493H-78.33a1.561,1.561,0,0,1-1.56-1.559,1.562,1.562,0,0,1,1.56-1.56h1.455l.617-2.932h-8A3.748,3.748,0,0,1-88,11.459V-7.257A3.748,3.748,0,0,1-84.257-11h25.578a3.748,3.748,0,0,1,3.743,3.743v1.871h-3.119V-7.257a.624.624,0,0,0-.624-.624H-84.257a.624.624,0,0,0-.624.624V11.459a.624.624,0,0,0,.624.624h12.335V15.2h-1.785l-.617,2.932H-71.9V19.5a2.555,2.555,0,0,0,.691,1.75h0Zm8.477-6.582a1.559,1.559,0,0,1,1.559-1.559,1.56,1.56,0,0,1,1.56,1.559,1.56,1.56,0,0,1-1.56,1.56A1.56,1.56,0,0,1-62.734,14.673Z"
+                transform="translate(90 14.794)"></path>
+            </svg>
+            <div
+              class="absolute -top-1 -left-1 bg-[#111419] text-white w-[11px] h-[11px] rounded-full flex items-center justify-center font-bold text-[7px] border border-white/10 leading-none">
+              x</div>
+          </div>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Login device</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[14px] shrink-0"></ion-icon>
       </div>
 
       <!-- Quit -->
-      <div (click)="logout()" class="flex items-center justify-between h-[46px] px-4 active:bg-white/5 cursor-pointer menu-list-item">
-        <div class="flex items-center gap-3">
+      <div (click)="logout()"
+        class="flex items-center justify-between h-[clamp(42px,12vw,46px)] px-4 active:bg-white/5 cursor-pointer menu-list-item">
+        <div class="flex items-center gap-3 shrink-0">
           <svg width="20" height="20" viewBox="0 0 40 40" fill="#F0C059">
             <path
               d="M-7375.666-2925.334a5.338,5.338,0,0,1-5.334-5.333v-24a5.338,5.338,0,0,1,5.334-5.332h16a5.339,5.339,0,0,1,5.334,5.332v1.334a1.666,1.666,0,0,1-1.667,1.666,1.666,1.666,0,0,1-1.666-1.666v-1.334a2,2,0,0,0-2-2h-16a2,2,0,0,0-2,2v24a2,2,0,0,0,2,2h16a2,2,0,0,0,2-2V-2932a1.666,1.666,0,0,1,1.666-1.667,1.667,1.667,0,0,1,1.667,1.667v1.333a5.339,5.339,0,0,1-5.334,5.333Zm21.861-11.677a2,2,0,0,1,0-2.828l.829-.829h-9.357a2,2,0,0,1-2-2,2,2,0,0,1,2-2h9.357l-.829-.829a2,2,0,0,1,0-2.828,2,2,0,0,1,2.828,0l4.243,4.242a2,2,0,0,1,.585,1.415,1.992,1.992,0,0,1-.585,1.414l-4.243,4.242a1.99,1.99,0,0,1-1.414.587A1.993,1.993,0,0,1-7353.8-2937.011Z"
               transform="translate(7383.667 2962.667)"></path>
           </svg>
-          <span class="text-white text-[13px] font-bold">Quit</span>
+          <span class="text-white text-[clamp(9.5px,2.8vw,12.5px)] font-bold">Quit</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px]"></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="text-white/15 text-[18px] shrink-0"></ion-icon>
       </div>
     </div>
 
   </div>
+
+
 </ion-content>
 
 <app-footer-nav activeTab="profile"></app-footer-nav>

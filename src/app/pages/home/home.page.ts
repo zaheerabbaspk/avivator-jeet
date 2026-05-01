@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, OnDestroy, OnInit } from '@angular/core';
-import { IonHeader, IonContent, IonIcon } from '@ionic/angular/standalone';
+import { IonHeader, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
 import {
@@ -38,7 +38,7 @@ import { InviteBonusModalComponent } from '../../components/invite-bonus-modal/i
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
-    IonHeader, IonContent, IonIcon, CommonModule,
+    IonHeader, IonContent, IonIcon, IonGrid, IonRow, IonCol, CommonModule,
     AuthModalComponent, SuccessModalComponent, RewardModalComponent, FooterNavComponent,
     HomeHeaderComponent, HomeBannersComponent, HomeBrandsComponent,
     HomeAnnounceComponent, HomeCategoriesComponent, HomeGameGridComponent,
@@ -317,6 +317,11 @@ export class HomePage implements OnInit, OnDestroy {
     if (!this.isLoggedIn) { this.isAuthModalOpen = true; return; }
     this.isInitialLoadSequence = false;
     this.router.navigate(['/deposit']);
+  }
+
+  handleWithdraw() {
+    if (!this.isLoggedIn) { this.isAuthModalOpen = true; return; }
+    this.router.navigate(['/withdraw']);
   }
 
   refreshBalance() {

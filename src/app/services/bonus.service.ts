@@ -35,18 +35,26 @@ export class BonusService {
     }
 
     try {
-      // 1. Get user's total deposits from Supabase
-      const { data: deposits, error: depErr } = await this.supabase
-        .from('deposits')
-        .select('amount, status')
-        .eq('user_id', user.id)
-        .eq('status', 'approved');
+      // 1. Get user's total deposits from BOTH tables
+      const [depRes, manRes] = await Promise.all([
+        this.supabase
+          .from('deposits')
+          .select('amount')
+          .eq('user_id', user.id)
+          .eq('status', 'approved'),
+        this.supabase
+          .from('manual_deposits')
+          .select('amount')
+          .eq('user_id', user.id)
+          .eq('status', 'approved')
+      ]);
 
-      if (depErr) throw depErr;
+      if (depRes.error) throw depRes.error;
+      if (manRes.error) throw manRes.error;
 
-      const totalDeposited = (deposits || []).reduce(
-        (sum: number, d: any) => sum + (d.amount || 0), 0
-      );
+      const totalDeposited = 
+        (depRes.data || []).reduce((sum, d) => sum + (d.amount || 0), 0) +
+        (manRes.data || []).reduce((sum, d) => sum + (d.amount || 0), 0);
 
       // 2. No deposit at all — redirect to deposit page
       if (totalDeposited < 100) {

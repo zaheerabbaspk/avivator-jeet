@@ -26,10 +26,21 @@
 @import "@ionic/angular/css/core.css";
 
 /* App Global Responsiveness */
-html {
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh; /* Force full viewport height */
+    height: 100dvh;
+    min-height: 100vh;
     overflow-x: hidden;
+    background-color: #0f1520 !important;
+}
+
+html {
     max-width: 100%;
     -webkit-text-size-adjust: 100%;
+    
     /* Reduced minimum font size for small screens to prevent zooming */
     font-size: clamp(10.5px, 3.2vw, 16px);
 
@@ -40,9 +51,18 @@ html {
 }
 
 body {
-    overflow-x: hidden;
     max-width: 100vw;
     -webkit-text-size-adjust: 100%;
+}
+
+ion-app, ion-router-outlet, .ion-page {
+    height: 100% !important;
+    min-height: 100% !important;
+    background-color: #0f1520 !important;
+}
+
+ion-content {
+    --padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
 }
 
 /* Ensure main containers don't exceed 420px on desktop but are fluid on mobile */

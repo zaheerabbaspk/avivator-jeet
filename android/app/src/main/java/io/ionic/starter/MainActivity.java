@@ -1,4 +1,4 @@
-package com.avivatorjeet;
+package com.bp999.com;
 
 import com.getcapacitor.BridgeActivity;
 

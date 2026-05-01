@@ -24,6 +24,30 @@ export class SoundService {
     }
   }
 
+  // State to track if sounds were playing before backgrounding
+  private wasAmbientPlaying = false;
+
+  pauseAll() {
+    if (this.ambientAudio && !this.ambientAudio.paused) {
+      this.wasAmbientPlaying = true;
+      this.ambientAudio.pause();
+    } else {
+      this.wasAmbientPlaying = false;
+    }
+
+    if (this.flyAwayAudio) {
+      this.flyAwayAudio.pause();
+    }
+  }
+
+  resumeAll() {
+    if (this.isMuted()) return;
+
+    if (this.wasAmbientPlaying && this.ambientAudio) {
+      this.ambientAudio.play().catch(e => console.log('Resume blocked:', e));
+    }
+  }
+
   setFlight(playing: boolean, multiplier: number = 1.0) {
     if (!this.ambientAudio || this.isMuted()) return;
 
@@ -32,19 +56,17 @@ export class SoundService {
         this.ambientAudio.currentTime = 0;
         this.ambientAudio.play().catch(e => console.log('Audio play blocked:', e));
       }
-      // Dynamic pitch shifting based on multiplier
-      // Standard engine pitch starts at 1, goes up slightly as multiplier grows
       const pitch = Math.min(1 + (multiplier - 1) * 0.1, 2.5);
       this.ambientAudio.playbackRate = pitch;
     } else {
       this.ambientAudio.pause();
+      this.wasAmbientPlaying = false;
     }
   }
 
   playFlyAway() {
     if (!this.flyAwayAudio || this.isMuted()) return;
     console.log('🔊 Playing Fly Away sound...');
-    // Skip the first 3.8 seconds (fine-tuned in milliseconds)
     this.flyAwayAudio.currentTime = 3.7;
     this.flyAwayAudio.play().catch(e => console.log('Audio play blocked:', e));
   }
@@ -53,6 +75,7 @@ export class SoundService {
     if (this.ambientAudio) {
       this.ambientAudio.pause();
       this.ambientAudio.currentTime = 0;
+      this.wasAmbientPlaying = false;
     }
     if (this.flyAwayAudio) {
       this.flyAwayAudio.pause();

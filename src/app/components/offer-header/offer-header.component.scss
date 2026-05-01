@@ -1,12 +1,35 @@
+:host {
+  display: block;
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+}
+
+.safe-area-padding {
+  /* Use env() as a reliable fallback and var() for Ionic's integration */
+  padding-top: env(safe-area-inset-top, 22px);
+  padding-top: var(--ion-safe-area-top, env(safe-area-inset-top, 22px));
+  min-height: calc(env(safe-area-inset-top, 22px) + 48px);
+
+  @media (max-width: 768px) {
+    /* Adjusted up by 4px for pixel-perfect alignment */
+    padding-top: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 20px)) + 17px);
+    min-height: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 20px)) + 65px);
+  }
+}
+
 .active-tab-indicator {
-  @apply absolute bottom-[2px] left-0 right-0 h-[2.5px] bg-[#F1C15A] transition-all duration-300;
-  box-shadow: 0 -1px 4px rgba(241, 193, 90, 0.3);
+  @apply absolute bottom-0 left-2 right-2 h-[2.5px] bg-[#F1C15A] transition-all duration-300 rounded-t-full;
+  box-shadow: 0 -2px 8px rgba(241, 193, 90, 0.5);
 }
 
 .no-scrollbar {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+
   &::-webkit-scrollbar {
     display: none;
   }

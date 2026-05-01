@@ -1,6 +1,6 @@
 <div class="modal-overlay" *ngIf="isOpen" (click)="close()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    
+
     <!-- Top Bar Header -->
     <div class="header-bar flex items-center justify-between gap-2 px-2 py-1.5 mb-4">
       <ion-icon name="volume-medium" class="text-white text-[16px]"></ion-icon>
@@ -19,20 +19,22 @@
 
     <!-- Unified Scrollable Body -->
     <div class="modal-body-scrollable">
-      
+
       <!-- Section 1: Lucky Draw (The Wheel) -->
       <div class="wheel-section">
         <!-- Balance Section -->
         <div class="balance-display flex flex-col items-center mb-4">
           <div class="flex items-center gap-2 mb-3">
-            <div class="rs-circle w-[32px] h-[32px] rounded-full bg-[#fdd835] flex items-center justify-center font-black text-[#874404] text-[16px] shadow-md border-2 border-white/40">
+            <div
+              class="rs-circle w-[32px] h-[32px] rounded-full bg-[#fdd835] flex items-center justify-center font-black text-[#874404] text-[16px] shadow-md border-2 border-white/40">
               Rs
             </div>
             <span class="text-[#fdd835] text-[48px] font-black tracking-tight leading-none drop-shadow-lg">
               {{ balance | number:'1.2-2' }}
             </span>
           </div>
-          <button class="claim-btn uppercase font-black text-[14px] tracking-wider px-10 py-1 rounded-md mb-[7px]" (click)="handleClaim()">
+          <button class="claim-btn uppercase font-black text-[14px] tracking-wider px-10 py-1 rounded-md mb-[7px]"
+            (click)="handleClaim()">
             CLAIM
           </button>
         </div>
@@ -42,35 +44,34 @@
           <div class="wheel-area">
             <!-- Static Background Layer for Inner Yellow Theme -->
             <div class="wheel-inner-backdrop"></div>
-            
+
             <!-- Outer Frame (Composite SVG) -->
             <div class="wheel-outer-ring">
               <div class="wheel-bulbs-container">
                 <div class="bulb" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"></div>
               </div>
             </div>
-            
+
             <!-- Inner Spinning Section -->
             <div class="wheel-body" [style.transform]="'rotate(' + totalRotation + 'deg)'">
               @for (item of wheelItems; track item.id) {
-                <div class="wheel-slice" [style.transform]="'rotate(' + item.rotation + 'deg)'">
-                  <span class="slice-label">{{ item.label }}</span>
-                  <img [src]="item.icon" class="slice-img" />
-                </div>
+              <div class="wheel-slice" [style.transform]="'rotate(' + item.rotation + 'deg)'">
+                <span class="slice-label">{{ item.label }}</span>
+                <img [src]="item.icon" class="slice-img" />
+              </div>
               }
             </div>
-            
+
             <div class="wheel-center-trigger flex flex-col items-center justify-center" (click)="spin()">
               <div class="pointer-arrow"></div>
               <div class="center-content text-white flex flex-col items-center">
                 <span class="x-count font-black leading-none">x{{ availableDraws }}</span>
                 <span class="draw-text font-black">Free draw</span>
               </div>
-              <img *ngIf="!isSpinning && availableDraws > 0" 
-                   src="assets/images/sprites/wheel_hand_cursor.png" 
-                   class="hand-cursor-anim" />
+              <img *ngIf="!isSpinning && availableDraws > 0" src="assets/images/sprites/wheel_hand_cursor.png"
+                class="hand-cursor-anim" />
             </div>
-            
+
             <!-- Wealth Decor (User's High-Fid PNG) -->
             <div class="wealth-decor-container">
               <img src="assets/images/sprites/money.png" class="wealth-img" />
@@ -78,62 +79,41 @@
           </div>
         </div>
 
-        <!-- User Referral Info Row -->
-        <div class="user-info-bar flex items-center justify-between px-3 mt-2 text-[13px]">
-          <div class="invitation-code flex items-center gap-1 text-white/90">
-            Invitation code <span class="font-bold text-white">273724998</span>
-            <ion-icon name="copy-outline" class="text-white/60 text-[14px]"></ion-icon>
+        <!-- Main Call to Action with Tooltip -->
+        <div class="cta-wrapper px-8 mt-28 flex flex-col items-center relative">
+          <!-- Red Tooltip Badge -->
+          <div
+            class="promo-tooltip absolute -top-6 bg-[#FF0000] text-white text-[10px] font-bold px-2 py-1 rounded shadow-md z-10 whitespace-nowrap">
+            Only 10.15 is needed to claim the bonu...
+            <div class="tooltip-arrow"></div>
           </div>
-          <div class="subordinates-link text-[#f0c059] font-semibold cursor-pointer">
-            My subordinates
-          </div>
-        </div>
 
-        <!-- Main Call to Action -->
-        <div class="cta-wrapper px-2 mt-4">
-          <button class="invite-action-btn font-bold text-[16px] w-full py-3.5 rounded-xl shadow-lg active:scale-95 transition-transform" (click)="goInvite()">
+          <button
+            class="invite-action-btn font-medium text-[#004d3a] text-[15px] w-full py-2.5 rounded shadow-md active:scale-95 transition-transform"
+            (click)="goInvite()">
             Invite friend, Win bonus
           </button>
         </div>
 
-        <!-- Social Share Icons (Added) -->
-        <div class="flex items-center justify-center mt-5 mb-2 gap-4 pb-2">
-           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('generic')">
-              <div class="w-[42px] h-[42px] rounded-full flex items-center justify-center border border-white/20 bg-black/20">
-                 <ion-icon name="share-outline" class="text-white text-[20px]"></ion-icon>
-              </div>
-              <span class="text-white font-medium text-[11px]">Share</span>
-           </div>
-           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('telegram')">
-              <div class="w-[42px] h-[42px] rounded-full bg-[#2AABEE] flex items-center justify-center">
-                 <ion-icon name="paper-plane" class="text-white text-[20px]"></ion-icon>
-              </div>
-              <span class="text-white font-medium text-[11px]">Telegram</span>
-           </div>
-           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('facebook')">
-              <div class="w-[42px] h-[42px] rounded-full bg-[#1877F2] flex items-center justify-center">
-                 <ion-icon name="logo-facebook" class="text-white text-[22px]"></ion-icon>
-              </div>
-              <span class="text-white font-medium text-[11px]">Facebook</span>
-           </div>
-           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('instagram')">
-              <div class="w-[42px] h-[42px] rounded-full bg-gradient-to-tr from-[#FFD600] via-[#FF0040] to-[#9900FF] flex items-center justify-center">
-                 <ion-icon name="logo-instagram" class="text-white text-[22px]"></ion-icon>
-              </div>
-              <span class="text-white font-medium text-[11px]">Instagram</span>
-           </div>
-           <div class="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform shrink-0" (click)="share('whatsapp')">
-              <div class="w-[42px] h-[42px] rounded-full bg-[#25D366] flex items-center justify-center">
-                 <ion-icon name="logo-whatsapp" class="text-white text-[22px]"></ion-icon>
-              </div>
-              <span class="text-white font-medium text-[11px]">WhatsApp</span>
-           </div>
+        <!-- User Referral Info Row -->
+        <div class="user-info-bar flex items-center justify-between px-3 mt-5">
+          <div class="invitation-code flex items-center gap-1 text-white whitespace-nowrap text-[11px]">
+            <span class="font-normal opacity-80">Invitation code</span>
+            <span class="font-bold text-[12px]">126406886</span>
+            <ion-icon name="copy-outline" class="text-[#f0c059] text-[12px] cursor-pointer active:opacity-60"></ion-icon>
+          </div>
+          <div class="subordinates-link text-[#f0c059] font-semibold whitespace-nowrap text-[11px] cursor-pointer active:opacity-60 ml-2">
+            My subordinates
+          </div>
         </div>
+
+
+
       </div>
 
       <!-- Section 2: Missions -->
       <div class="mission-section mt-4">
-        
+
         <!-- Missions Group (Unified Box) -->
         <div class="section-group-box">
           <div class="decorative-header">
@@ -146,35 +126,35 @@
 
           <div class="task-list">
             @for (task of tasks; track task.id) {
-              <div class="task-card">
-                <div class="task-icon-box">
-                  <ion-icon [name]="task.icon"></ion-icon>
-                </div>
-                <div class="task-info">
-                  <div class="task-name">{{ task.title }}</div>
-                  <div class="task-reward flex items-center gap-1.5">
-                    <img src="assets/images/sprites/wheel_reward_icon.png" class="reward-wheel-icon" />
-                    <span>+ {{ task.rewardValue }} x</span>
-                  </div>
-                  <div class="task-subtext" *ngIf="task.subtext">{{ task.subtext }}</div>
-                </div>
-                <div class="task-action">
-                  @if (task.isComplete) {
-                    <div class="status-success">
-                      <ion-icon name="checkmark-outline"></ion-icon>
-                    </div>
-                  } @else if (task.progressText && !task.actionText) {
-                    <div class="status-timer">
-                      <div class="time-val">{{ task.progressText }}</div>
-                      <div class="time-label">can get</div>
-                    </div>
-                  } @else {
-                    <button class="task-go-btn font-bold" (click)="handleTask(task)">
-                      {{ task.actionText || 'Go to invite' }}
-                    </button>
-                  }
-                </div>
+            <div class="task-card">
+              <div class="task-icon-box">
+                <ion-icon [name]="task.icon"></ion-icon>
               </div>
+              <div class="task-info">
+                <div class="task-name">{{ task.title }}</div>
+                <div class="task-reward flex items-center gap-1.5">
+                  <img src="assets/images/sprites/wheel_reward_icon.png" class="reward-wheel-icon" />
+                  <span>+ {{ task.rewardValue }} x</span>
+                </div>
+                <div class="task-subtext" *ngIf="task.subtext">{{ task.subtext }}</div>
+              </div>
+              <div class="task-action">
+                @if (task.isComplete) {
+                <div class="status-success">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </div>
+                } @else if (task.progressText && !task.actionText) {
+                <div class="status-timer">
+                  <div class="time-val">{{ task.progressText }}</div>
+                  <div class="time-label">can get</div>
+                </div>
+                } @else {
+                <button class="task-go-btn font-bold" (click)="handleTask(task)">
+                  {{ task.actionText || 'Go to invite' }}
+                </button>
+                }
+              </div>
+            </div>
             }
           </div>
         </div>
@@ -191,29 +171,29 @@
 
           <div class="records-container">
             @if (records.length > 0) {
-              @for (rec of records; track $index) {
-                <div class="record-item">
-                  <div class="record-time">{{ rec.dateStr }} {{ rec.timeStr }}</div>
-                  <div class="record-desc">{{ rec.description }}</div>
-                  <div class="record-val">{{ rec.highlight }}</div>
-                </div>
-              }
+            @for (rec of records; track $index) {
+            <div class="record-item">
+              <div class="record-time">{{ rec.dateStr }} {{ rec.timeStr }}</div>
+              <div class="record-desc">{{ rec.description }}</div>
+              <div class="record-val">{{ rec.highlight }}</div>
+            </div>
+            }
             } @else {
-              <div class="text-center py-4 text-white/20 text-[12px]">No records yet</div>
+            <div class="text-center py-4 text-white/20 text-[12px]">No records yet</div>
             }
           </div>
         </div>
 
       </div>
-      
+
     </div>
 
 
 
   </div>
 
-    <!-- Professional Circular Close Button -->
-    <div class="modal-close-wrapper" (click)="close()">
+  <!-- Professional Circular Close Button -->
+  <div class="modal-close-wrapper" (click)="close()">
     <div class="close-inner-circle">
       <ion-icon name="close"></ion-icon>
     </div>

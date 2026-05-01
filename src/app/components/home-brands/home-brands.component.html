@@ -12,10 +12,4 @@
       </div>
     }
   </div>
-  <!-- Dots -->
-  <div class="brand-dots">
-    @for (i of [].constructor(brands.length - 2); track $index) {
-      <div class="brand-dot" [class.active]="currentBrandSlide === $index" (click)="goBrandSlide($index)"></div>
-    }
-  </div>
 </div>

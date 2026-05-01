@@ -1,7 +1,7 @@
 .brand-swiper {
   position: relative;
   width: 97% !important;
-  margin: 10px auto;
+  margin: 3px auto 10px auto; /* Tighter gap above */
   overflow: hidden;
 
   @media (max-width: 450px) {
@@ -15,6 +15,7 @@
   }
 
   .brand-slide {
+    box-sizing: border-box;
     min-width: 33.333%;
     width: 33.333%;
     flex-shrink: 0;
@@ -61,7 +62,7 @@
   transition: transform 0.12s ease;
 
   @media (max-width: 450px) {
-    height: 70px !important;
+    height: 62px !important;
   }
 
   &:active {

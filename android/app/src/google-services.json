@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "205180824902",
-    "project_id": "avivatorjeet",
-    "storage_bucket": "avivatorjeet.firebasestorage.app"
+    "project_id": "bp999.com",
+    "storage_bucket": "bp999.com.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:205180824902:android:8aa89a1c795e6026cb0947",
         "android_client_info": {
-          "package_name": "com.avivatorjeet"
+          "package_name": "com.bp999.com"
         }
       },
       "oauth_client": [],

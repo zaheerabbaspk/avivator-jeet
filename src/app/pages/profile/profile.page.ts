@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonToast } from '@ionic/angular/standalone';
+import { IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonToast, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   walletOutline,
@@ -33,7 +33,7 @@ import {
   logOutOutline,
   syncOutline,
   caretDownOutline,
-  notificationsOutline, caretDownSharp, arrowDownCircle, arrowUpCircle
+  notificationsOutline, caretDownSharp, arrowDownCircle, arrowUpCircle, leaf
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -50,7 +50,7 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonToast, AuthModalComponent, RewardModalComponent, FooterNavComponent, ProfileEditModalComponent]
+  imports: [CommonModule, IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonToast, IonGrid, IonRow, IonCol, AuthModalComponent, RewardModalComponent, FooterNavComponent, ProfileEditModalComponent]
 })
 export class ProfilePage {
   private router = inject(Router);
@@ -78,7 +78,7 @@ export class ProfilePage {
   };
 
   constructor() {
-    addIcons({ chevronBackOutline, headsetOutline, chatbubbleOutline, pencilOutline, copyOutline, refreshOutline, arrowDownCircle, arrowUpCircle, chevronForwardOutline, logOutOutline, caretDownSharp, syncOutline, walletOutline, cashOutline, trendingUpOutline, briefcaseOutline, documentTextOutline, settingsOutline, shareSocialOutline, personOutline, shieldCheckmarkOutline, searchOutline, globeOutline, helpCircleOutline, phonePortraitOutline, chatbubbleEllipsesOutline, shieldHalfOutline, giftOutline, peopleOutline, logInOutline, personAddOutline, mailOutline, caretDownOutline, notificationsOutline });
+    addIcons({ chevronBackOutline, headsetOutline, pencilOutline, caretDownSharp, copyOutline, syncOutline, leaf, chevronForwardOutline, chatbubbleOutline, refreshOutline, arrowDownCircle, arrowUpCircle, logOutOutline, walletOutline, cashOutline, trendingUpOutline, briefcaseOutline, documentTextOutline, settingsOutline, shareSocialOutline, personOutline, shieldCheckmarkOutline, searchOutline, globeOutline, helpCircleOutline, phonePortraitOutline, chatbubbleEllipsesOutline, shieldHalfOutline, giftOutline, peopleOutline, logInOutline, personAddOutline, mailOutline, caretDownOutline, notificationsOutline });
 
     // Subscribe to auth state
     this.authService.user$.subscribe(user => {

@@ -10,9 +10,7 @@
           </div>
         </div>
         <div class="carousel-pagination">
-          <span class="dot active"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
+          <span class="dot" *ngFor="let p of posters; let i = index" [class.active]="i === 0"></span>
         </div>
       </div>
 

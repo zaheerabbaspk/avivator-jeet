@@ -1,7 +1,7 @@
 .banner-swiper {
   position: relative;
   width: 95%;
-  margin: 6px auto;
+  margin: 6px auto 3px auto; /* Tighter gap below */
   overflow: hidden;
   background: #000;
   border-radius: 12px;
@@ -20,18 +20,17 @@
 
     img {
       width: 100%;
-      height: 150px;
-      /* Reduced from 160px */
+      height: 125px; /* Reduced to match aspect ratio of reference */
       object-fit: cover;
       object-position: center top;
       display: block;
 
       @media (max-width: 380px) {
-        height: 90px;
+        height: 110px;
       }
 
       @media (max-width: 360px) {
-        height: 90px;
+        height: 100px;
       }
     }
   }

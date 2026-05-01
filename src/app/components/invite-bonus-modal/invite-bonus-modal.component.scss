@@ -12,8 +12,8 @@
 }
 
 .modal-container {
-    width: 90%;
-    max-width: 25rem;
+    width: 98%;
+    max-width: 32rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,8 +55,8 @@
 }
 
 .carousel-slide {
-    flex: 0 0 75%;
-    /* 75% width ensures left/right are partially visible */
+    flex: 0 0 82%;
+    /* Increased from 75% for bigger card */
     scroll-snap-align: center;
     border-radius: 0.625rem;
     overflow: hidden;
@@ -71,6 +71,7 @@
     .poster-img {
         width: 100%;
         height: auto;
+        min-height: 220px;
         display: block;
         object-fit: cover;
     }

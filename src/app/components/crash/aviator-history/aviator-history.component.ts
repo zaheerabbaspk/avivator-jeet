@@ -22,8 +22,8 @@ export class AviatorHistoryComponent {
   }
 
   getMultiplierColor(val: number): string {
-    if (val < 1.2) return 'text-[#34b4ff]'; // Blue
-    if (val < 2.0) return 'text-[#913ef8]'; // Purple
-    return 'text-[#c017b4]'; // Pink/Gold
+    if (val < 2.0) return 'text-[#34b4ff]'; // Blue for under 2x
+    if (val < 10.0) return 'text-[#913ef8]'; // Purple for 2x - 10x
+    return 'text-[#c017b2]'; // Pink/Red for 10x and above
   }
 }

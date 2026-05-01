@@ -1,54 +1,56 @@
 <ion-modal [isOpen]="isOpen" [backdropDismiss]="false" class="auth-modal">
   <ng-template>
-    <div class="modal-layout">
-      <!-- Top Header Bar -->
-      <div class="modal-top-bar">
-        <ion-icon name="chevron-back" class="back-btn" (click)="dismiss()"></ion-icon>
-      </div>
-
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          
-          <!-- Premium Header -->
-          <div class="bonus-header">
-            <p class="bonus-title">Free bonus for <span class="green-text">Rs 777</span></p>
-            <p class="bonus-subtitle">Invite 1 person And get a reward of <span class="green-text">Rs 5,000</span></p>
+      <div class="modal-layout">
+        <div class="modal-wrapper">
+          <!-- Top Header Bar Integrated -->
+          <div class="modal-top-bar">
+            <ion-icon name="chevron-back" class="back-btn" (click)="dismiss()"></ion-icon>
           </div>
 
-        <!-- Tabs -->
-        <div class="auth-tabs">
-          <div class="tab" [class.active]="authMode === 'register'" (click)="setAuthMode('register')">
-            Register
-          </div>
-          <div class="tab" [class.active]="authMode === 'login'" (click)="setAuthMode('login')">
-            Login
-          </div>
-          <div class="tab-indicator" [class.to-right]="authMode === 'login'"></div>
-        </div>
-
-        <!-- Form -->
-        <div class="auth-form">
-          <p class="field-label">Support Phone number/Profile {{ authMode === 'login' ? 'Login' : 'Register' }}</p>
-          
-          <div class="input-group phone-group">
-            <div class="flag-prefix" *ngIf="authMode === 'login'">
-              <img src="https://flagcdn.com/w40/pk.png" alt="PK" class="flag-img">
-              <span class="country-code">+92</span>
+          <div class="modal-container">
+            <!-- Premium Header -->
+            <div class="bonus-header">
+              <p class="bonus-title">Free bonus for <span class="green-text">Rs 777</span></p>
+              <p class="bonus-subtitle">Invite 1 person And get a reward of <span class="green-text">Rs 5,000</span></p>
             </div>
-            <ion-icon name="person" class="left-icon grey" *ngIf="authMode === 'register'"></ion-icon>
-            <span class="required-star">*</span>
-            <input type="tel" 
-                   [(ngModel)]="account" 
-                   (input)="validatePhone($event)"
-                   [placeholder]="authMode === 'login' ? '3081687789' : 'Please enter Phone number/Profile'" 
-                   maxlength="10"
-                   class="main-input">
-            <ion-icon name="close-circle" *ngIf="account" (click)="account = ''" class="clear-icon"></ion-icon>
-          </div>
-          <div class="field-error" *ngIf="showErrors && !account">
-            <ion-icon name="alert-circle"></ion-icon>
-            <span>Please enter Phone number/Profile</span>
-          </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+              <div class="tab" [class.active]="authMode === 'register'" (click)="setAuthMode('register')">
+                Register
+              </div>
+              <div class="tab" [class.active]="authMode === 'login'" (click)="setAuthMode('login')">
+                Login
+              </div>
+              <div class="tab-indicator" [class.to-right]="authMode === 'login'"></div>
+            </div>
+
+            <!-- Form -->
+            <div class="auth-form">
+              <p class="field-label">Support Phone number/Profile {{ authMode === 'login' ? 'Login' : 'Register' }}</p>
+              
+              <div class="input-group phone-group">
+                <div class="flag-prefix">
+                  <img src="https://flagcdn.com/w40/pk.png" alt="PK" class="flag-img">
+                  <span class="country-code">+92</span>
+                </div>
+                <span class="required-star">*</span>
+                <input type="tel" 
+                       [(ngModel)]="account" 
+                       (input)="validatePhone($event)"
+                       placeholder="Please enter Phone number/Profile" 
+                       maxlength="10"
+                       class="main-input">
+                <ion-icon name="close-circle" *ngIf="account" (click)="account = ''" class="clear-icon"></ion-icon>
+              </div>
+              <div class="field-error" *ngIf="phoneError">
+                <ion-icon name="alert-circle"></ion-icon>
+                <span>{{ phoneError }}</span>
+              </div>
+              <div class="field-error" *ngIf="showErrors && !account && !phoneError">
+                <ion-icon name="alert-circle"></ion-icon>
+                <span>Please enter Phone number/Profile</span>
+              </div>
 
           <!-- Options (Login Only) -->
           <div class="auth-options" *ngIf="authMode === 'login'">
@@ -142,6 +144,16 @@
             </div>
             <p class="warning-text">Must have the same name as your withdrawal bank account</p>
 
+            <!-- Referral Code Input (New) -->
+            <div class="input-group">
+              <ion-icon name="gift" class="left-icon grey"></ion-icon>
+              <input type="text" 
+                     [(ngModel)]="referralCode" 
+                     placeholder="Invitation Code (Optional)"
+                     class="main-input">
+            </div>
+
+
             <div class="agree-container">
               <ion-checkbox [checked]="true" labelPlacement="end">
                 <span class="agree-text">I am over 18 years old, I have read and agree to <span class="link">《User Agreement》</span></span>
@@ -151,6 +163,12 @@
 
           <div class="remember-container" *ngIf="authMode === 'login'">
             <ion-checkbox [checked]="true" labelPlacement="end">Remember account password</ion-checkbox>
+          </div>
+
+          <!-- Error Message Display -->
+          <div class="main-error-message" *ngIf="errorMessage">
+            <ion-icon name="alert-circle"></ion-icon>
+            <span>{{ errorMessage }}</span>
           </div>
 
           <!-- Action Button Area -->

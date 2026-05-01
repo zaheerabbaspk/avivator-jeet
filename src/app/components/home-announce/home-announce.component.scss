@@ -1,8 +1,9 @@
 .announce-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 12px;
+  gap: 8px;
+  padding: 1px 10px; /* Thinnest padding */
+  height: 22px; /* Fixed small height */
   background-color: #121926;
   background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 75%, transparent 75%, transparent);
   background-size: 8px 8px; /* Diagonal pattern */
@@ -17,7 +18,7 @@
     flex-shrink: 0;
 
     .speaker-icon {
-      font-size: 16px;
+      font-size: 12px; /* Smaller icon */
       color: #3b82f6; /* Professional blue */
       filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.4));
     }
@@ -39,7 +40,7 @@
       white-space: nowrap;
       padding-left: 100%;
       animation: marquee 25s linear infinite;
-      font-size: 11px;
+      font-size: 10px; /* Smaller text */
       font-weight: 800;
       color: #00ff41; /* Neon green from image */
       letter-spacing: 0.1px;
@@ -54,7 +55,7 @@
     flex-shrink: 0;
 
     .envelope-img {
-      height: 18px;
+      height: 12px; /* Smaller icon */
       width: auto;
       filter: brightness(0.9);
     }
@@ -65,11 +66,11 @@
       right: -6px;
       background: #ef4444;
       color: #fff;
-      font-size: 8px;
+      font-size: 7px; /* Smaller text */
       font-weight: 900;
       border-radius: 50%;
-      width: 13px;
-      height: 13px;
+      width: 12px; /* Smaller badge */
+      height: 12px;
       display: flex;
       align-items: center;
       justify-content: center;

@@ -19,7 +19,8 @@ ion-content {
     align-items: center;
     background: #1c1c22;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 30px 12px 14px 12px;
+    padding: calc(var(--ion-safe-area-top, 0px) + 10px) 12px 8px;
+    /* Restored padding for balance */
 }
 
 .back-btn {
@@ -46,7 +47,8 @@ ion-content {
     --background: transparent !important;
     background: transparent !important;
     flex: 1;
-    margin: 0 2px;
+    margin: 0 2px 0 10px;
+    /* Added 10px left margin to push right */
     height: 40px;
     overflow-x: auto;
     -ms-overflow-style: none;
@@ -64,11 +66,13 @@ ion-content {
         --color-checked: #d4a017;
         --indicator-color: #d4a017;
         --indicator-height: 2px;
-        padding: 0 12px;
-        flex: 1;
+        padding: 0 4px;
+        margin: 0;
+        min-width: auto;
+        flex: 0 0 auto;
 
         ion-label {
-            font-size: 13.5px;
+            font-size: 11px;
             font-weight: 700;
             margin: 0;
             text-transform: none;

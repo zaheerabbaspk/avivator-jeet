@@ -126,6 +126,14 @@ export class InvitePage implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    
+    // Subscribe to real agent stats (for dynamic referral code)
+    this.inviteService.agentStats$.subscribe(stats => {
+      this.agentStats = stats;
+      this.referralCode = stats.account;
+      this.referralLink = this.inviteService.getReferralLink(this.referralCode);
+    });
+
     // Auto-open lucky draw on page load as requested
     setTimeout(() => {
       this.isSpinModalOpen = true;
