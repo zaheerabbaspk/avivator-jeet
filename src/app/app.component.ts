@@ -31,6 +31,15 @@ export class AppComponent implements OnInit {
     });
 
     this.initializeAppListeners();
+
+    // Unlock audio on first user interaction for iOS/iPhone
+    const unlock = () => {
+      this.soundService.unlockAudio();
+      document.removeEventListener('click', unlock);
+      document.removeEventListener('touchstart', unlock);
+    };
+    document.addEventListener('click', unlock);
+    document.addEventListener('touchstart', unlock);
   }
 
   ngOnInit() {}

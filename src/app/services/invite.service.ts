@@ -70,28 +70,28 @@ export class InviteService {
       title: 'Invitation Bonus 1',
       subtitle: 'Invite friends bonus',
       amount: 'Rs 5,000',
-      imgUrl: 'assets/invite1.png'
+      imgUrl: '/assets/invite1.png'
     },
     {
       id: 'b1',
       title: 'Invitation Bonus 2',
       subtitle: 'Cards/Fishing/live/Sports Special invitation reward',
       amount: 'Rs 1,000',
-      imgUrl: 'assets/invite4.png'
+      imgUrl: '/assets/invite7.png'
     },
     {
       id: 'b3',
       title: 'Invitation Bonus 4',
       subtitle: 'Cricket/Sports Special promotion',
       amount: 'Rs 5,000',
-      imgUrl: 'assets/invite2.png'
+      imgUrl: '/assets/invite2.png'
     },
     {
       id: 'b2',
       title: 'Invite Friends',
       subtitle: 'Share your code and get rewards',
       amount: 'Rs 2,000',
-      imgUrl: 'assets/invite3.png' // Fallback to pilot for generic invite
+      imgUrl: '/assets/invite3.png' // Fallback to pilot for generic invite
     },
 
     {
@@ -99,7 +99,7 @@ export class InviteService {
       title: 'Invite Friends',
       subtitle: 'Share your code and get rewards',
       amount: 'Rs 2,000',
-      imgUrl: 'assets/invite.png' // Fallback to pilot for generic invite
+      imgUrl: '/assets/invite.png' // Fallback to pilot for generic invite
     },
     {
       id: 'b2',
@@ -130,14 +130,14 @@ export class InviteService {
       unclaimedBalance: '0.00'
     },
     {
-      title: 'Invite 1 friends bonus Rs 5,000',
+      title: 'Daily Invitation Reward Rs 5',
       stats: [
         { label: 'Invite valid number of people', value: '0' },
-        { label: 'Reward', value: '0.00' }
+        { label: 'Reward', value: '5.00' }
       ],
-      reward: '5000.00',
+      reward: '5.00',
       claimedBalance: '0.00',
-      unclaimedBalance: '0.00'
+      unclaimedBalance: '5.00'
     }
   ];
 
@@ -165,7 +165,7 @@ export class InviteService {
     // Update the local state for simulation
     commission.claimedBalance = (parseFloat(commission.claimedBalance) + amount).toFixed(2);
     commission.reward = '0.00';
-    
+
     return { success: true, amount };
   }
 
@@ -188,7 +188,7 @@ export class InviteService {
         { label: 'Direct wins/losses', value: '0.00' },
         { label: 'Sub\'s Perf.', value: '0.00' }
       ],
-       revenueStats: [
+      revenueStats: [
         { label: 'Direct commission', value: '0.00', isYellow: true },
         { label: 'Other commission', value: '0.00', isYellow: true },
         { label: 'Total commission', value: '0.00', isYellow: true },
@@ -238,5 +238,41 @@ export class InviteService {
 
   getReferralLink(account: string) {
     return `https://bp999.online/?id=${account}`;
+  }
+
+  async fetchMyDataStats(): Promise<MyDataStats> {
+    const stats = this.getMyDataStats();
+
+    const user = this.authService.userSubject.value;
+    if (!user) return stats;
+
+    try {
+      const { count: directCount } = await this.authService.supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('invited_by', user.id);
+
+      const dCount = directCount || 0;
+      const commission = dCount * 500; // Rs 500 per referral
+
+      stats.subordinateStats[0].value = dCount.toString(); // New subordinates
+
+      stats.revenueStats[0].value = commission.toFixed(2); // Direct commission
+      stats.revenueStats[2].value = commission.toFixed(2); // Total commission
+      stats.revenueStats[3].value = commission.toFixed(2); // Get commission
+
+      stats.allDataStats[0][0].value = dCount.toString(); // Total subordinates
+      stats.allDataStats[0][1].value = dCount.toString(); // Direct subordinates
+
+      stats.totalIncomeStats[0][0].value = commission.toFixed(2); // Direct commission
+      stats.totalIncomeStats[0][2].value = commission.toFixed(2); // Total commission
+
+      this.inviteStats.cumulativeInvitees = dCount;
+      this.inviteStats.totalEarnings = commission.toFixed(2);
+    } catch (e) {
+      console.error('Error fetching referral stats:', e);
+    }
+
+    return stats;
   }
 }

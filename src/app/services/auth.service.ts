@@ -244,6 +244,50 @@ export class AuthService {
 
     return data;
   }
+
+  // ── Record Stats (Total Aggregates) ──────────────────────────────────────────
+  async fetchRecordStats(userId: string) {
+    try {
+      // 1. Total Deposits (Approved)
+      const [depRes, manRes] = await Promise.all([
+        this.supabase.from('deposits').select('amount').eq('user_id', userId).eq('status', 'approved'),
+        this.supabase.from('manual_deposits').select('amount').eq('user_id', userId).eq('status', 'approved')
+      ]);
+
+      const totalDeposits = 
+        (depRes.data || []).reduce((sum, d) => sum + (d.amount || 0), 0) +
+        (manRes.data || []).reduce((sum, d) => sum + (d.amount || 0), 0);
+
+      // 2. Total Withdrawals (Approved)
+      const { data: withRes } = await this.supabase
+        .from('withdrawal_requests')
+        .select('amount')
+        .eq('user_id', userId)
+        .eq('status', 'approved');
+      
+      const totalWithdrawals = (withRes || []).reduce((sum, w) => sum + (w.amount || 0), 0);
+
+      // 3. Total Received (Daily Bonuses + Referral Commission + Registration Bonus)
+      const [bonusRes, profileRes, myProfileRes] = await Promise.all([
+        this.supabase.from('daily_bonuses').select('amount').eq('user_id', userId),
+        this.supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('invited_by', userId),
+        this.supabase.from('profiles').select('invited_by').eq('id', userId).single()
+      ]);
+      
+      const referralCommission = (profileRes.count || 0) * 500;
+      const registrationBonus = myProfileRes.data?.invited_by ? 500 : 0;
+      const totalReceived = (bonusRes.data || []).reduce((sum, b) => sum + (b.amount || 0), 0) + referralCommission + registrationBonus;
+
+      return {
+        deposits: totalDeposits.toFixed(2),
+        withdrawals: totalWithdrawals.toFixed(2),
+        received: totalReceived.toFixed(2)
+      };
+    } catch (error) {
+      console.error('Error fetching record stats:', error);
+      return { deposits: '0.00', withdrawals: '0.00', received: '0.00' };
+    }
+  }
 }
 
 

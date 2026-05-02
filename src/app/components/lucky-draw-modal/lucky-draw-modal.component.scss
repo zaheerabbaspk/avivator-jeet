@@ -4,14 +4,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(12px);
-  padding: 10px;
+  z-index: 20000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px 10px;
 }
 
 .modal-content {
@@ -524,31 +525,43 @@
   box-shadow: 0 2px 0 #c4b532;
 }
 
-/* Professional Circular Close Button */
+/* Professional Circular Close Button at Bottom */
 .modal-close-wrapper {
-  margin-top: 12px;
-  z-index: 3000;
+  margin-top: 20px;
+  z-index: 20001;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
+
+  @media (max-height: 750px) {
+    margin-top: 12px;
+  }
 
   &:active {
-    transform: translate(-50%, 2px) scale(0.9);
+    transform: scale(0.9);
   }
 
   .close-inner-circle {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(4px);
+    background: transparent;
+    border: 1.5px solid #ffffff;
+    
+    @media (max-height: 750px) {
+      width: 32px;
+      height: 32px;
+    }
 
     ion-icon {
-      color: white;
+      color: #ffffff;
       font-size: 20px;
+      
+      @media (max-height: 750px) {
+        font-size: 18px;
+      }
     }
   }
 }

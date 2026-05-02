@@ -90,6 +90,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  /* Scale down on smaller height screens like S9 */
+  @media (max-height: 740px) {
+    width: min(80vw, 240px);
+  }
+
+  @media (max-height: 640px) {
+    width: min(75vw, 210px);
+  }
 }
 
 /* ================================================
@@ -727,8 +736,9 @@
 
 /* ---- Close Button ---- */
 .modal-close-wrapper {
-  margin-top: 5px; /* Minimized gap right below the main envelope */
+  margin-top: -20px; /* Negative margin pulls it closer/overlapping the envelope */
   z-index: 999;
+  position: relative;
   cursor: pointer;
   display: flex;
   align-items: center;

@@ -5,7 +5,9 @@
         <!-- Title Bar -->
         <div class="modal-title-bar">
           <div class="title-content">
-            <ion-icon name="search-outline" class="title-icon-ion"></ion-icon>
+            <div class="title-icon-wrap">
+              <ion-icon name="globe-outline"></ion-icon>
+            </div>
             <span>Find us</span>
           </div>
         </div>
@@ -22,7 +24,7 @@
           <div class="url-section">
             <div class="section-header">
               <div class="header-left">
-                <ion-icon name="globe-outline" class="header-icon-ion"></ion-icon>
+                <div class="www-badge">www</div>
                 <span>Save URL</span>
               </div>
               <div class="copy-all" (click)="copyAll()">
@@ -34,26 +36,26 @@
             <div class="domain-list">
               <h3 class="simple-title">Simple domain name</h3>
               <ul class="simple-domains">
-                <li>No777.me</li>
-                <li>No777.org</li>
-                <li>No777.win</li>
+                <li>bp999.online</li>
+                <li>bp999.me</li>
+                <li>bp999.org</li>
               </ul>
 
               <div class="home-urls">
-                <div class="url-item">
+                <div class="url-item" (click)="copyToClipboard('www.bp999.online')">
                   <span class="label">Home URL</span>
-                  <span class="value">www.12no777.com</span>
-                  <ion-icon name="copy-outline" class="copy-icon" (click)="copyToClipboard('www.12no777.com')"></ion-icon>
+                  <span class="value">www.bp999.online</span>
+                  <ion-icon name="copy-outline" class="copy-icon"></ion-icon>
                 </div>
-                <div class="url-item">
+                <div class="url-item" (click)="copyToClipboard('www.bp999.me')">
                   <span class="label">Home URL</span>
-                  <span class="value">www.13no777.com</span>
-                  <ion-icon name="copy-outline" class="copy-icon" (click)="copyToClipboard('www.13no777.com')"></ion-icon>
+                  <span class="value">www.bp999.me</span>
+                  <ion-icon name="copy-outline" class="copy-icon"></ion-icon>
                 </div>
-                <div class="url-item">
+                <div class="url-item" (click)="copyToClipboard('www.bp999.org')">
                   <span class="label">Home URL</span>
-                  <span class="value">www.14no777.com</span>
-                  <ion-icon name="copy-outline" class="copy-icon" (click)="copyToClipboard('www.14no777.com')"></ion-icon>
+                  <span class="value">www.bp999.org</span>
+                  <ion-icon name="copy-outline" class="copy-icon"></ion-icon>
                 </div>
               </div>
             </div>
@@ -63,8 +65,12 @@
 
       <!-- Footer Overlay -->
       <div class="footer-overlay">
-        <div class="checkbox-item">
-          <div class="custom-checkbox"></div>
+        <div class="checkbox-item" (click)="toggleDontShow()">
+          <div class="custom-checkbox" [class.checked]="dontShowToday">
+            @if (dontShowToday) {
+              <ion-icon name="checkmark" class="check-mark"></ion-icon>
+            }
+          </div>
           <span>Don't show again today</span>
         </div>
         

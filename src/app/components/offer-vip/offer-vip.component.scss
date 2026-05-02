@@ -69,16 +69,16 @@
   background-repeat: repeat;
   
   .carousel-viewport {
-    @apply flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden w-full py-5;
+    @apply flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden w-full py-4;
     scrollbar-width: none;
     scroll-behavior: smooth;
-    padding-left: 16vw; 
-    padding-right: 16vw;
-    gap: 2px;
+    padding-left: 10%;
+    padding-right: 10%;
+    gap: 8px;
   }
   
   .carousel-slide {
-    @apply min-w-[68vw] snap-center shrink-0 transition-all duration-500 opacity-50 scale-[0.85] z-0;
+    @apply min-w-[80%] snap-center shrink-0 transition-all duration-500 opacity-50 scale-[0.88] z-0;
     
     &.active-slide {
       @apply opacity-100 scale-100 z-10;
@@ -97,7 +97,7 @@
 }
 
 .vip-card-header-gradient {
-  @apply relative aspect-[2.7/1] rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.3)] p-4 text-white transition-all duration-500;
+  @apply relative aspect-[3.5/1] rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.3)] p-4 text-white transition-all duration-500;
   background: #189D91; 
   
   &.active-card {
@@ -118,7 +118,7 @@
   }
   
   .rank-badge-elaborate {
-    @apply absolute right-2 top-1/2 -translate-y-1/2 w-[110px] h-[110px] flex items-center justify-center;
+    @apply absolute right-2 top-1/2 -translate-y-1/2 w-[90px] h-[90px] flex items-center justify-center;
     
     &::before {
       content: '';
@@ -126,7 +126,7 @@
     }
 
     .badge-outer-ring {
-      @apply w-[85px] h-[85px] rounded-full border-[3px] border-white/10 flex items-center justify-center relative p-1.5;
+      @apply w-[75px] h-[75px] rounded-full border-[3px] border-white/10 flex items-center justify-center relative p-1.5;
       background: radial-gradient(circle, #2E8B83 0%, #179B92 100%);
       box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.4);
       

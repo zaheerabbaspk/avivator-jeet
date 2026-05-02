@@ -110,6 +110,14 @@ export class OffersPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params['showTreasure'] === 'true') this.showTreasure();
     });
+    // Subscribe to reactive history so the list updates live
+    this.offersService.history$.subscribe(records => {
+      this.historyRecords = records.filter(h => {
+        const matchStatus = this.activeStatusFilter === 'All' || h.status === this.activeStatusFilter;
+        const matchPeriod = this.activeHistoryFilter === 'Today' || h.period === this.activeHistoryFilter;
+        return matchStatus && matchPeriod;
+      });
+    });
   }
 
   loadAllData() {
@@ -118,7 +126,7 @@ export class OffersPage implements OnInit {
     this.vipTiers = this.offersService.getVipTiers();
     this.historyRecords = this.offersService.getHistory(this.activeStatusFilter, this.activeHistoryFilter);
     this.unclaimed = this.offersService.getUnclaimedSummary();
-    
+
     // Set initial VIP focus
     this.activeVipData = this.vipTiers[0];
   }
@@ -176,14 +184,37 @@ export class OffersPage implements OnInit {
   }
 
   openRedemption() {
-    // Placeholder for redemption modal/logic
     console.log('Opening redemption...');
   }
 
-  // VIP Logic (Updated for modular components)
+  // VIP Logic
   onVipLevelScrollChange(lvl: number) {
     this.activeVipLevel = lvl;
     this.activeVipData = this.vipTiers[lvl];
+  }
+
+  /**
+   * Real Claim Logic: Maps bonus type to label + amount, records in history,
+   * and auto-switches to History tab so user sees the result immediately.
+   */
+  handleVipClaimBonus(bonusType: string) {
+    if (!this.activeVipData) return;
+
+    const vip = this.activeVipData;
+    const map: Record<string, { label: string; amount: string }> = {
+      upgrade: { label: `VIP ${vip.lvl} Upgrade Bonus`, amount: vip.upgradeBonus },
+      daily: { label: `VIP ${vip.lvl} Daily Bonus`, amount: vip.dailyBonus },
+      weekly: { label: `VIP ${vip.lvl} Weekly Bonus`, amount: vip.weeklyBonus },
+      monthly: { label: `VIP ${vip.lvl} Monthly Bonus`, amount: vip.monthlyBonus },
+    };
+
+    const record = map[bonusType];
+    if (!record) return;
+
+    this.offersService.addClaimRecord(record.label, record.amount, 'Claimed');
+
+    // Switch to History tab so user sees the new entry
+    this.activeTab = 'history';
   }
 
   getIconArray(count: number): any[] { return Array(Math.max(0, count)); }

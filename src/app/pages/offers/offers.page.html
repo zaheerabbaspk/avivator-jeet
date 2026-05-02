@@ -1,9 +1,5 @@
 <ion-header class="ion-no-border">
-  <app-offer-header 
-    [tabs]="tabs" 
-    [activeTab]="activeTab" 
-    (tabChange)="activeTab = $event" 
-    (back)="goBack()">
+  <app-offer-header [tabs]="tabs" [activeTab]="activeTab" (tabChange)="activeTab = $event" (back)="goBack()">
   </app-offer-header>
 </ion-header>
 
@@ -12,85 +8,60 @@
 
     <!-- Sidebar (Only on Event tab) -->
     @if (activeTab === 'event') {
-      <app-offer-sidebar 
-        [activeSidebar]="activeSidebar"
-        [isLoadingRewards]="isLoadingRewards"
-        (sidebarChange)="activeSidebar = $event"
-        (navigateToHistory)="activeTab = 'history'"
-        (refreshRewards)="refreshRewards()"
-        (openRedemption)="openRedemption()">
-      </app-offer-sidebar>
+    <app-offer-sidebar [activeSidebar]="activeSidebar" [isLoadingRewards]="isLoadingRewards"
+      (sidebarChange)="activeSidebar = $event" (navigateToHistory)="activeTab = 'history'"
+      (refreshRewards)="refreshRewards()" (openRedemption)="openRedemption()">
+    </app-offer-sidebar>
     }
 
     <!-- Right Content Area -->
     <div class="flex-1 h-full overflow-y-auto pt-4 pb-14 relative bg-[#111419] offers-list-scroll">
       <div>
         @switch (activeTab) {
-          @case ('event') {
-            <app-offer-event 
-              [offers]="offers" 
-              (offerClick)="openOffer($event)"
-              (shareClick)="openLuckyDraw()">
-            </app-offer-event>
-          }
+        @case ('event') {
+        <app-offer-event [offers]="offers" (offerClick)="openOffer($event)" (shareClick)="openLuckyDraw()">
+        </app-offer-event>
+        }
 
-          @case ('mission') {
-            <app-offer-mission 
-              [activeMissionTab]="activeMissionTab"
-              [missions]="missions"
-              [isLoadingMissions]="isLoadingMissions"
-              (missionChannelChange)="setMissionTab($event)"
-              (refreshMissions)="refreshMissions()"
-              (claimMission)="loadAllData()">
-            </app-offer-mission>
-          }
+        @case ('mission') {
+        <app-offer-mission [activeMissionTab]="activeMissionTab" [missions]="missions"
+          [isLoadingMissions]="isLoadingMissions" (missionChannelChange)="setMissionTab($event)"
+          (refreshMissions)="refreshMissions()" (claimMission)="loadAllData()">
+        </app-offer-mission>
+        }
 
-          @case ('vip') {
-            <app-offer-vip 
-              [vipTiers]="vipTiers"
-              [activeVipLevel]="activeVipLevel"
-              [activeVipData]="activeVipData"
-              [unclaimed]="unclaimed"
-              [isLoadingUnclaimed]="isLoadingUnclaimed"
-              (levelChange)="onVipLevelScrollChange($event)"
-              (refreshUnclaimed)="refreshUnclaimed()"
-              (viewHistory)="activeTab = 'history'"
-              (claimBonus)="loadAllData()">
-            </app-offer-vip>
-          }
+        @case ('vip') {
+        <app-offer-vip [vipTiers]="vipTiers" [activeVipLevel]="activeVipLevel" [activeVipData]="activeVipData"
+          [unclaimed]="unclaimed" [isLoadingUnclaimed]="isLoadingUnclaimed"
+          (levelChange)="onVipLevelScrollChange($event)" (refreshUnclaimed)="refreshUnclaimed()"
+          (viewHistory)="activeTab = 'history'" (claimBonus)="handleVipClaimBonus($event)">
+        </app-offer-vip>
+        }
 
-          @case ('unclaimed') {
-            <app-offer-unclaimed 
-              [unclaimed]="unclaimed"
-              [isLoadingUnclaimed]="isLoadingUnclaimed"
-              (refreshUnclaimed)="refreshUnclaimed()"
-              (claimCategory)="loadAllData()">
-            </app-offer-unclaimed>
-          }
+        @case ('unclaimed') {
+        <app-offer-unclaimed [unclaimed]="unclaimed" [isLoadingUnclaimed]="isLoadingUnclaimed"
+          (refreshUnclaimed)="refreshUnclaimed()" (claimCategory)="loadAllData()">
+        </app-offer-unclaimed>
+        }
 
-          @case ('history') {
-            <app-offer-history 
-              [activeHistoryFilter]="activeHistoryFilter"
-              [activeStatusFilter]="activeStatusFilter"
-              [isHistoryFilterOpen]="isHistoryFilterOpen"
-              [isStatusFilterOpen]="isStatusFilterOpen"
-              [historyPeriods]="historyPeriods"
-              [statusOptions]="statusOptions"
-              [historyRecords]="historyRecords"
-              [pendingHistoryFilter]="pendingHistoryFilter"
-              (toggleHistory)="toggleHistoryFilter()"
-              (confirmHistory)="confirmHistoryFilter()"
-              (toggleStatus)="toggleStatusFilter()"
-              (setStatus)="setStatusFilter($event)"
-              (setPendingFilter)="pendingHistoryFilter = $event">
-            </app-offer-history>
-          }
+        @case ('history') {
+        <app-offer-history [activeHistoryFilter]="activeHistoryFilter" [activeStatusFilter]="activeStatusFilter"
+          [isHistoryFilterOpen]="isHistoryFilterOpen" [isStatusFilterOpen]="isStatusFilterOpen"
+          [historyPeriods]="historyPeriods" [statusOptions]="statusOptions" [historyRecords]="historyRecords"
+          [pendingHistoryFilter]="pendingHistoryFilter" (toggleHistory)="toggleHistoryFilter()"
+          (confirmHistory)="confirmHistoryFilter()" (toggleStatus)="toggleStatusFilter()"
+          (setStatus)="setStatusFilter($event)" (setPendingFilter)="pendingHistoryFilter = $event">
+        </app-offer-history>
+        }
         }
       </div>
     </div>
   </div>
 </ion-content>
 
-<app-lucky-draw-modal [isOpen]="isLuckyDrawModalOpen" (modalClose)="isLuckyDrawModalOpen = false" (openInviteBonus)="handleOpenInviteBonus()"></app-lucky-draw-modal>
-<app-invite-bonus-modal [isOpen]="isInviteBonusModalOpen" (modalClose)="isInviteBonusModalOpen = false"></app-invite-bonus-modal>
+<app-lucky-draw-modal [isOpen]="isLuckyDrawModalOpen" (modalClose)="isLuckyDrawModalOpen = false"
+  (openInviteBonus)="handleOpenInviteBonus()"></app-lucky-draw-modal>
+<app-invite-bonus-modal [isOpen]="isInviteBonusModalOpen"
+  (modalClose)="isInviteBonusModalOpen = false"></app-invite-bonus-modal>
+
 <app-footer-nav activeTab="offers"></app-footer-nav>

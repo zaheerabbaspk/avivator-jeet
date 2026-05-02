@@ -13,38 +13,51 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
-/* Utility: Hide Scrollbar */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
+/* Utility: Hide Scrollbar globally */
+* {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
 }
+
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
 }
 
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
+@import "./theme/variables.scss";
 
 /* App Global Responsiveness */
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100vh; /* Force full viewport height */
+    min-height: 100%;
     height: 100dvh;
-    min-height: 100vh;
-    overflow-x: hidden;
+    /* Modern dynamic viewport height for mobile */
     background-color: #0f1520 !important;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: var(--ion-font-family, inherit);
 }
 
 html {
     max-width: 100%;
     -webkit-text-size-adjust: 100%;
-    
-    /* Reduced minimum font size for small screens to prevent zooming */
     font-size: clamp(10.5px, 3.2vw, 16px);
 
-    /* Scale down even more on shorter screens to save vertical space */
     @media (max-height: 1000px) {
         font-size: clamp(9.5px, 3vw, 14px);
     }
@@ -52,17 +65,82 @@ html {
 
 body {
     max-width: 100vw;
-    -webkit-text-size-adjust: 100%;
+    background-color: #090e15 !important;
+    /* Slightly darker for the "sides" on desktop */
 }
 
-ion-app, ion-router-outlet, .ion-page {
+/* Responsive Desktop Wrapper */
+@media (min-width: 480px) {
+    ion-app {
+        max-width: 450px !important;
+        margin: 0 auto !important;
+        position: relative !important;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.8) !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.05);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Fix side menu: anchor to container's left, not viewport's left */
+    ion-menu {
+        max-width: 300px !important;
+        width: 80% !important;
+        /* Calculate: center of viewport minus half of 450px container */
+        --side-max-width: 300px;
+        left: calc(50% - 225px) !important;
+        transform: none !important;
+    }
+
+    .success-toast {
+        max-width: 450px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+
+    .floating-icons {
+        position: absolute !important;
+        max-width: 450px !important;
+        width: 100% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+}
+
+ion-app,
+ion-router-outlet,
+.ion-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
     height: 100% !important;
     min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
     background-color: #0f1520 !important;
+    overflow: hidden;
 }
 
 ion-content {
-    --padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+    --background: #0f1520 !important;
+    --offset-bottom: 0px !important;
+    --padding-bottom: env(safe-area-inset-bottom, 0px);
+    --scrollbar-width: 0px !important;
+    --scrollbar-height: 0px !important;
+    height: 100%;
+
+    &::part(scroll) {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+
+
+        &::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+    }
 }
 
 /* Ensure main containers don't exceed 420px on desktop but are fluid on mobile */

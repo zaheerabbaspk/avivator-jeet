@@ -1,40 +1,59 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { closeOutline, copyOutline, checkmarkCircle, searchOutline, globeOutline } from 'ionicons/icons';
+import { closeOutline, copyOutline, checkmarkCircle, globeOutline, checkmark } from 'ionicons/icons';
 
 @Component({
   selector: 'app-find-us-modal',
   templateUrl: './find-us-modal.component.html',
   styleUrls: ['./find-us-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule],
+  // Force re-evaluation by explicitly declaring props used in template
 })
-export class FindUsModalComponent {
+export class FindUsModalComponent implements OnInit {
   @Input() isOpen = false;
   @Output() didDismiss = new EventEmitter<void>();
 
+  dontShowToday = false;
+
+  private readonly allUrls = [
+    'bp999.online', 'bp999.me', 'bp999.org',
+    'www.bp999.online', 'www.bp999.me', 'www.bp999.org'
+  ];
+
   constructor() {
-    addIcons({ closeOutline, copyOutline, checkmarkCircle, searchOutline, globeOutline });
+    addIcons({ closeOutline, copyOutline, checkmarkCircle, globeOutline, checkmark });
+  }
+
+  ngOnInit() {
+    // Check if user already checked "don't show today"
+    const savedDate = localStorage.getItem('findUsHideDate');
+    const today = new Date().toDateString();
+    if (savedDate === today) {
+      this.dontShowToday = true;
+    }
   }
 
   dismiss() {
+    if (this.dontShowToday) {
+      localStorage.setItem('findUsHideDate', new Date().toDateString());
+    }
     this.didDismiss.emit();
+  }
+
+  toggleDontShow() {
+    this.dontShowToday = !this.dontShowToday;
   }
 
   copyToClipboard(text: string) {
     navigator.clipboard.writeText(text).then(() => {
-      // Could add a toast here if needed
-      console.log('Copied to clipboard:', text);
+      console.log('Copied:', text);
     });
   }
 
   copyAll() {
-    const allUrls = [
-      'No777.me', 'No777.org', 'No777.win',
-      'www.12no777.com', 'www.13no777.com', 'www.14no777.com'
-    ].join('\n');
-    this.copyToClipboard(allUrls);
+    this.copyToClipboard(this.allUrls.join('\n'));
   }
 }

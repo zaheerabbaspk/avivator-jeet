@@ -82,10 +82,11 @@ import { IonIcon } from '@ionic/angular/standalone';
     .main-link-layout {
       display: flex;
       gap: 16px;
+      align-items: flex-start;
     }
 
     .qr-container {
-      width: 90px;
+      width: clamp(80px, 25vw, 100px);
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
@@ -96,54 +97,46 @@ import { IonIcon } from '@ionic/angular/standalone';
       width: 100%;
       aspect-ratio: 1;
       background: white;
-      border-radius: 5px 5px 0 0;
-      padding: 6px;
+      border-radius: 6px 6px 0 0;
+      padding: clamp(4px, 1.5vw, 8px);
       position: relative;
     }
 
     .qr-button {
       width: 100%;
       background: #F1C15A;
-      padding: 3px 0;
-      border-radius: 0 0 5px 5px;
+      padding: clamp(3px, 1vw, 5px) 0;
+      border-radius: 0 0 6px 6px;
       text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     .btn-text {
       color: #5A3D0A;
-      font-size: 9px;
-      font-weight: 700;
+      font-size: clamp(8px, 2.2vw, 10px);
+      font-weight: 800;
       line-height: 1.1;
       display: block;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       padding: 0 2px;
     }
 
     .link-section {
       flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
     }
 
     @media (max-width: 360px) {
       .main-link-layout {
-        flex-direction: column;
-        gap: 20px;
+        gap: 12px;
       }
       
       .qr-container {
-        width: 120px;
-        align-self: center;
-      }
-
-      .btn-text {
-        font-size: 10px;
-      }
-
-      .link-section {
-        width: 100%;
+        width: 85px;
       }
     }
   `],

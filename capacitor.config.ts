@@ -6,7 +6,14 @@ const config: CapacitorConfig = {
   webDir: 'www',
   server: {
     allowNavigation: ['zdkccjutalnqugfccujg.supabase.co']
-  }
+  },
+  plugins: {
+    Keyboard: {
+      resize: 'none',
+      backgroundColor: '#0f1520'
+    }
+  },
+  backgroundColor: '#0f1520'
 };
 
 export default config;

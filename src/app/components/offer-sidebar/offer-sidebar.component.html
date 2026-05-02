@@ -1,6 +1,8 @@
-<div class="offer-sidebar-container bg-[#1A1C22] flex flex-col items-center py-4 px-2 gap-3 border-r border-white/5 h-full">
+<div
+  class="offer-sidebar-container bg-[#1A1C22] flex flex-col items-center py-4 px-2 gap-3 border-r border-white/5 h-full">
   <!-- All -->
-  <div class="sidebar-item-box relative sidebar-item flex items-center justify-center shadow-md !h-[32px] rounded-[-7px]"
+  <div
+    class="sidebar-item-box relative sidebar-item flex items-center justify-center shadow-md !h-[32px] rounded-[-7px]"
     [ngClass]="activeSidebar === 'all' ? 'active' : 'inactive'" (click)="setSidebar('all')">
     <div class="flex items-center gap-2">
       <ion-icon name="apps" class="text-[18px]" [class.text-[#3E2723]]="activeSidebar === 'all'"></ion-icon>
@@ -40,7 +42,7 @@
   <div class="mt-auto mb-16 relative" *ngIf="isLogoVisible">
     <div
       class="w-[62px] h-[62px] rounded-full bg-gradient-to-b from-[#A52424] to-[#5A0B0B] border-[2px] border-[#F1C15A] p-0.5 shadow-lg relative active:scale-95 transition-transform overflow-visible">
-      <img src="assets/brand_ar999.png" class="w-full h-full object-contain rounded-full" />
+      <img src="assets/brand_ar999.jpg" class="w-full h-full object-contain rounded-full" />
       <div
         class="absolute -top-0.5 -right-0.5 bg-black w-[18px] h-[18px] rounded-full flex items-center justify-center border border-white/20 shadow-md cursor-pointer z-20"
         (click)="removeLogo(); $event.stopPropagation()">

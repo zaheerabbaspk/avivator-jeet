@@ -47,6 +47,8 @@
     transform-origin: center;
     border-radius: 50%;
     pointer-events: none;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 @keyframes rotate-sunburst-bl {
@@ -67,6 +69,7 @@
 .plane-svg {
     filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
     animation: plane-shake 0.2s infinite ease-in-out;
+    will-change: transform;
 }
 
 @keyframes plane-shake {
@@ -264,4 +267,6 @@
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
     transform: rotate(0deg);
     transition: none !important;
+    will-change: transform, top, left;
+    backface-visibility: hidden;
 }

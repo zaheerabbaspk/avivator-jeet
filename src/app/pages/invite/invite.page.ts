@@ -149,10 +149,11 @@ export class InvitePage implements OnInit {
     this.isInviteBonusModalOpen = true;
   }
 
-  loadData() {
+  async loadData() {
     this.agentStats = this.inviteService.getAgentStats();
     this.inviteStats = this.inviteService.getInviteStats();
-    this.myDataStats = this.inviteService.getMyDataStats();
+    this.myDataStats = await this.inviteService.fetchMyDataStats();
+    this.inviteStats = this.inviteService.getInviteStats(); // Refresh invite stats after fetching data
     this.banners = this.inviteService.getBanners();
     this.commissions = this.inviteService.getCommissions();
     this.referralCode = this.agentStats.account;

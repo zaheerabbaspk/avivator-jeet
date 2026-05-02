@@ -24,26 +24,43 @@ export class SoundService {
     }
   }
 
+  /**
+   * Unlocks audio on iOS/iPhone. 
+   * Needs to be called on a user interaction (like first click).
+   */
+  unlockAudio() {
+    if (this.ambientAudio && this.ambientAudio.paused) {
+      // Play and immediately pause to unlock the context
+      this.ambientAudio.play().then(() => {
+        this.ambientAudio?.pause();
+        console.log('🔓 SoundService: Audio unlocked for iOS');
+      }).catch(e => console.log('Audio unlock failed:', e));
+    }
+  }
+
   // State to track if sounds were playing before backgrounding
   private wasAmbientPlaying = false;
 
   pauseAll() {
-    if (this.ambientAudio && !this.ambientAudio.paused) {
-      this.wasAmbientPlaying = true;
+    console.log('🔇 SoundService: Pausing all audio');
+    if (this.ambientAudio) {
+      this.wasAmbientPlaying = !this.ambientAudio.paused;
       this.ambientAudio.pause();
-    } else {
-      this.wasAmbientPlaying = false;
+      this.ambientAudio.volume = 0; // Double insurance
     }
-
     if (this.flyAwayAudio) {
       this.flyAwayAudio.pause();
+      this.flyAwayAudio.volume = 0;
     }
   }
 
   resumeAll() {
     if (this.isMuted()) return;
-
-    if (this.wasAmbientPlaying && this.ambientAudio) {
+    
+    // Only resume if we were actually playing something that should loop
+    if (this.ambientAudio && this.wasAmbientPlaying) {
+      console.log('🔊 SoundService: Resuming ambient audio');
+      this.ambientAudio.volume = 0.5;
       this.ambientAudio.play().catch(e => console.log('Resume blocked:', e));
     }
   }
@@ -72,11 +89,15 @@ export class SoundService {
   }
 
   stopAll() {
+    console.log('🛑 SoundService: Stopping ALL audio immediately');
+    this.wasAmbientPlaying = false;
+    
     if (this.ambientAudio) {
       this.ambientAudio.pause();
       this.ambientAudio.currentTime = 0;
-      this.wasAmbientPlaying = false;
+      this.ambientAudio.playbackRate = 1.0;
     }
+    
     if (this.flyAwayAudio) {
       this.flyAwayAudio.pause();
       this.flyAwayAudio.currentTime = 0;

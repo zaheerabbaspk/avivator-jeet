@@ -3,14 +3,20 @@
     <button (click)="goBack()" class="w-10 h-10 flex items-center justify-center text-white/60 active:opacity-50">
       <ion-icon name="chevron-back-outline" class="text-[20px]"></ion-icon>
     </button>
-    <div class="flex-1 flex items-center justify-around h-full">
-      <div class="nav-tab" [class.active]="selectedTab === 'statement'" (click)="selectedTab = 'statement'">Statement
-      </div>
-      <div class="nav-tab" [class.active]="selectedTab === 'bet'" (click)="selectedTab = 'bet'">Bet record</div>
-      <div class="nav-tab" [class.active]="selectedTab === 'report'" (click)="selectedTab = 'report'">Report</div>
-      <div class="nav-tab" [class.active]="selectedTab === 'retrieve'" (click)="selectedTab = 'retrieve'">Retrieve
-        Balance</div>
-    </div>
+    <ion-segment [(ngModel)]="selectedTab" mode="md" [scrollable]="true" class="records-segment">
+      <ion-segment-button value="statement">
+        <ion-label>Statement</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="bet">
+        <ion-label>Bet record</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="report">
+        <ion-label>Report</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="retrieve">
+        <ion-label>Retrieve Balance</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </div>
 </ion-header>
 
@@ -18,29 +24,31 @@
   <div class="records-container min-h-full bg-[#1A1E23] flex flex-col">
 
     <!-- Balance Summary Bar (Only for Statement) -->
-    <div *ngIf="selectedTab === 'statement'" class="m-3 p-4 bg-[#23272E] rounded-lg border border-white/5">
-      <div class="flex items-center justify-between mb-2">
+    <div *ngIf="selectedTab === 'statement'" class="m-3 p-3 bg-[#1C1F25] rounded-lg">
+      <div class="flex items-center justify-between mb-1.5">
         <div class="flex items-center gap-1.5">
-          <span class="text-[#848B94] text-[13px]">Current Balance</span>
-          <span class="text-[#F1C15A] text-[15px] font-bold">0.78</span>
-          <ion-icon name="sync-outline" class="text-[#F1C15A] text-[16px] cursor-pointer"
+          <span class="text-[#646C75] text-[10px] sm:text-[11px] leading-none">Current<br>Balance</span>
+          <span class="text-[#F1C15A] text-[14px] sm:text-[15px] font-bold">{{ (authService.balance$ | async) | number:'1.2-2'
+            }}</span>
+          <ion-icon name="sync-outline" class="text-[#F1C15A] text-[14px] sm:text-[15px] cursor-pointer"
             [class.animate-spin]="isLoading" (click)="refreshBalance()"></ion-icon>
         </div>
-        <div class="flex items-center gap-1 text-[#F1C15A] text-[13px] font-bold cursor-pointer"
-          (click)="selectedTab = 'retrieve'">
-          Retrieve Balance
-          <ion-icon name="chevron-forward-outline" class="text-[#848B94] text-[14px]"></ion-icon>
+        <div class="flex items-center gap-1.5 cursor-pointer" (click)="selectedTab = 'retrieve'">
+          <div class="text-[#F1C15A] text-[10px] sm:text-[11px] leading-[1.2] text-right">
+            Retrieve<br>Balance
+          </div>
+          <ion-icon name="chevron-forward-outline" class="text-[#646C75] text-[12px]"></ion-icon>
         </div>
       </div>
-      <p class="text-[#646C75] text-[11px] leading-[1.4]">
+      <p class="text-[#646C75] text-[10px] sm:text-[11px] leading-[1.4] m-0 pr-2">
         If your balance is lost when entering or leaving the game, you can restore it through the self-service balance
         recovery function.
       </p>
     </div>
 
     <!-- Filters Row: Statement -->
-    <div *ngIf="selectedTab === 'statement'" class="px-3 flex gap-2 mb-4">
-      <div class="filter-dropdown" [class.active]="isDateFilterOpen" (click)="toggleDateFilter()">
+    <div *ngIf="selectedTab === 'statement'" class="px-3 flex gap-2 mb-4 mt-1">
+      <div class="filter-dropdown" [class.active]="isDateFilterOpen" (click)="toggleDateFilter($event)">
         <span>{{selectedDateLabel}}</span>
         <ion-icon [name]="isDateFilterOpen ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
       </div>
@@ -56,8 +64,8 @@
 
     <!-- Filters Row: Bet record -->
     <div *ngIf="selectedTab === 'bet'" class="px-3 flex gap-2 mb-4 overflow-x-auto no-scrollbar py-1">
-      <div class="filter-dropdown shrink-0 min-w-[80px]" [class.active]="isDateFilterOpen" (click)="toggleDateFilter()">
-        <span>Today</span>
+      <div class="filter-dropdown shrink-0 min-w-[80px]" [class.active]="isDateFilterOpen" (click)="toggleDateFilter($event)">
+        <span>{{selectedDateLabel}}</span>
         <ion-icon [name]="isDateFilterOpen ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
       </div>
       <div class="filter-dropdown shrink-0 min-w-[100px]">
@@ -75,48 +83,65 @@
     </div>
 
     <!-- Date Picker Advanced Dropdown -->
-    <div *ngIf="isDateFilterOpen" class="mx-3 mb-4 p-4 bg-[#23272E] border border-white/10 rounded-xl shadow-2xl animate__animated animate__fadeInDown">
+    <div *ngIf="isDateFilterOpen"
+      class="date-picker-overlay mx-3 mb-4 p-4 bg-[#23272E] border border-white/10 rounded-xl shadow-2xl animate__animated animate__fadeInDown">
       <!-- Presets -->
-      <div class="flex gap-3 mb-4">
-        <button class="date-preset-btn" [class.active]="activeDatePreset === 'today'" (click)="activeDatePreset = 'today'">Today</button>
-        <button class="date-preset-btn" [class.active]="activeDatePreset === 'yesterday'" (click)="activeDatePreset = 'yesterday'">Yesterday</button>
+      <div class="flex gap-3 mb-6">
+        <button class="date-preset-btn" [class.active]="activeDatePreset === 'today'"
+          (click)="selectPreset('today')">Today</button>
+        <button class="date-preset-btn" [class.active]="activeDatePreset === 'yesterday'"
+          (click)="selectPreset('yesterday')">Yesterday</button>
       </div>
 
       <!-- Custom Date Picker -->
       <div class="mb-4">
-        <span class="text-white font-bold text-[14px] mb-3 block">Custom</span>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <span class="text-[#848B94] text-[12px] block text-center mb-2">Start Date</span>
-            <div class="custom-date-display">
-              <span>2026</span>
-              <span>04</span>
-              <span>27</span>
-            </div>
+        <span class="text-[#848B94] text-[13px] font-bold mb-3 block">Custom</span>
+        <div class="grid grid-cols-2 gap-0 relative border-t border-b border-white/5 py-4">
+          <div class="date-picker-box px-0">
+            <span class="text-[#848B94] text-[10px] block text-center mb-2 mt-1">Start Date</span>
+            <ion-picker class="custom-numeric-picker">
+              <ion-picker-column [value]="startYear" (ionChange)="startYear = $any($event.detail.value)">
+                <ion-picker-column-option *ngFor="let y of years" [value]="y">{{y}}</ion-picker-column-option>
+              </ion-picker-column>
+              <ion-picker-column [value]="startMonth" (ionChange)="startMonth = $any($event.detail.value)">
+                <ion-picker-column-option *ngFor="let m of months" [value]="m">{{m}}</ion-picker-column-option>
+              </ion-picker-column>
+              <ion-picker-column [value]="startDay" (ionChange)="startDay = $any($event.detail.value)">
+                <ion-picker-column-option *ngFor="let d of days" [value]="d">{{d}}</ion-picker-column-option>
+              </ion-picker-column>
+            </ion-picker>
           </div>
-          <div class="border-l border-white/5 pl-4">
-            <span class="text-[#848B94] text-[12px] block text-center mb-2">End Date</span>
-            <div class="custom-date-display">
-              <span>2026</span>
-              <span>04</span>
-              <span>27</span>
-            </div>
+          <div class="date-picker-box px-0 border-l border-white/5">
+            <span class="text-[#848B94] text-[10px] block text-center mb-2 mt-1">End Date</span>
+            <ion-picker class="custom-numeric-picker">
+              <ion-picker-column [value]="endYear" (ionChange)="endYear = $any($event.detail.value)">
+                <ion-picker-column-option *ngFor="let y of years" [value]="y">{{y}}</ion-picker-column-option>
+              </ion-picker-column>
+              <ion-picker-column [value]="endMonth" (ionChange)="endMonth = $any($event.detail.value)">
+                <ion-picker-column-option *ngFor="let m of months" [value]="m">{{m}}</ion-picker-column-option>
+              </ion-picker-column>
+              <ion-picker-column [value]="endDay" (ionChange)="endDay = $any($event.detail.value)">
+                <ion-picker-column-option *ngFor="let d of days" [value]="d">{{d}}</ion-picker-column-option>
+              </ion-picker-column>
+            </ion-picker>
           </div>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="flex gap-3 pt-2">
-        <button (click)="isDateFilterOpen = false" class="flex-1 h-[44px] rounded-lg border border-[#F1C15A]/60 text-[#F1C15A] text-[14px] font-bold active:opacity-50">Cancel</button>
+        <button (click)="isDateFilterOpen = false"
+          class="flex-1 h-[44px] rounded-lg action-btn-cancel text-[14px] font-bold active:opacity-50">Cancel</button>
         <button (click)="confirmDate()"
-          class="flex-1 h-[44px] rounded-lg bg-[#F1C15A] text-[#1A1E23] text-[14px] font-bold active:opacity-80">Confirm</button>
+          class="flex-1 h-[44px] rounded-lg action-btn-confirm text-[14px] font-bold active:opacity-80">Confirm</button>
       </div>
     </div>
 
     <!-- Filters Row: Report -->
     <div *ngIf="selectedTab === 'report'" class="px-3 flex items-center justify-between mb-4">
       <div class="flex gap-2 flex-1 mr-4">
-        <div class="filter-dropdown shrink-0 min-w-[80px]" [class.active]="isDateFilterOpen" (click)="toggleDateFilter()">
+        <div class="filter-dropdown shrink-0 min-w-[80px]" [class.active]="isDateFilterOpen"
+          (click)="toggleDateFilter($event)">
           <span>{{selectedDateLabel}}</span>
           <ion-icon [name]="isDateFilterOpen ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
         </div>
@@ -135,7 +160,7 @@
     </div>
 
     <!-- Empty State -->
-    <div class="flex-1 flex flex-col items-center justify-center -mt-10 opacity-80 pb-20">
+    <div class="flex-1 flex flex-col items-center justify-center -mt-20 opacity-80 pb-32">
       <div class="relative w-[180px] h-[180px] mb-2">
         <svg viewBox="0 0 100 100" class="w-full h-full text-white/5">
           <rect x="20" y="40" width="60" height="45" rx="4" fill="currentColor" />
@@ -151,7 +176,7 @@
     </div>
 
     <!-- Floating Logo -->
-    <div class="fixed bottom-24 left-4 z-[1000]">
+    <div *ngIf="isLogoVisible" class="fixed bottom-24 left-4 z-[1000]">
       <div class="relative group">
         <div
           class="w-[50px] h-[50px] bg-black border-2 border-[#2A2F38] rounded-full flex items-center justify-center overflow-hidden shadow-xl">
@@ -160,7 +185,7 @@
             <span class="text-white text-[8px] font-bold">.COM</span>
           </div>
         </div>
-        <div
+        <div (click)="hideLogo()"
           class="absolute -top-1 -right-1 w-4 h-4 bg-[#111419] border border-white/20 rounded-full flex items-center justify-center cursor-pointer">
           <ion-icon name="close-outline" class="text-white text-[10px]"></ion-icon>
         </div>
@@ -169,20 +194,20 @@
 
     <!-- Footer Stats Overlay -->
     <div
-      class="fixed bottom-[50px] left-0 right-0 bg-[#1A1E23] border-t border-white/10 p-3 px-4 z-[100] shadow-[0_-4px_10px_rgba(0,0,0,0.3)]">
+      class="fixed bottom-0 left-0 right-0 bg-[#1A1E23] border-t border-white/5 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] px-4 z-[100]">
       <!-- Statement Footer -->
-      <div *ngIf="selectedTab === 'statement'" class="grid grid-cols-2 gap-y-2 gap-x-8">
-        <div class="flex items-center justify-between">
-          <span class="text-[#848B94] text-[12px]">Total Deposits</span>
-          <span class="text-[#4ADE80] text-[13px] font-bold">Rs{{stats.deposits}}</span>
+      <div *ngIf="selectedTab === 'statement'" class="grid grid-cols-2 gap-y-2 gap-x-6">
+        <div class="flex items-center gap-2">
+          <span class="text-[#646C75] text-[12px] w-[110px]">Total Deposits</span>
+          <span class="text-[#4ADE80] text-[12px] font-medium">Rs{{stats.deposits}}</span>
         </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[#848B94] text-[12px]">Total Withdrawal</span>
-          <span class="text-[#F87171] text-[13px] font-bold">Rs{{stats.withdrawals}}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-[#646C75] text-[12px] w-[110px]">Total Withdrawal</span>
+          <span class="text-[#F87171] text-[12px] font-medium">Rs{{stats.withdrawals}}</span>
         </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[#848B94] text-[12px]">Total Received</span>
-          <span class="text-[#F1C15A] text-[13px] font-bold">Rs{{stats.received}}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-[#646C75] text-[12px] w-[110px]">Total Received</span>
+          <span class="text-[#F1C15A] text-[12px] font-medium">Rs{{stats.received}}</span>
         </div>
       </div>
 

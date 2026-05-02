@@ -46,13 +46,14 @@ import { AgentStats, InviteStats } from '../../services/invite.service';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      flex-wrap: wrap; /* Fallback for very narrow screens */
     }
 
     .stats-grid {
       display: grid;
-      grid-template-cols: 1fr 1fr;
-      gap: 10px;
+      grid-template-cols: 1.2fr 1fr;
+      gap: 15px;
       align-items: center;
     }
 
@@ -62,14 +63,12 @@ import { AgentStats, InviteStats } from '../../services/invite.service';
 
     @media (max-width: 360px) {
       .row-container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
+        gap: 8px;
       }
       
       .stats-grid {
         grid-template-cols: 1fr;
-        gap: 8px;
+        gap: 10px;
       }
       
       .stats-right-align {

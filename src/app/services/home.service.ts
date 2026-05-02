@@ -36,23 +36,23 @@ export interface Game {
 export class HomeService {
 
   private bannerSlides = [
-    'assets/m.png',
-    'assets/main1.png',
-    'assets/main2.png',
-    'assets/mmmm.png',
-    'assets/main5.png',
-    'assets/mm.png',
-    'assets/mmm.png',
-    'assets/mmmmm.png',
+    '/assets/m.png',
+    '/assets/main1.png',
+    '/assets/main2.png',
+    '/assets/mmmm.png',
+    '/assets/main5.png',
+    '/assets/mm.png',
+    '/assets/mmm.png',
+    '/assets/mmmmm.png',
   ];
 
   private brands: Brand[] = [
-    { name: 'BV999', image: 'assets/brand_bv999.png', color: '#4ade80' },
-    { name: 'AR999', image: 'assets/brand_ar999.png', color: '#ef4444' },
-    { name: 'CZ777', image: 'assets/brand_cz777.png', color: '#c084fc' },
-    { name: 'WC777', image: 'assets/brand_bv999.png', color: '#4ade80' },
-    { name: 'ZC777', image: 'assets/brand_ar999.png', color: '#ef4444' },
-    { name: 'NO777', image: 'assets/brand_cz777.png', color: '#f5c518' },
+    { name: 'BV999', image: '/assets/brand_bv999.jpg', color: '#4ade80' },
+    { name: 'AR999', image: '/assets/brand_ar999.jpg', color: '#ef4444' },
+    { name: 'CZ777', image: '/assets/brand_cz777.jpg', color: '#c084fc' },
+    { name: 'WC777', image: '/assets/brand_bv999.jpg', color: '#4ade80' },
+    { name: 'ZC777', image: '/assets/brand_ar999.jpg', color: '#ef4444' },
+    { name: 'NO777', image: '/assets/brand_cz777.jpg', color: '#f5c518' },
   ];
 
   private categories: Category[] = [

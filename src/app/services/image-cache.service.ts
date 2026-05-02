@@ -13,7 +13,7 @@ export class ImageCacheService {
    */
   async getCachedImage(url: string): Promise<string> {
     if (!url) return '';
-    if (url.startsWith('assets/') || url.startsWith('data:')) {
+    if (url.startsWith('assets/') || url.startsWith('/assets/') || url.startsWith('data:')) {
       return url; 
     }
 

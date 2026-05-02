@@ -104,6 +104,13 @@ export class CrashGamePage implements OnInit, OnDestroy {
     private lastState: 'WAITING' | 'RUNNING' | 'CRASHED' | null = null;
     private visibilityHandler = () => this.handleVisibilityChange();
     private appStateListener?: PluginListenerHandle;
+    private timeoutIds: any[] = [];
+
+    private safeTimeout(callback: Function, delay: number) {
+        const id = setTimeout(() => callback(), delay);
+        this.timeoutIds.push(id);
+        return id;
+    }
 
 
     constructor() {
@@ -208,21 +215,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
     ngOnInit() {
         console.log('🎮 Crash game page initialized');
 
-        // Handle visibility change (Minimize app / Switch tab)
-        document.addEventListener('visibilitychange', this.visibilityHandler);
-        
-        // Native App Backgrounding Support via Capacitor
-        App.addListener('appStateChange', ({ isActive }) => {
-            if (!isActive) {
-                console.log('🔇 Native App backgrounded, pausing sounds');
-                this.soundService.stopAll();
-            } else {
-                console.log('🔊 Native App foregrounded, resuming sounds');
-                if (this.gameEngine.gameState() === 'RUNNING' && !this.isLoading) {
-                    this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
-                }
-            }
-        }).then(handle => this.appStateListener = handle);
+        // Handled by AppComponent globally for all pages to ensure no sound leaks in background
 
         // Check for bonus rain trigger from URL
         this.route.queryParams.subscribe(params => {
@@ -243,11 +236,11 @@ export class CrashGamePage implements OnInit, OnDestroy {
                     // Phase 2: Powered by Spribe
                     this.loadingPhase = 'splash';
                     
-                    setTimeout(() => {
+                    this.safeTimeout(() => {
                         // Phase 3: Connection...
                         this.loadingPhase = 'connection';
 
-                        setTimeout(() => {
+                        this.safeTimeout(() => {
                             this.isLoading = false;
                             if (this.gameEngine.gameState() === 'RUNNING') {
                                 this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
@@ -279,7 +272,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
             }
 
             this.loadingProgress = current;
-            setTimeout(tick, Math.random() * 40 + 10);
+            this.safeTimeout(tick, Math.random() * 40 + 10);
         };
         tick();
     }
@@ -309,6 +302,10 @@ export class CrashGamePage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log('🎮 Crash game page destroyed');
+        // Clear all pending timeouts to prevent sound leaks
+        this.timeoutIds.forEach(id => clearTimeout(id));
+        this.timeoutIds = [];
+
         document.removeEventListener('visibilitychange', this.visibilityHandler);
         if (this.appStateListener) {
             this.appStateListener.remove();
@@ -317,14 +314,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
     }
 
     private handleVisibilityChange() {
-        if (document.hidden) {
-            console.log('🔇 App hidden, pausing sounds');
-            this.soundService.stopAll();
-        } else {
-            if (this.gameEngine.gameState() === 'RUNNING' && !this.isLoading) {
-                this.soundService.setFlight(true, this.gameEngine.currentMultiplier());
-            }
-        }
+        // Handled globally in AppComponent
     }
 
     // UI Actions (Refined for realistic flight)
@@ -530,7 +520,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
         ];
 
         for (let i = 0; i < count; i++) {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 if (this.gameEngine.gameState() !== 'WAITING') return;
 
                 const amount = possibleAmounts[Math.floor(Math.random() * possibleAmounts.length)];
@@ -546,6 +536,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
                 this.totalBetsCount.update(n => n + 1);
                 this.totalActiveBets.update(n => n + 1);
             }, Math.random() * 4500); // Spread joining over the whole waiting period
+            this.timeoutIds.push(timeoutId);
         }
     }
 
