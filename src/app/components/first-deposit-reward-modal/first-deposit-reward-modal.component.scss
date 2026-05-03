@@ -1,28 +1,36 @@
 .first-deposit-reward-modal {
-  --background: transparent;
+  --background: transparent !important;
   --width: 95%;
-  --height: auto;
-  --max-height: 90%;
+  --height: 100%;
+  --max-height: 100%;
   --border-radius: 12px;
-  --backdrop-filter: blur(4px);
-  --backdrop-opacity: 0.8;
+  --box-shadow: none !important;
 
   @media (min-width: 768px) {
     --width: 400px;
   }
 
-  @media (max-height: 667px) {
-    --max-height: 95%;
-
-    .modal-content {
-      max-height: 45vh;
-    }
+  &::part(content) {
+    background: transparent !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow-y: auto !important;
+    padding: 20px 0 !important;
   }
 
-  &::part(content) {
-    background: transparent;
-    box-shadow: none;
-    border-radius: 12px;
+  &::part(backdrop) {
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(4px) !important;
+    opacity: 1 !important;
+  }
+
+  /* Target the internal page container that often leaks background */
+  ::ng-deep .ion-page {
+    background: transparent !important;
   }
 
   .modal-wrapper {
@@ -32,7 +40,8 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    padding-bottom: 80px;
+    padding: 1rem;
+    box-sizing: border-box;
   }
 
   .modal-card {
@@ -52,7 +61,6 @@
       transform: scale(0.95);
       opacity: 0;
     }
-
     to {
       transform: scale(1);
       opacity: 1;
@@ -72,7 +80,7 @@
   .modal-content {
     padding: 14px;
     background: #1e2024;
-    max-height: 60vh;
+    max-height: 65vh;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -221,10 +229,8 @@
       .footer-btn {
         flex: 1;
         height: 32px;
-        /* Reduced from 40px */
         border-radius: 6px;
         font-size: 13px;
-        /* Reduced from 14px */
         font-weight: 500;
         cursor: pointer;
 
@@ -266,29 +272,57 @@
   }
 
   .close-container {
-    margin-top: 15px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     display: flex;
     justify-content: center;
     cursor: pointer;
     position: relative;
     z-index: 100;
+    flex-shrink: 0;
 
     .close-btn {
       width: 32px;
-      /* Reduced from 44px */
       height: 32px;
-      /* Reduced from 44px */
       border-radius: 50%;
       border: 1px solid rgba(255, 255, 255, 0.8);
-      /* Thinner border */
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
       font-size: 20px;
-      /* Reduced from 28px */
       background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(4px);
     }
   }
+
+  /* Responsive Fix for Small Screens */
+  @media (max-height: 740px) {
+    &::part(content) {
+      align-items: flex-start !important;
+      padding-top: 20px;
+    }
+
+    .modal-card {
+      max-height: 82vh;
+    }
+
+    .modal-content {
+      max-height: 55vh;
+    }
+  }
+
+  @media (max-height: 600px) {
+    .modal-card {
+      max-height: 78vh;
+    }
+    .modal-content {
+      max-height: 45vh;
+    }
+  }
+}
+
+:host {
+  display: contents;
+  background: transparent !important;
 }

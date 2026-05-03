@@ -245,8 +245,22 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   handleLogin(mode: 'login' | 'register') {
+    this.closeAllModals();
     this.authMode = mode;
     this.isAuthModalOpen = true;
+  }
+
+  private closeAllModals() {
+    this.isAuthModalOpen = false;
+    this.isSuccessModalOpen = false;
+    this.isRewardModalOpen = false;
+    this.isBonusRainOpen = false;
+    this.isDepositModalOpen = false;
+    this.isAnnouncementModalOpen = false;
+    this.isFirstDepositModalOpen = false;
+    this.isFindUsModalOpen = false;
+    this.isLuckyDrawModalOpen = false;
+    this.isInviteBonusModalOpen = false;
   }
 
   handleAuthSuccess() {

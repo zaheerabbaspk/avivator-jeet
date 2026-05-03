@@ -27,7 +27,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './records.page.html',
   styleUrls: ['./records.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel, IonDatetime, IonModal, IonPicker, IonPickerColumn, IonPickerColumnOption, FooterNavComponent]
+  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonIcon, IonSegment, IonSegmentButton, IonLabel, IonDatetime, IonModal, IonPicker, IonPickerColumn, IonPickerColumnOption]
 })
 export class RecordsPage {
   private router = inject(Router);
