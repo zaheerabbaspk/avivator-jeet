@@ -119,6 +119,16 @@ export class DepositPage implements OnInit, OnDestroy {
       if (amount) {
         this.selectAmount(Number(amount));
       }
+
+      const paymentStatus = params['payment'];
+      if (paymentStatus === 'success') {
+        alert('Payment successful! Your balance will be updated automatically in a few moments.');
+        // Clear query params
+        this.router.navigate([], { queryParams: { payment: null }, queryParamsHandling: 'merge' });
+      } else if (paymentStatus === 'cancelled') {
+        alert('Payment was cancelled.');
+        this.router.navigate([], { queryParams: { payment: null }, queryParamsHandling: 'merge' });
+      }
     });
     
     // Get real balance from auth service
@@ -213,17 +223,30 @@ export class DepositPage implements OnInit, OnDestroy {
 
     try {
       // Call backend to create CashMaal order
-      const response: any = await this.http.post(`${environment.backendUrl}/api/payments/create-cashmaal-order`, {
+      const response: any = await this.http.post(`${environment.backendUrl}/api/payment/create-cashmaal-order`, {
         amount: this.getCurrentAmount(),
         userId: user.id,
         userEmail: user.email
       }).toPromise();
 
-      if (response && response.url) {
-        // Redirect to CashMaal checkout
-        window.location.href = response.url;
+      if (response && response.params) {
+        // Create and submit hidden form (Standard for CashMaal SCI)
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = response.target_url;
+
+        Object.keys(response.params).forEach(key => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = response.params[key];
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
       } else {
-        throw new Error('Failed to get payment URL');
+        throw new Error('Invalid response from payment gateway');
       }
     } catch (error: any) {
       console.error('CashMaal Error:', error);
