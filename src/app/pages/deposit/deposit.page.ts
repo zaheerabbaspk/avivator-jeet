@@ -48,6 +48,7 @@ export class DepositPage implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private supabaseService = inject(SupabaseService);
   private authService = inject(AuthService);
+  private http = inject(HttpClient);
 
   selectedMethod = 'jazzcash';
   selectedAmount: number | null = null;
@@ -201,7 +202,37 @@ export class DepositPage implements OnInit, OnDestroy {
 
   async submitDeposit() {
     if (!this.canDeposit) return;
-    this.currentStep = 'proof';
+
+    const user = this.authService.userSubject.value;
+    if (!user) {
+      alert('Please login to deposit');
+      return;
+    }
+
+    this.isLoading = true;
+
+    try {
+      // Call backend to create CashMaal order
+      const response: any = await this.http.post(`${environment.backendUrl}/api/payments/create-cashmaal-order`, {
+        amount: this.getCurrentAmount(),
+        userId: user.id,
+        userEmail: user.email
+      }).toPromise();
+
+      if (response && response.url) {
+        // Redirect to CashMaal checkout
+        window.location.href = response.url;
+      } else {
+        throw new Error('Failed to get payment URL');
+      }
+    } catch (error: any) {
+      console.error('CashMaal Error:', error);
+      alert('Payment initialization failed: ' + (error.message || 'Please try again later'));
+      this.isLoading = false;
+      
+      // Fallback to manual proof if API fails (Optional, but fulfills "hide but don't remove" logic)
+      // this.currentStep = 'proof'; 
+    }
   }
 
   onFileSelected(event: any) {

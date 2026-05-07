@@ -5,6 +5,11 @@
 }
 
 .records-navbar {
+  padding-top: env(safe-area-inset-top);
+  height: calc(50px + env(safe-area-inset-top)) !important;
+  display: flex;
+  align-items: center;
+
   .records-segment {
     --background: transparent !important;
     background: transparent !important;
