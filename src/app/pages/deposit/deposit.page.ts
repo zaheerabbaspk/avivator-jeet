@@ -39,6 +39,7 @@ interface Promotion {
 @Component({
   selector: 'app-deposit',
   templateUrl: './deposit.page.html',
+
   styleUrls: ['./deposit.page.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, IonHeader, IonContent, IonFooter, IonIcon, IonButton, IonSpinner, FooterNavComponent]
@@ -57,7 +58,7 @@ export class DepositPage implements OnInit, OnDestroy {
   isPromotionsExpanded = false;
   userBalance = 1.55;
   isLoading = false;
-  
+
   // Manual flow states
   currentStep: 'amount' | 'proof' = 'amount';
   transactionId: string = '';
@@ -66,21 +67,21 @@ export class DepositPage implements OnInit, OnDestroy {
 
   // Amounts exactly matching the screenshot
   amounts: DepositAmount[] = [
-    { val: 100,    bonus: '+1.50' },
-    { val: 500,    bonus: '+861.50' },
-    { val: 1000,   bonus: '+2,346.00' },
-    { val: 3000,   bonus: '+7,376.00' },
-    { val: 5000,   bonus: '+15,233.00' },
-    { val: 10000,  bonus: '+19,358.00' },
-    { val: 30000,  bonus: '+107,635.00' },
-    { val: 50000,  bonus: '+305,912.00' },
+    { val: 100, bonus: '+1.50' },
+    { val: 500, bonus: '+861.50' },
+    { val: 1000, bonus: '+2,346.00' },
+    { val: 3000, bonus: '+7,376.00' },
+    { val: 5000, bonus: '+15,233.00' },
+    { val: 10000, bonus: '+19,358.00' },
+    { val: 30000, bonus: '+107,635.00' },
+    { val: 50000, bonus: '+305,912.00' },
   ];
 
   // Full promotions list matching screenshot (expanded view)
   promotions: Promotion[] = [
-    { label: 'Rewards 7.00-77.00',        desc: 'First Deposit ≥ 200' },
-    { label: 'Rewards 7.00-777.00',        desc: 'Single Deposit ≥ 500' },
-    { label: 'Rewards 37.00-777.00',       desc: 'First Deposit ≥ 1,000' },
+    { label: 'Rewards 7.00-77.00', desc: 'First Deposit ≥ 200' },
+    { label: 'Rewards 7.00-777.00', desc: 'Single Deposit ≥ 500' },
+    { label: 'Rewards 37.00-777.00', desc: 'First Deposit ≥ 1,000' },
     {
       label: 'Rewards 7.00-777.00',
       desc: 'Total deposit ≥ 1,000',
@@ -88,10 +89,10 @@ export class DepositPage implements OnInit, OnDestroy {
       badge: 'Deposit again 1,000 to receive',
       badgeDesc: 'Total deposit ≥ 1,000'
     },
-    { label: 'Rewards 17.00-2,777.00',     desc: 'Single Deposit ≥ 1,500' },
-    { label: 'Rewards 77.00-3,777.00',     desc: 'First Deposit ≥ 3,000' },
-    { label: 'Rewards 77.00-7,777.00',     desc: 'Single Deposit ≥ 5,000' },
-    { label: 'Rewards 177.00-17,777.00',   desc: 'First Deposit ≥ 10,000' },
+    { label: 'Rewards 17.00-2,777.00', desc: 'Single Deposit ≥ 1,500' },
+    { label: 'Rewards 77.00-3,777.00', desc: 'First Deposit ≥ 3,000' },
+    { label: 'Rewards 77.00-7,777.00', desc: 'Single Deposit ≥ 5,000' },
+    { label: 'Rewards 177.00-17,777.00', desc: 'First Deposit ≥ 10,000' },
   ];
 
   private timerInterval: any;
@@ -130,7 +131,7 @@ export class DepositPage implements OnInit, OnDestroy {
         this.router.navigate([], { queryParams: { payment: null }, queryParamsHandling: 'merge' });
       }
     });
-    
+
     // Get real balance from auth service
     this.authService.balance$.subscribe(bal => {
       this.userBalance = bal;
@@ -233,7 +234,7 @@ export class DepositPage implements OnInit, OnDestroy {
         // Create and submit hidden form (Standard for CashMaal SCI)
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = response.target_url;
+        form.action = response.target_url || 'https://www.cashmaal.net/Pay/';
 
         Object.keys(response.params).forEach(key => {
           const input = document.createElement('input');
@@ -244,7 +245,20 @@ export class DepositPage implements OnInit, OnDestroy {
         });
 
         document.body.appendChild(form);
-        form.submit();
+
+        // Give the DOM a moment to update, then submit
+        setTimeout(() => {
+          form.submit();
+
+          // Safety: If navigation doesn't happen (e.g. blocked by browser/Capacitor), 
+          // we should stop the loading state after a few seconds so the user isn't stuck.
+          setTimeout(() => {
+            this.isLoading = false;
+            // Optionally remove the form
+            if (form.parentNode) document.body.removeChild(form);
+          }, 3000);
+        }, 100);
+
       } else {
         throw new Error('Invalid response from payment gateway');
       }
@@ -252,9 +266,6 @@ export class DepositPage implements OnInit, OnDestroy {
       console.error('CashMaal Error:', error);
       alert('Payment initialization failed: ' + (error.message || 'Please try again later'));
       this.isLoading = false;
-      
-      // Fallback to manual proof if API fails (Optional, but fulfills "hide but don't remove" logic)
-      // this.currentStep = 'proof'; 
     }
   }
 
@@ -280,13 +291,13 @@ export class DepositPage implements OnInit, OnDestroy {
     if (!user) return;
 
     this.isLoading = true;
-    
+
     try {
       const file = this.selectedFile;
       const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
       const fileName = `${user.id}_${Date.now()}_${sanitizedFileName}`;
       const blob = new Blob([file], { type: file.type });
-      
+
       // 1. Upload to Supabase Storage
       const { data: uploadData, error: uploadError } = await this.supabaseService.supabase.storage
         .from('aviator-jeet')

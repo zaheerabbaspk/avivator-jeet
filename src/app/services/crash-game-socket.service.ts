@@ -134,10 +134,33 @@ export class CrashGameSocketService {
             this.gameState.set('CRASHED');
         });
 
+        // Live Bets Feed
+        this.socket.on('bet:placed', (data: any) => {
+            console.log('🎲 External bet placed:', data);
+            // This will be handled by the engine service through a callback or observable if needed, 
+            // but for now we'll just log it or we could add a signal.
+            // For better architecture, we'll use a callback pattern or just let the engine subscribe.
+        });
+
+        this.socket.on('bet:cashed_out', (data: any) => {
+            console.log('💰 External cashout:', data);
+        });
+
+        this.socket.on('bet:list', (data: any[]) => {
+            console.log('📋 Initial bet list received:', data);
+        });
+
         // Request initial state when connected
         this.socket.on('connect', () => {
             this.socket?.emit('requestGameState');
         });
+    }
+
+    /**
+     * Helper to subscribe to specific game events from the engine
+     */
+    onEvent(event: string, callback: (data: any) => void) {
+        this.socket?.on(event, callback);
     }
 
     // Actions to send to server

@@ -23,7 +23,7 @@ export class CrashGameEngineService implements OnDestroy {
     private socketService = inject(CrashGameSocketService);
 
     // UI State Signals (managed locally)
-    balance = signal<number>(0); 
+    balance = signal<number>(0);
     history = signal<number[]>([]);
 
     // Betting Signals (local UI state)
@@ -61,12 +61,12 @@ export class CrashGameEngineService implements OnDestroy {
         this.syncTimer = setInterval(() => {
             const state = this.gameState();
             if (state === 'RUNNING' || state === 'WAITING' || state === 'CRASHED') {
-                 // Only update signal if list changed (shallow check)
-                 this.activeBets.set([...this._activeBets]);
+                // Only update signal if list changed (shallow check)
+                this.activeBets.set([...this._activeBets]);
             }
         }, 200);
 
-        // Simulation Effect (Handles logic, but writes to _activeBets internal buffer)
+        // Simulation Effect (Handles bot logic, but writes to _activeBets internal buffer)
         effect(() => {
             const state = this.gameState();
             const multiplier = this.currentMultiplier();
@@ -75,6 +75,9 @@ export class CrashGameEngineService implements OnDestroy {
                 if (state === 'WAITING' && this._activeBets.length > 0 && multiplier === 1.0) {
                     // Reset bots on new round
                     this.totalWinAmount.set(0);
+                    // We don't call generateBots() here anymore if we want REAL logic.
+                    // Instead, we let the server or the initial list handle it.
+                    // But if we want bots, we call it once per round.
                     this.generateBots();
                 } else if (state === 'RUNNING') {
                     // Check if bots hit cashout targets (Update internal buffer first)
@@ -113,6 +116,74 @@ export class CrashGameEngineService implements OnDestroy {
                 }
             });
         }, { allowSignalWrites: true });
+
+        // --- NEW REAL LOGIC SOCKET LISTENERS ---
+        this.socketService.onEvent('bet:placed', (data: any) => {
+            this.handleExternalBet(data);
+        });
+
+        this.socketService.onEvent('bet:cashed_out', (data: any) => {
+            this.handleExternalCashout(data);
+        });
+
+        this.socketService.onEvent('bet:list', (data: any[]) => {
+            this.handleExternalBetList(data);
+        });
+    }
+
+    private handleExternalBet(data: any) {
+        // Avoid adding ourselves twice (we already add ourselves locally for speed)
+        const myUserId = this.authService.userSubject.value?.id;
+        if (data.userId === myUserId) return;
+
+        const bet: ActiveBet = {
+            id: data.id || `ext_${data.userId}`,
+            name: data.username || data.name || 'Anonymous',
+            avatarClass: 'bg-gradient-to-br from-blue-500 to-indigo-500', // Default for real users
+            avatarLetter: (data.username || 'A')[0].toUpperCase(),
+            betAmount: data.amount,
+            cashoutTarget: data.autoCashout || 9999,
+            status: 'PLAYING'
+        };
+
+        this._activeBets.unshift(bet);
+        this.totalBetsCount.update(c => c + 1);
+    }
+
+    private handleExternalCashout(data: any) {
+        const myUserId = this.authService.userSubject.value?.id;
+        if (data.userId === myUserId) return;
+
+        for (const bet of this._activeBets) {
+            if (bet.id === data.id || bet.id === `ext_${data.userId}`) {
+                bet.status = 'CASHED_OUT';
+                bet.winAmount = data.winAmount;
+                bet.cashoutMultiplier = data.multiplier;
+                this.totalWinAmount.update(w => w + data.winAmount);
+                break;
+            }
+        }
+    }
+
+    private handleExternalBetList(list: any[]) {
+        // Sync full list (useful on reconnect)
+        const myUserId = this.authService.userSubject.value?.id;
+        const filteredList = list.filter(item => item.userId !== myUserId).map(item => ({
+            id: item.id || `ext_${item.userId}`,
+            name: item.username || item.name || 'Anonymous',
+            avatarClass: 'bg-gradient-to-br from-blue-500 to-indigo-500',
+            avatarLetter: (item.username || 'A')[0].toUpperCase(),
+            betAmount: item.amount,
+            cashoutTarget: item.autoCashout || 9999,
+            status: item.status === 'win' ? 'CASHED_OUT' : (item.status === 'lose' ? 'LOST' : 'PLAYING'),
+            winAmount: item.winAmount,
+            cashoutMultiplier: item.cashoutMultiplier
+        } as ActiveBet));
+
+        // Keep our own bets if present
+        const myBets = this._activeBets.filter(b => b.isMe);
+        this._activeBets = [...myBets, ...filteredList];
+        this.totalBetsCount.set(this._activeBets.length);
     }
 
     private generateBots() {
@@ -126,7 +197,7 @@ export class CrashGameEngineService implements OnDestroy {
             'from-yellow-400 to-orange-500',
             'from-teal-400 to-emerald-500'
         ];
-        
+
         const bots: ActiveBet[] = Array.from({ length: numBots }).map((_, i) => {
             const betAmt = Math.floor(Math.random() * 9900) + 100; // 100 to 10,000
             // Highly weight early cashouts
@@ -219,7 +290,7 @@ export class CrashGameEngineService implements OnDestroy {
         try {
             // Deduct from universal balance in database
             await this.authService.updateBalance(-amount);
-            
+
             // Send to server
             this.socketService.placeBet({
                 slot,
@@ -358,7 +429,7 @@ export class CrashGameEngineService implements OnDestroy {
         this.betSlotB.update(b =>
             b.status === 'PLACED' ? b : { ...b, amount: 0, status: 'IDLE', payout: 0, cashoutMultiplier: undefined }
         );
-        
+
         // Generate bots
         this.totalWinAmount.set(0);
         this.generateBots();

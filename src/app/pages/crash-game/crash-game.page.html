@@ -150,7 +150,7 @@
         <!-- GAME AREA COMPONENT -->
         <app-aviator-game-screen [gameState]="gameEngine.gameState()" [currentMultiplier]="gameEngine.currentMultiplier()"
             [planeCoordinates]="planeCoordinates" [planeTailCoordinates]="planeTailCoordinates" [curvePath]="curvePath"
-            [visualMultiplier]="visualMultiplier()" [timeLeft]="gameEngine.timeLeft()" [activePlayers]="baseActivePlayers() + totalActiveBets()">
+            [visualMultiplier]="visualMultiplier()" [timeLeft]="gameEngine.timeLeft()" [activePlayers]="gameEngine.totalBetsCount()">
         </app-aviator-game-screen>
 
 
@@ -197,7 +197,7 @@
                                 <img src="https://i.pravatar.cc/100?img=2" class="w-4 h-4 rounded-full border border-[#1b1c1d]">
                                 <img src="https://i.pravatar.cc/100?img=3" class="w-4 h-4 rounded-full border border-[#1b1c1d]">
                             </div>
-                            <span class="text-white text-[11px] font-bold">{{ baseBetsCount() + totalBetsCount() }}/{{ baseBetsCount() + totalBetsCount() + 78 }} <span class="text-[#8c8f95] font-normal">Bets</span></span>
+                            <span class="text-white text-[11px] font-bold">{{ gameEngine.totalBetsCount() }} <span class="text-[#8c8f95] font-normal">Bets</span></span>
                         </div>
                     </div>
                     <div class="flex flex-col items-end">
@@ -221,26 +221,38 @@
                     <div class="w-[25%] text-right">Win PKR</div>
                 </div>
 
-                <!-- List (Ready for Supabase Data) -->
+                <!-- List (Synced with Engine) -->
                 <div class="px-2 pb-2 min-h-[400px] max-h-[500px] overflow-y-auto">
-                    @for (bet of mockBets(); track $index) {
+                    @for (bet of gameEngine.activeBets(); track bet.id) {
                     <div class="flex items-center px-2 py-1 mb-1 rounded-[8px] transition-all"
-                         [ngClass]="bet.win ? 'bg-[#1b4317] border border-[#2cb31b]/30' : 'bg-[#141516]'">
+                         [ngClass]="bet.status === 'CASHED_OUT' ? 'bg-[#1b4317] border border-[#2cb31b]/30' : 'bg-[#141516]'">
                         <div class="w-[35%] flex items-center gap-2">
-                            <img [src]="'https://i.pravatar.cc/100?img=' + bet.avatar" class="w-5 h-5 rounded-full object-cover">
-                            <span class="text-[11px] font-medium" [ngClass]="bet.win ? 'text-white' : 'text-[#8c8f95]'">{{ bet.name }}</span>
+                            @if (bet.isMe || bet.id.startsWith('ext_')) {
+                                <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0" 
+                                     [class]="bet.avatarClass || 'bg-blue-600'">
+                                    {{ bet.avatarLetter || 'U' }}
+                                </div>
+                            } @else {
+                                <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0"
+                                     [class]="bet.avatarClass">
+                                    {{ bet.avatarLetter }}
+                                </div>
+                            }
+                            <span class="text-[11px] font-medium" [ngClass]="bet.status === 'CASHED_OUT' ? 'text-white' : 'text-[#8c8f95]'">
+                                {{ bet.isMe ? 'YOU (Me)' : bet.name }}
+                            </span>
                         </div>
                         <div class="w-[25%] text-right text-white text-[12px] font-medium tracking-tight">
-                            {{ bet.bet | number:'1.2-2' }}
+                            {{ bet.betAmount | number:'1.2-2' }}
                         </div>
                         <div class="w-[15%] flex justify-center">
-                            <!-- Multiplier Pill (Hidden if null) -->
-                            @if (bet.mult) {
-                                <span class="text-[#28a9ea] text-[11px] font-bold px-2 py-0.5">{{ bet.mult }}x</span>
+                            <!-- Multiplier Pill (Only if cashed out) -->
+                            @if (bet.status === 'CASHED_OUT' && bet.cashoutMultiplier) {
+                                <span class="text-[#28a9ea] text-[11px] font-bold px-2 py-0.5">{{ bet.cashoutMultiplier | number:'1.2-2' }}x</span>
                             }
                         </div>
                         <div class="w-[25%] text-right text-white text-[12px] font-bold tracking-tight">
-                            {{ bet.win ? (bet.win | number:'1.2-2') : '' }}
+                            {{ bet.status === 'CASHED_OUT' ? (bet.winAmount | number:'1.2-2') : '' }}
                         </div>
                     </div>
                     }

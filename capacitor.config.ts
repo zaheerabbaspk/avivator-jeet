@@ -5,7 +5,14 @@ const config: CapacitorConfig = {
   appName: 'bp999.com ',
   webDir: 'www',
   server: {
-    allowNavigation: ['zdkccjutalnqugfccujg.supabase.co']
+    allowNavigation: [
+      'zdkccjutalnqugfccujg.supabase.co',
+      '*.cashmaal.net',
+      'cashmaal.net',
+      'bp999.online',
+      'bp999.site',
+      'bp999.com'
+    ]
   },
   plugins: {
     Keyboard: {

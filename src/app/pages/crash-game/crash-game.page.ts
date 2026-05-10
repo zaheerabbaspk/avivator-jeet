@@ -63,8 +63,10 @@ export class CrashGamePage implements OnInit, OnDestroy {
         animation: true
     };
 
-    // Empty bets array for UI (populates dynamically now)
-    mockBets = signal<any[]>([]);
+    // Dynamic Stats Signals
+    totalBetsCount = this.gameEngine.totalBetsCount;
+    totalActiveBets = signal<number>(0); // We'll manage this via effects now
+    totalWinAmount = this.gameEngine.totalWinAmount;
 
     // Slot A Signals
     betAmountA = signal<number>(16);
@@ -79,16 +81,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
     useAutoCashoutB = signal<boolean>(false);
     useAutoBetB = signal<boolean>(false);
     slotBMode = signal<'manual' | 'auto'>('manual');
-    
-    // Dynamic Stats Signals
-    totalBetsCount = signal<number>(0);
-    totalActiveBets = signal<number>(0);
-    totalWinAmount = signal<number>(0);
-
-    // Realistic Base Offsets (Randomized on each round start)
-    baseActivePlayers = signal<number>(0);
-    baseBetsCount = signal<number>(0);
-
 
     // Side Nav Drag State
     sideNavTopPx = 80;
@@ -116,9 +108,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
     constructor() {
         addIcons({ home, wallet, caretBack, checkmarkSharp, helpCircleOutline, menuOutline, removeCircleOutline, addCircleOutline, arrowBack, walletOutline, rocketOutline, listOutline, timeOutline, statsChartOutline, alertCircleOutline, homeOutline, notificationsOutline, remove, add, playBackOutline, play, checkmarkCircle, copyOutline, ellipsisHorizontal, person, shieldCheckmark, volumeMediumOutline, volumeMuteOutline, musicalNotesOutline, flashOutline, starOutline, bookOutline, documentTextOutline, settingsOutline, closeOutline });
 
-        // Initial base numbers for realism
-        this.baseActivePlayers.set(Math.floor(Math.random() * 2000) + 1000);
-        this.baseBetsCount.set(Math.floor(Math.random() * 5000) + 3000);
 
         // Watch for game state changes from server
         effect(() => {
@@ -136,17 +125,8 @@ export class CrashGamePage implements OnInit, OnDestroy {
                     this.visualMultiplier.set(1.00);
                     
                     // Clear all bets (remove dummy users) ONLY when transition starts
-                    this.mockBets.set([]);
-                    this.totalBetsCount.set(0);
                     this.totalActiveBets.set(0);
-                    this.totalWinAmount.set(0);
 
-                    // Set new random base numbers for next round realism
-                    this.baseActivePlayers.set(Math.floor(Math.random() * 500) + 200);
-                    this.baseBetsCount.set(Math.floor(Math.random() * 1000) + 500);
-
-                    // Start simulating random players joining
-                    this.simulateRandomBets();
                 }
 
                 // Reactive Auto Bet Dependencies (read outside conditional to ensure tracking)
@@ -175,8 +155,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
                     this.animatePlane();
                 }
 
-                // Simulate mock players cashing out at various points
-                this.simulateRandomWins();
             } else if (state === 'CRASHED') {
                 this.soundService.setFlight(false);
                 if (!this.isLoading) {
@@ -192,7 +170,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
 
                 // Zero out active counts immediately on blast
                 this.totalActiveBets.set(0);
-                this.baseActivePlayers.set(0);
             }
 
             this.lastState = state;
@@ -214,8 +191,6 @@ export class CrashGamePage implements OnInit, OnDestroy {
 
     ngOnInit() {
         console.log('🎮 Crash game page initialized');
-
-        // Handled by AppComponent globally for all pages to ensure no sound leaks in background
 
         // Check for bonus rain trigger from URL
         this.route.queryParams.subscribe(params => {
@@ -451,19 +426,8 @@ export class CrashGamePage implements OnInit, OnDestroy {
             if (event.autoCashout) this.autoCashoutB.set(event.autoCashout);
         }
         this.gameEngine.placeBet(slot, event.amount, event.autoCashout);
-
-        // Dynamically add the user's bet to the All Bets list so it shows immediately
-        const newBet = { 
-            avatar: '5', // Mock user avatar
-            name: 'YOU (Me)', // Show as current user
-            bet: event.amount, 
-            mult: null, 
-            win: null 
-        };
-        this.mockBets.update(bets => [newBet, ...bets]);
         
-        // Update Stats
-        this.totalBetsCount.update(n => n + 1);
+        // Update local active count
         this.totalActiveBets.update(n => n + 1);
     }
 
@@ -477,21 +441,7 @@ export class CrashGamePage implements OnInit, OnDestroy {
 
     handleCashOut(slot: 'A' | 'B') {
         this.gameEngine.cashOut(slot);
-        
-        // Update the user's bet in the All Bets list to show as won
-        const mult = this.gameEngine.currentMultiplier();
-        this.mockBets.update(bets => {
-            return bets.map(b => {
-                if (b.name === 'YOU (Me)' && b.mult === null) {
-                    const win = b.bet * mult;
-                    // Update stats here too since we found the bet
-                    this.totalWinAmount.update(w => w + win);
-                    this.totalActiveBets.update(a => a - 1);
-                    return { ...b, mult: mult.toFixed(2), win: win };
-                }
-                return b;
-            });
-        });
+        this.totalActiveBets.update(a => Math.max(0, a - 1));
     }
 
     handleCancelBet(slot: 'A' | 'B') {
@@ -509,64 +459,4 @@ export class CrashGamePage implements OnInit, OnDestroy {
         if (m < 2) return 'bg-[#151b22]'; // Subtle blue tint for low
         return 'bg-[#201522]'; // Subtle pink tint for high
     }
-
-    private simulateRandomBets() {
-        // Add 15-30 random players over the next few seconds for a busy casino feel
-        const count = Math.floor(Math.random() * 15) + 15;
-        const possibleAmounts = [16, 32, 64, 100, 160, 320, 500, 1000, 1600, 3200, 5000];
-        const names = [
-            'a***1', '2***x', '9***q', 'P***r', 'K***0', '7***7', 'm***2', 's***9', 
-            'f***z', 'u***6', 'v***1', 'r***k', 'L***v', 'x***x', 'b***8', 'n***n'
-        ];
-
-        for (let i = 0; i < count; i++) {
-            const timeoutId = setTimeout(() => {
-                if (this.gameEngine.gameState() !== 'WAITING') return;
-
-                const amount = possibleAmounts[Math.floor(Math.random() * possibleAmounts.length)];
-                const newBet = {
-                    avatar: Math.floor(Math.random() * 70).toString(),
-                    name: names[Math.floor(Math.random() * names.length)],
-                    bet: amount,
-                    mult: null,
-                    win: null
-                };
-
-                this.mockBets.update(bets => [newBet, ...bets]);
-                this.totalBetsCount.update(n => n + 1);
-                this.totalActiveBets.update(n => n + 1);
-            }, Math.random() * 4500); // Spread joining over the whole waiting period
-            this.timeoutIds.push(timeoutId);
-        }
-    }
-
-    private lastWinSimTime = 0;
-    private simulateRandomWins() {
-        const now = Date.now();
-        if (now - this.lastWinSimTime < 500) return; // Only check 2 times per second
-        this.lastWinSimTime = now;
-
-        const currentMult = this.gameEngine.currentMultiplier();
-        if (currentMult < 1.1) return; 
-
-        this.mockBets.update(bets => {
-            return bets.map(b => {
-                // If it's a mock player (not YOU) and hasn't won yet
-                if (b.name !== 'YOU (Me)' && b.mult === null) {
-                    // Very low chance per check to ensure many players lose
-                    // Higher multiplier = much lower chance to win
-                    const winChance = currentMult < 1.5 ? 0.05 : (currentMult < 2.5 ? 0.02 : 0.01);
-                    
-                    if (Math.random() < winChance) {
-                        const win = b.bet * currentMult;
-                        this.totalWinAmount.update(w => w + win);
-                        this.totalActiveBets.update(a => a - 1);
-                        return { ...b, mult: currentMult.toFixed(2), win: win };
-                    }
-                }
-                return b;
-            });
-        });
-    }
 }
-

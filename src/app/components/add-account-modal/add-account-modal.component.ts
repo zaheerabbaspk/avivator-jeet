@@ -71,45 +71,45 @@ export interface PaymentMethod {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding-bottom: 60px;
+      padding-bottom: clamp(30px, 10vw, 60px);
     }
     .modal-sheet {
       width: calc(100% - 48px);
       max-width: 380px;
       background: #1e1e26;
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 28px;
-      padding: 30px 24px 24px;
+      border-radius: clamp(16px, 5vw, 24px);
+      padding: clamp(14px, 4.5vw, 24px) clamp(12px, 4vw, 20px);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: clamp(8px, 2vw, 14px);
       position: relative;
     }
     .modal-title {
-      font-size: 19px;
+      font-size: clamp(16px, 4.5vw, 19px);
       font-weight: 900;
       color: #ffffff;
       text-align: center;
-      margin: 0 0 10px;
+      margin: 0 0 clamp(4px, 1.5vw, 10px);
     }
     .input-wrap {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: clamp(8px, 2vw, 10px);
       background: #141418;
       border: 1.5px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 14px 18px;
+      border-radius: clamp(10px, 3vw, 14px);
+      padding: clamp(6px, 2vw, 12px) clamp(10px, 3vw, 14px);
       &.highlight {
         border-color: #f0c040;
       }
       .input-icon {
-        font-size: 18px;
+        font-size: clamp(14px, 4vw, 18px);
         color: rgba(255,255,255,0.25);
       }
       .method-icon-sm { 
-        width: 30px;
-        height: 30px;
+        width: clamp(24px, 7vw, 30px);
+        height: clamp(24px, 7vw, 30px);
         object-fit: contain;
         background: #fff;
         border-radius: 6px;
@@ -117,11 +117,13 @@ export interface PaymentMethod {
       }
       .modal-input {
         flex: 1;
+        min-width: 0;
+        width: 100%;
         background: transparent;
         border: none;
         outline: none;
         color: #ffffff;
-        font-size: 14px;
+        font-size: clamp(11px, 2.8vw, 13px);
         font-weight: 600;
         &::placeholder { color: rgba(255,255,255,0.2); }
       }
@@ -129,13 +131,18 @@ export interface PaymentMethod {
         background: transparent;
         border: none;
         color: #f0c040;
-        font-size: 14px;
+        font-size: clamp(11px, 2.8vw, 13px);
         font-weight: 800;
         padding: 0;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
       }
     }
     .modal-warning {
-      font-size: 12px;
+      font-size: clamp(10px, 2.5vw, 12px);
       color: rgba(255,255,255,0.3);
       margin: 0;
       text-align: center;
@@ -144,15 +151,15 @@ export interface PaymentMethod {
     }
     .confirm-yellow-btn {
       width: 100%;
-      padding: 18px;
+      padding: clamp(10px, 2.5vw, 16px);
       background: #666; /* Grey when disabled */
       color: #fff;
-      font-size: 16px;
+      font-size: clamp(14px, 3.5vw, 16px);
       font-weight: 900;
       border: none;
-      border-radius: 16px;
+      border-radius: clamp(12px, 3.5vw, 16px);
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: clamp(4px, 1.5vw, 8px);
       transition: all 0.2s;
       &:not(:disabled) {
         background: linear-gradient(135deg, #d4a017, #f0c040);
@@ -167,16 +174,16 @@ export interface PaymentMethod {
     }
     .modal-close-btn {
       position: absolute;
-      bottom: -80px;
+      bottom: clamp(-60px, -15vw, -80px);
       left: 50%;
       transform: translateX(-50%);
-      width: 50px;
-      height: 50px;
+      width: clamp(40px, 10vw, 50px);
+      height: clamp(40px, 10vw, 50px);
       border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.3);
       background: transparent;
       color: #fff;
-      font-size: 28px;
+      font-size: clamp(20px, 6vw, 28px);
       display: flex;
       align-items: center;
       justify-content: center;

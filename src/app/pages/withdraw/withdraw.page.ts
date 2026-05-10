@@ -19,7 +19,8 @@ import {
   swapHorizontalOutline,
   chevronDownOutline,
   settingsOutline,
-  eyeOffOutline
+  eyeOffOutline,
+  eyeOutline
 } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -37,10 +38,10 @@ import { FooterNavComponent } from '../../components/footer-nav/footer-nav.compo
   styleUrls: ['./withdraw.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    IonHeader, 
-    IonContent, 
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonContent,
     IonIcon,
     IonSegment,
     IonSegmentButton,
@@ -68,6 +69,7 @@ export class WithdrawPage implements OnInit {
   selectedAccount: any = null;
   withdrawalHistory: any[] = [];
   isLoadingHistory = false;
+  showFullAccountId = false;
 
   // PIN Verification
   verifyPin = ['', '', '', '', '', ''];
@@ -80,19 +82,13 @@ export class WithdrawPage implements OnInit {
   withdrawAmount: number | null = null;
 
   paymentMethods: PaymentMethod[] = [
-    { key: 'jazzcash', name: 'JazzCash',      icon: '/assets/new-jazz-seeklogo.png',   color: '#E45C2A' },
-    { key: 'easypaisa', name: 'Easypaisa',    icon: '/assets/easypaisa-seeklogo.png',  color: '#1AA350' },
-    { key: 'bank',      name: 'Bank Transfer', icon: '/assets/images/logos/bank.png',       color: '#2563eb' },
+    { key: 'jazzcash', name: 'JazzCash', icon: '/assets/new-jazz-seeklogo.png', color: '#E45C2A' },
+    { key: 'easypaisa', name: 'Easypaisa', icon: '/assets/easypaisa-seeklogo.png', color: '#1AA350' },
+    { key: 'bank', name: 'Bank Transfer', icon: '/assets/images/logos/bank.png', color: '#2563eb' },
   ];
 
   constructor() {
-    addIcons({
-      chevronBackOutline, headsetOutline, refreshOutline,
-      addCircleOutline, chevronForwardOutline, walletOutline,
-      alertCircleOutline, informationCircleOutline,
-      swapHorizontalOutline, chevronDownOutline, settingsOutline,
-      eyeOffOutline
-    });
+    addIcons({ chevronBackOutline, refreshOutline, walletOutline, chevronDownOutline, cardOutline, settingsOutline, eyeOffOutline, eyeOutline, chevronForwardOutline, headsetOutline, addCircleOutline, alertCircleOutline, informationCircleOutline, swapHorizontalOutline });
   }
 
   ngOnInit() {
@@ -139,7 +135,7 @@ export class WithdrawPage implements OnInit {
 
   onSegmentChange(event: any) {
     if (event.detail.value && this.activeTab !== event.detail.value) {
-       this.setTab(event.detail.value);
+      this.setTab(event.detail.value);
     }
   }
 
@@ -215,7 +211,7 @@ export class WithdrawPage implements OnInit {
     // Success
     this.isPasswordSet = true;
     this.showPremiumAlert('Success', 'Your withdrawal PIN has been set successfully! You can now proceed with your withdrawal.');
-    
+
     // Refresh data to be sure
     await this.initData();
   }
@@ -291,7 +287,7 @@ export class WithdrawPage implements OnInit {
     await this.authService.updateBalance(-withdrawValue);
 
     this.showPremiumAlert('Success', 'Your withdrawal request of Rs ' + withdrawValue + ' has been submitted and is pending review!');
-    
+
     // Clear form
     this.withdrawAmount = null;
     this.verifyPin = ['', '', '', '', '', ''];

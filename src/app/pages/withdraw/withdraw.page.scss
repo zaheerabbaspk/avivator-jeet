@@ -2,6 +2,13 @@
     display: block;
     height: 100%;
     --ion-font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 ion-content {
@@ -11,21 +18,18 @@ ion-content {
 /* ================================
    HEADER
    ================================ */
-/* ================================
-   HEADER (SEGMENT)
-   ================================ */
 .withdraw-header {
     display: flex;
     align-items: center;
     background: #1c1c22;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     padding: calc(var(--ion-safe-area-top, 0px) + 10px) 12px 8px;
-    /* Restored padding for balance */
+    width: 100%;
 }
 
 .back-btn {
-    width: 36px;
-    height: 36px;
+    width: clamp(32px, 8.7vw, 36px);
+    height: clamp(32px, 8.7vw, 36px);
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -33,7 +37,7 @@ ion-content {
     background: transparent;
     border: none;
     flex-shrink: 0;
-    font-size: 22px;
+    font-size: clamp(18px, 5.3vw, 22px);
     padding: 0;
     cursor: pointer;
     transition: transform 0.15s;
@@ -47,18 +51,15 @@ ion-content {
     --background: transparent !important;
     background: transparent !important;
     flex: 1;
+    min-width: 0;
     margin: 0 2px 0 10px;
-    /* Added 10px left margin to push right */
     height: 40px;
     overflow-x: auto;
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
 
     &::-webkit-scrollbar {
         display: none;
-        /* Chrome, Safari and Opera */
     }
 
     ion-segment-button {
@@ -72,7 +73,7 @@ ion-content {
         flex: 0 0 auto;
 
         ion-label {
-            font-size: 11px;
+            font-size: clamp(10px, 2.6vw, 11px);
             font-weight: 700;
             margin: 0;
             text-transform: none;
@@ -86,15 +87,15 @@ ion-content {
 }
 
 .support-btn {
-    width: 34px;
-    height: 34px;
+    width: clamp(30px, 8.2vw, 34px);
+    height: clamp(30px, 8.2vw, 34px);
     display: flex;
     align-items: center;
     justify-content: flex-end;
     background: transparent;
     border: none;
     color: #d4a017;
-    font-size: 22px;
+    font-size: clamp(18px, 5.3vw, 22px);
     flex-shrink: 0;
     cursor: pointer;
     padding: 0;
@@ -104,25 +105,28 @@ ion-content {
    TAB CONTENT WRAPPER
    ================================ */
 .tab-content {
-    padding: 16px 16px 40px;
+    padding: clamp(8px, 2.5vw, 16px) clamp(10px, 3.4vw, 16px) clamp(16px, 5vw, 50px);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: clamp(3px, 0.5vw, 12px);
+    width: 100%;
 }
 
 /* ================================
-   TAB 1 - REQUEST WITHDRAWAL (High Fidelity)
+   TAB 1 - REQUEST WITHDRAWAL
    ================================ */
 .balance-section {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 8px 0;
+    min-width: 0;
 
     .bal-label {
-        font-size: 14px;
+        font-size: clamp(12px, 3.4vw, 14px);
         color: #fff;
         font-weight: 500;
+        white-space: nowrap;
 
         .bal-val {
             color: #f0c040;
@@ -131,21 +135,24 @@ ion-content {
     }
 
     .refresh-icon {
-        font-size: 16px;
+        font-size: clamp(14px, 3.8vw, 16px);
         color: #f0c040;
         cursor: pointer;
+        flex-shrink: 0;
     }
 }
 
 .action-chips {
     display: flex;
     gap: 8px;
-    margin: 8px 0;
+    margin: clamp(4px, 1vw, 8px) 0;
+    width: 100%;
 
     .chip {
         flex: 1;
+        min-width: 0;
         max-width: 140px;
-        height: 48px;
+        height: clamp(30px, 9vw, 48px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -154,7 +161,7 @@ ion-content {
         border: 1px solid #d4a017;
         border-radius: 8px;
         color: #fff;
-        font-size: 11px;
+        font-size: clamp(9px, 2.6vw, 11px);
         font-weight: 700;
         text-align: center;
         line-height: 1.2;
@@ -170,7 +177,7 @@ ion-content {
             right: 15px;
             background: linear-gradient(to right, #f0c040, #d4a017);
             color: #000;
-            font-size: 9px;
+            font-size: clamp(8px, 2vw, 9px);
             font-weight: 900;
             padding: 2px 6px;
             border-radius: 6px;
@@ -183,24 +190,27 @@ ion-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
+    padding: clamp(6px, 2vw, 14px) clamp(10px, 3.4vw, 16px);
     background: #1c1c22;
     border: 1.5px solid #d4a017;
     border-radius: 12px;
-    margin: 8px 0;
+    margin: clamp(4px, 1vw, 8px) 0;
     cursor: pointer;
+    width: 100%;
 
     .sel-info {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: clamp(8px, 2.9vw, 12px);
+        min-width: 0;
 
         .sel-logo {
-            width: 32px;
-            height: 32px;
+            width: clamp(26px, 7.7vw, 32px);
+            height: clamp(26px, 7.7vw, 32px);
             background: #fff;
             border-radius: 6px;
             padding: 2px;
+            flex-shrink: 0;
 
             img {
                 width: 100%;
@@ -210,14 +220,17 @@ ion-content {
         }
 
         .sel-text {
-            font-size: 14px;
+            font-size: clamp(12px, 3.4vw, 14px);
             font-weight: 700;
             color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &.empty {
             .sel-icon-empty {
-                font-size: 24px;
+                font-size: clamp(20px, 5.8vw, 24px);
                 color: #d4a017;
             }
 
@@ -230,23 +243,24 @@ ion-content {
     .sel-right {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: clamp(10px, 3.4vw, 14px);
+        flex-shrink: 0;
 
         .sel-chev {
-            font-size: 18px;
+            font-size: clamp(16px, 4.3vw, 18px);
             color: rgba(255, 255, 255, 0.3);
         }
 
         .card-action-icon {
             position: relative;
-            font-size: 24px;
+            font-size: clamp(20px, 5.8vw, 24px);
             color: #d4a017;
 
             .mini-cog {
                 position: absolute;
                 bottom: -2px;
                 right: -2px;
-                font-size: 12px;
+                font-size: clamp(10px, 2.9vw, 12px);
                 background: #141418;
                 border-radius: 50%;
                 color: #d4a017;
@@ -256,13 +270,14 @@ ion-content {
 }
 
 .amount-section {
-    margin: 16px 0;
+    margin: clamp(8px, 2vw, 16px) 0;
+    width: 100%;
 
     .amount-label {
-        font-size: 14px;
+        font-size: clamp(12px, 3.4vw, 14px);
         font-weight: 700;
         color: #fff;
-        margin-bottom: 8px;
+        margin-bottom: clamp(4px, 1vw, 8px);
     }
 
     .amount-input-box {
@@ -271,22 +286,25 @@ ion-content {
         background: #141418;
         border: 1.5px solid #d4a017;
         border-radius: 10px;
-        padding: 12px 14px;
+        padding: clamp(6px, 1.5vw, 12px) clamp(10px, 3vw, 14px);
         gap: 10px;
+        width: 100%;
 
         .currency-prefix {
             color: #fff;
             font-weight: 800;
-            font-size: 15px;
+            font-size: clamp(13px, 3.6vw, 15px);
+            flex-shrink: 0;
         }
 
         .amt-input {
             flex: 1;
+            min-width: 0;
             background: transparent;
             border: none;
             outline: none;
             color: #ffffff;
-            font-size: 14px;
+            font-size: clamp(12px, 3.4vw, 14px);
 
             &::placeholder {
                 color: rgba(212, 160, 23, 0.4);
@@ -297,29 +315,31 @@ ion-content {
         .amt-all {
             color: #d4a017;
             font-weight: 800;
-            font-size: 14px;
+            font-size: clamp(12px, 3.4vw, 14px);
             cursor: pointer;
+            flex-shrink: 0;
         }
     }
 }
 
 .pin-section {
-    margin: 16px 0;
+    margin: clamp(8px, 2vw, 16px) 0;
+    width: 100%;
 
     .pin-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 12px;
+        margin-bottom: clamp(6px, 1.5vw, 12px);
 
         span {
             color: #fff;
-            font-size: 14px;
+            font-size: clamp(12px, 3.4vw, 14px);
             font-weight: 700;
         }
 
         .pin-eye {
-            font-size: 18px;
+            font-size: clamp(16px, 4.3vw, 18px);
             color: rgba(255, 255, 255, 0.2);
         }
     }
@@ -332,16 +352,17 @@ ion-content {
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
         overflow: hidden;
+        width: 100%;
 
         .pin-box {
             width: 100%;
-            height: 54px;
+            height: clamp(32px, 9.5vw, 54px);
             background: #1c1c22;
             border: none;
             border-right: 1.5px solid #141418;
             color: #fff;
             text-align: center;
-            font-size: 20px;
+            font-size: clamp(16px, 4.8vw, 20px);
             font-weight: 700;
             outline: none;
 
@@ -355,12 +376,14 @@ ion-content {
 .bottom-actions-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 20px;
+    gap: clamp(8px, 2.9vw, 12px);
+    margin-top: clamp(10px, 3vw, 20px);
+    width: 100%;
 }
 
 .earn-action {
     position: relative;
+    min-width: 0;
 
     .apr-tag {
         position: absolute;
@@ -368,34 +391,35 @@ ion-content {
         left: 0;
         background: #00ff00;
         color: #000;
-        font-size: 9px;
+        font-size: clamp(8px, 2vw, 9px);
         font-weight: 900;
         padding: 2px 8px;
         border-radius: 6px;
         z-index: 10;
         box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        white-space: nowrap;
     }
 }
 
 .earn-btn-blue {
     width: 100%;
-    padding: 14px 0;
+    padding: clamp(6px, 1.5vw, 14px) 0;
     background: transparent;
     border: 1.5px solid #d4a017;
     border-radius: 8px;
     color: #fff;
-    font-size: 13px;
+    font-size: clamp(11px, 3.1vw, 13px);
     font-weight: 800;
 }
 
 .confirm-withdraw-btn {
     width: 100%;
-    padding: 14px 0;
+    padding: clamp(6px, 1.5vw, 14px) 0;
     background: linear-gradient(135deg, #d4a017, #f0c040);
     color: #1a1000;
     border: none;
     border-radius: 8px;
-    font-size: 13px;
+    font-size: clamp(11px, 3.1vw, 13px);
     font-weight: 800;
 
     &:disabled {
@@ -414,7 +438,7 @@ ion-content {
     padding: 4px 0 8px;
 
     .account-label {
-        font-size: 13px;
+        font-size: clamp(11px, 3.1vw, 13px);
         font-weight: 700;
         color: rgba(255, 255, 255, 0.7);
 
@@ -433,13 +457,14 @@ ion-content {
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 10px;
     overflow: hidden;
+    width: 100%;
 }
 
 .method-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px 14px;
+    gap: clamp(8px, 2.9vw, 12px);
+    padding: clamp(12px, 3.8vw, 16px) clamp(10px, 3.4vw, 14px);
     background: #1a1a20;
     cursor: pointer;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -454,12 +479,11 @@ ion-content {
     }
 
     .method-icon {
-        width: 40px;
-        height: 40px;
+        width: clamp(32px, 9.7vw, 40px);
+        height: clamp(32px, 9.7vw, 40px);
         border-radius: 8px;
         padding: 4px;
         background: #ffffff;
-        /* White background for logos */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -474,31 +498,36 @@ ion-content {
 
     .method-name {
         flex: 1;
-        font-size: 14px;
+        min-width: 0;
+        font-size: clamp(12px, 3.4vw, 14px);
         font-weight: 700;
         color: rgba(255, 255, 255, 0.85);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .method-add {
         display: flex;
         align-items: center;
         gap: 4px;
+        flex-shrink: 0;
 
         span {
-            font-size: 12px;
+            font-size: clamp(10px, 2.9vw, 12px);
             font-weight: 700;
             color: #d4a017;
         }
 
         ion-icon {
-            font-size: 14px;
+            font-size: clamp(12px, 3.4vw, 14px);
             color: #d4a017;
         }
     }
 }
 
 .methods-title {
-    font-size: 13px;
+    font-size: clamp(11px, 3.1vw, 13px);
     font-weight: 700;
     color: rgba(255, 255, 255, 0.4);
     margin: 12px 0 4px;
@@ -508,39 +537,41 @@ ion-content {
     background: rgba(0, 119, 255, 0.04);
     border: 1px solid rgba(0, 119, 255, 0.15);
     border-radius: 12px;
-    padding: 12px;
+    padding: clamp(10px, 2.9vw, 12px);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: clamp(10px, 2.9vw, 12px);
+    width: 100%;
 }
 
 .added-acc-card.premium {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
+    padding: clamp(12px, 3.8vw, 16px);
     background: #002d5a;
-    /* Deep blue from screenshot */
     border: 1.5px solid #009dff;
-    /* Cyan border */
     border-radius: 12px;
     position: relative;
     overflow: hidden;
+    width: 100%;
 
     .acc-info {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: clamp(8px, 2.9vw, 12px);
+        min-width: 0;
 
         .acc-logo {
-            width: 44px;
-            height: 44px;
+            width: clamp(36px, 10.6vw, 44px);
+            height: clamp(36px, 10.6vw, 44px);
             background: #fff;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 4px;
+            flex-shrink: 0;
 
             img {
                 width: 100%;
@@ -552,18 +583,21 @@ ion-content {
         .acc-text {
             display: flex;
             flex-direction: column;
+            min-width: 0;
 
             .acc-name {
-                font-size: 15px;
+                font-size: clamp(13px, 3.6vw, 15px);
                 font-weight: 800;
                 color: #fff;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .acc-id-cyan {
-                font-size: 13px;
+                font-size: clamp(11px, 3.1vw, 13px);
                 font-weight: 600;
                 color: #00ddff;
-                /* Light cyan from screenshot */
             }
         }
     }
@@ -572,8 +606,8 @@ ion-content {
         position: absolute;
         bottom: 0;
         right: 0;
-        width: 24px;
-        height: 24px;
+        width: clamp(20px, 5.8vw, 24px);
+        height: clamp(20px, 5.8vw, 24px);
         background: #009dff;
         display: flex;
         align-items: center;
@@ -582,8 +616,8 @@ ion-content {
         border-top-left-radius: 8px;
 
         .check-svg {
-            width: 14px;
-            height: 14px;
+            width: clamp(12px, 3.4vw, 14px);
+            height: clamp(12px, 3.4vw, 14px);
             stroke-width: 4;
         }
     }
@@ -599,14 +633,15 @@ ion-content {
     align-items: center;
     justify-content: center;
     gap: 12px;
+    width: 100%;
 
     .empty-icon {
-        font-size: 48px;
+        font-size: clamp(36px, 11.6vw, 48px);
         color: rgba(255, 255, 255, 0.1);
     }
 
     .empty-label {
-        font-size: 13px;
+        font-size: clamp(11px, 3.1vw, 13px);
         color: rgba(255, 255, 255, 0.2);
         font-weight: 600;
     }
@@ -634,15 +669,15 @@ ion-content {
     background: #1e1e26;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    padding: 24px 20px 20px;
+    padding: clamp(14px, 4vw, 24px) clamp(12px, 3.5vw, 20px);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: clamp(8px, 2.5vw, 14px);
     position: relative;
 }
 
 .modal-title {
-    font-size: 16px;
+    font-size: clamp(14px, 3.8vw, 16px);
     font-weight: 800;
     color: #ffffff;
     text-align: center;
@@ -656,7 +691,8 @@ ion-content {
     background: #141418;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
-    padding: 12px 14px;
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 3vw, 14px);
+    width: 100%;
 
     &.highlight {
         border-color: #d4a017;
@@ -664,23 +700,24 @@ ion-content {
     }
 
     .input-icon {
-        font-size: 18px;
+        font-size: clamp(16px, 4.3vw, 18px);
         color: rgba(255, 255, 255, 0.3);
         flex-shrink: 0;
     }
 
     .method-icon-sm {
-        font-size: 20px;
+        font-size: clamp(18px, 4.8vw, 20px);
         flex-shrink: 0;
     }
 
     .modal-input {
         flex: 1;
+        min-width: 0;
         background: transparent;
         border: none;
         outline: none;
         color: #ffffff;
-        font-size: 13px;
+        font-size: clamp(12px, 3.1vw, 13px);
         font-weight: 500;
 
         &::placeholder {
@@ -692,15 +729,16 @@ ion-content {
         background: transparent;
         border: none;
         color: #d4a017;
-        font-size: 12px;
+        font-size: clamp(11px, 2.9vw, 12px);
         font-weight: 800;
         cursor: pointer;
         padding: 0;
+        flex-shrink: 0;
     }
 }
 
 .modal-warning {
-    font-size: 11px;
+    font-size: clamp(10px, 2.6vw, 11px);
     color: rgba(255, 255, 255, 0.35);
     margin: 0;
     line-height: 1.5;
@@ -708,10 +746,10 @@ ion-content {
 
 .confirm-yellow-btn {
     width: 100%;
-    padding: 15px;
+    padding: clamp(10px, 2.5vw, 15px);
     background: linear-gradient(135deg, #d4a017, #f0c040);
     color: #1a1000;
-    font-size: 15px;
+    font-size: clamp(13px, 3.6vw, 15px);
     font-weight: 900;
     border: none;
     border-radius: 12px;
@@ -728,13 +766,13 @@ ion-content {
     bottom: -54px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
+    width: clamp(36px, 9.7vw, 40px);
+    height: clamp(36px, 9.7vw, 40px);
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.3);
     background: transparent;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 22px;
+    font-size: clamp(18px, 5.3vw, 22px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -744,5 +782,54 @@ ion-content {
     &:active {
         border-color: white;
         color: white;
+    }
+}
+
+/* ================================
+   EXTRA SMALL SCREEN ADJUSTMENTS
+   ================================ */
+@media (max-width: 360px) {
+    .withdraw-segment {
+        margin: 0 0 0 4px;
+
+        ion-segment-button {
+            padding: 0 2px;
+        }
+    }
+
+    .pin-section .pin-grid {
+        gap: 1px;
+    }
+
+    .tab-content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+/* ================================
+   RESPONSIVE DESIGN (TABLET & DESKTOP)
+   ================================ */
+@media (min-width: 768px) {
+    .withdraw-header {
+        max-width: 480px;
+        margin: 0 auto;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .tab-content {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    .modal-backdrop {
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 0;
+    }
+
+    .modal-sheet {
+        max-width: 420px;
+        margin: 0 auto;
     }
 }
