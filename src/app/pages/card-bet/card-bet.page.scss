@@ -1,0 +1,500 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+/* Force Reset Global Paddings for this page */
+ion-content {
+    --padding-start: 0px !important;
+    --padding-end: 0px !important;
+    --padding-top: 0px !important;
+    --padding-bottom: 0px !important;
+    --background: #000 !important;
+
+    &::part(scroll) {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+}
+
+/* Cyber Neon Loading Screen Styles */
+.circular-loader {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 3.5px solid rgba(16, 185, 129, 0.05);
+    border-top-color: #00ff88; /* More vibrant neon green */
+    animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: -3.5px; left: -3.5px; right: -3.5px; bottom: -3.5px;
+        border-radius: 50%;
+        border: 3.5px solid transparent;
+        border-top-color: #00ff88;
+        filter: blur(4px);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes lineLoad {
+    0% { transform: translateX(-100%); opacity: 0.3; }
+    50% { transform: translateX(0%); opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0.3; }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-lineLoad {
+    animation: lineLoad 2s ease-in-out infinite;
+}
+
+.casino-bg {
+    background: #0a0a0a; /* Solid Soft Black for whole screen */
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+
+.glass-box {
+    background: transparent;
+    border: 0.5px solid rgba(74, 222, 128, 0.15); /* Ultra-thin soft green border */
+    backdrop-filter: none;
+    overflow: visible;
+    position: relative;
+    box-shadow: none;
+
+    &.winning-glow-exact {
+        border-color: #00ff88;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
+        background: rgba(0, 255, 136, 0.05);
+    }
+}
+
+.score-badge {
+    background: transparent;
+    border: 0.5px solid rgba(74, 222, 128, 0.15); 
+    padding: 0 10px !important;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+        color: #efc57a !important; 
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        font-size: 10px;
+        letter-spacing: -0.01em;
+    }
+}
+
+.player-label {
+    span {
+        color: #efc57a !important; 
+        font-family: 'Inter', sans-serif;
+        font-weight: 900; /* Ultra Bold for exact match */
+        font-size: 13px;
+        letter-spacing: -0.01em;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+}
+
+.hands-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10vw; /* Precise gap for centering */
+    width: 100%;
+    max-width: 440px;
+}
+
+.playing-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.betting-interface {
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    max-height: 55vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 10;
+
+    button {
+        cursor: pointer !important;
+    }
+
+    /* Header row specific styling */
+    &>div:first-child {
+        padding: 1vw 2vw !important;
+        font-size: 2.6vw !important;
+
+        div {
+            height: auto !important;
+            padding: 0.8vw !important;
+        }
+    }
+}
+
+.header-bar {
+    padding: 2.2vw 4vw !important;
+
+    .text-xl {
+        font-size: 4.2vw !important;
+    }
+}
+
+@keyframes blinkGreen {
+    0%, 100% {
+        outline: 3px solid rgba(74, 222, 128, 1);
+        outline-offset: -3px;
+    }
+    50% {
+        outline: 3px solid rgba(74, 222, 128, 0.3);
+        outline-offset: -3px;
+    }
+}
+
+@keyframes blinkRed {
+    0%, 100% {
+        outline: 3px solid rgba(248, 113, 113, 1);
+        outline-offset: -3px;
+    }
+    50% {
+        outline: 3px solid rgba(248, 113, 113, 0.3);
+        outline-offset: -3px;
+    }
+}
+
+.bet-row {
+    height: 54px !important;
+    padding: 4px !important;
+    transition: all 0.3s ease;
+
+    &.winning-blink > div:first-child {
+        animation: blinkGreen 1s infinite !important;
+        background-color: #bef264 !important;
+        outline: 3px solid #4ade80 !important;
+        outline-offset: -3px;
+    }
+
+    &.losing-blink > div:first-child {
+        animation: blinkRed 1s infinite !important;
+        background-color: #fef2f2 !important;
+    }
+
+    button {
+        width: 22vw !important;
+        height: 12vw !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1.1 !important;
+
+        span.text-lg {
+            font-size: 4vw !important;
+            display: block !important;
+            margin-bottom: 0.2vw !important;
+            text-align: center !important;
+            width: 100% !important;
+        }
+
+        span.opacity-70 {
+            font-size: 2.2vw !important;
+            display: block !important;
+            text-align: center !important;
+            width: 100% !important;
+        }
+    }
+
+    span.text-sm {
+        font-size: 2.8vw !important;
+    }
+
+    span.text-xs {
+        font-size: 2vw !important;
+    }
+}
+
+.live-result-graph {
+    padding: 1vw !important;
+
+    .w-8 {
+        width: 6.5vw !important;
+        height: 6.5vw !important;
+        font-size: 2.2vw !important;
+    }
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.suspended-label {
+    color: #ff3333;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 360px) {
+    .suspended-label {
+        font-size: 11px !important;
+    }
+}
+
+/* Fully Responsive Media Queries for Game Table */
+
+/* 1. Large Screen / Tablet Lock (min-width: 501px) */
+@media (min-width: 501px) {
+    .hands-container {
+        max-width: 440px !important;
+        gap: 30px !important;
+        margin-top: 20px !important;
+    }
+    .glass-box {
+        aspect-ratio: 1.8 / 1 !important;
+        border-radius: 20px !important;
+    }
+    .player-label span { font-size: 15px !important; }
+    .score-badge { height: 22px !important; span { font-size: 11px !important; } }
+}
+
+/* 2. Medium Phones (361px - 500px) */
+@media (min-width: 361px) and (max-width: 500px) {
+    .hands-container {
+        max-width: 90vw !important;
+        gap: 6vw !important;
+        margin-top: 4vw !important;
+    }
+    .glass-box {
+        aspect-ratio: 1.9 / 1 !important;
+        border-radius: 16px !important;
+    }
+    .player-label span { font-size: 13px !important; }
+    .score-badge { height: 18px !important; span { font-size: 10px !important; } }
+}
+
+/* 3. Small Phones / S9 (max-width: 360px) */
+@media (max-width: 360px) {
+    .glass-box {
+        aspect-ratio: 2.8 / 1 !important; /* Increased aspect ratio to reduce height */
+        border-radius: 10px !important;
+        width: 38vw !important; /* Reduced width */
+    }
+
+    .card-wrapper {
+        scale: 0.95 !important; /* Scaled down card to fit smaller box */
+    }
+
+    .hands-container {
+        gap: 3vw !important;
+        margin-top: 1.5vw !important;
+        max-width: 85vw !important; /* Narrower container */
+    }
+
+    .player-label span {
+        font-size: 10px !important;
+    }
+
+    .score-badge {
+        height: 14px !important;
+        padding: 0 6px !important;
+        margin-top: 2px !important;
+        span { font-size: 8px !important; }
+    }
+
+    .bet-row {
+        button {
+            width: 22vw !important;
+            height: 11vw !important;
+
+            span.text-lg {
+                font-size: 3.8vw !important;
+                margin-top: -1vw !important;
+                margin-bottom: 0px !important;
+            }
+
+            span.opacity-70 {
+                font-size: 2.2vw !important;
+                margin-top: -0.5vw !important;
+            }
+        }
+    }
+
+    /* Timer Scaling */
+    .betting-interface>div:last-child {
+        padding: 1vw 2vw !important;
+        span.text-base { font-size: 2.8vw !important; }
+        span.text-gray-500 { font-size: 2.5vw !important; }
+    }
+}
+
+.betting-modal-container {
+    width: 90vw !important;
+    max-width: 380px !important;
+
+    @media (max-width: 360px) {
+        width: 94vw !important;
+        .p-3 { padding: 1.5vw !important; }
+        .p-2 { padding: 1vw !important; }
+        .space-y-2\.5 { gap: 1vw !important; space-y: 0 !important; margin-top: 0 !important; }
+        .space-y-2\.5>*+* { margin-top: 1vw !important; }
+        .suspended-label { font-size: 3vw !important; }
+        .flex.items-center.gap-2 {
+            justify-content: space-between !important;
+            span.w-16 { width: 18vw !important; font-size: 3.2vw !important; }
+            input, .flex-1.border.border-gray-400 {
+                width: 65vw !important;
+                max-width: 65vw !important;
+                height: 9vw !important;
+                font-size: 3.8vw !important;
+            }
+        }
+        .px-3.py-2 { padding-left: 2vw !important; padding-right: 2vw !important; height: 100% !important; }
+        h3 { font-size: 4vw !important; }
+        span { font-size: 3.2vw !important; }
+        .grid {
+            gap: 1.2vw !important;
+            button {
+                padding: 1.8vw 0 !important;
+                font-size: 2.8vw !important;
+                border-radius: 4px !important;
+            }
+        }
+        .flex.gap-2.pt-1 {
+            padding-top: 1.5vw !important;
+            gap: 1.5vw !important;
+            button {
+                height: 10vw !important;
+                font-size: 3.8vw !important;
+                padding: 0 !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                span.text-\[9px\] {
+                    font-size: 2.2vw !important;
+                    margin-top: 0.5vw !important;
+                }
+            }
+        }
+    }
+}
+
+/* Desktop/Tablet Lock (min-width: 501px) */
+@media (min-width: 501px) {
+    .casino-bg {
+        max-height: 98vh !important;
+        height: 950px !important;
+        margin-top: 1vh !important;
+        margin-bottom: 1vh !important;
+        border-radius: 20px !important;
+    }
+
+    .header-bar {
+        padding: 14px 20px !important;
+        .text-xl { font-size: 24px !important; }
+    }
+
+    .game-table {
+        padding: 15px !important;
+        padding-top: 15px !important;
+        justify-content: center !important;
+        svg { width: 50px !important; height: 50px !important; }
+        .text-base { font-size: 16px !important; }
+    }
+
+    .hands-container {
+        gap: 20px !important;
+        max-width: 450px !important;
+    }
+
+    .betting-interface {
+        max-height: 500px !important;
+        &>div:first-child {
+            font-size: 12px !important;
+            padding: 2px 15px !important;
+        }
+    }
+
+    .bet-row {
+        padding: 1px 5px !important;
+        button {
+            width: 90px !important;
+            height: 48px !important;
+            span.text-lg { font-size: 15px !important; }
+            span.opacity-70 { font-size: 9px !important; }
+        }
+        span.text-sm { font-size: 12px !important; }
+        span.text-xs { font-size: 8px !important; }
+    }
+
+    .live-result-graph {
+        padding: 2px 8px !important;
+        .flex.items-center.justify-between.mb-2 { margin-bottom: 2px !important; }
+        .w-8 { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+    }
+
+    .casino-bg, .game-table, ion-content { overflow: visible !important; }
+
+    .timer-container {
+        position: absolute;
+        top: 11px !important;
+        right: 11px !important;
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        overflow: visible !important;
+    }
+
+    .timer-container svg {
+        width: 52px;
+        height: 52px;
+        display: block;
+        overflow: visible !important;
+    }
+
+    @media (max-width: 500px) {
+        .timer-container {
+            top: 11px !important;
+            right: 11px !important;
+            width: 52px;
+            height: 52px;
+            transform: none !important;
+        }
+        .timer-container svg { width: 52px; height: 52px; }
+    }
+}
+
+@media (max-height: 650px) {
+    .betting-interface { max-height: 50vh; }
+}

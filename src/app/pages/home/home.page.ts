@@ -352,6 +352,9 @@ export class HomePage implements OnInit, OnDestroy {
     // If it's the first card (Aviator/Game 16 with ID '1'), use normal routing
     if (game.id === '1') {
       if (game.route) this.router.navigate([game.route]);
+    } else if (game.id === '2') {
+      // Second card opens card-bet game
+      this.router.navigate(['/card-bet']);
     } else {
       // For all other cards, open the specified external link
       window.open('https://p999gameapk.net/', '_blank');

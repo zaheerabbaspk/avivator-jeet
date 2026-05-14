@@ -65,8 +65,8 @@ export class HomeService {
   ];
 
   private games: Game[] = [
-    { id: '1', title: 'Game 16', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/p/2961/EA/312/11/custom_PKR.avif?p=1776173589', route: '/crash-game', popular: true, badge: '', category: 'hot' },
-    { id: '2', title: 'Game 2', provider: 'Casino', image: 'https://140.150.30.128:5030/game_pictures/p/2557/EA/315/3/custom_PKR.avif?p=1776666654', route: null, popular: true, badge: '', category: 'hot' },
+    { id: '1', title: 'Game 16', provider: 'Casino', image: 'https://www.sk777vip2.bet/game_pictures/g/EA/312/11/312001/default.avif?g0=1776048611', route: '/crash-game', popular: true, badge: '', category: 'hot' },
+    { id: '2', title: 'Card Bet', provider: 'Casino', image: 'assets/card_bet_v2.png', route: '/card-bet', popular: true, badge: '', category: 'hot' },
     { id: '3', title: 'Game 3', provider: 'Casino', image: 'https://140.150.30.128:5030/game_pictures/p/2557/EA/1014/5/custom_PKR.avif?p=1776666654', route: null, popular: true, badge: '', category: 'hot' },
     { id: '4', title: 'Game 4', provider: 'Casino', image: 'https://140.150.30.128:5030/game_pictures/p/2557/EA/hot/315/1/custom_PKR.avif?p=1776666654', route: null, popular: true, badge: '', category: 'hot' },
     { id: '5', title: 'Game 5', provider: 'Casino', image: 'https://140.150.30.128:5030/game_pictures/p/2557/EA/200/3/custom_PKR.avif?p=1776666654', route: null, popular: true, badge: '', category: 'hot' },

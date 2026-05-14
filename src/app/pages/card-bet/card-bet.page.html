@@ -1,0 +1,343 @@
+<ion-content [fullscreen]="true" class="ion-no-padding" style="--padding-top: 0; --padding-bottom: 0; --padding-start: 0; --padding-end: 0; --background: #000;">
+  <!-- Premium Game Loading Screen -->
+  @if (isLoading) {
+  <div class="fixed inset-0 z-[200] bg-[#0a0a0a]">
+    <!-- Centered Hero Image with reduced width -->
+    <div class="absolute inset-0 overflow-hidden flex items-center justify-center p-6">
+      <img src="assets/casino.png" alt="Casino Game" class="w-[90%] max-w-[400px] h-auto rounded-3xl shadow-[0_0_60px_rgba(34,197,94,0.2)] scale-105 animate-pulse-slow">
+      <!-- Dark Overlay to ensure loading text is readable -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+    </div>
+
+    <!-- Cyber Neon Loading UI (Overlayed at Bottom) -->
+    <div class="absolute bottom-[8%] left-0 right-0 flex flex-col items-center">
+      <!-- Glowing Circular Loader -->
+      <div class="flex justify-center items-center mb-4 scale-50">
+        <div class="circular-loader"></div>
+      </div>
+      
+      <div class="text-[#00ff88] text-lg font-bold tracking-[0.2em] mb-1 drop-shadow-[0_0_10px_rgba(0,255,136,0.5)]">
+        LOADING...
+      </div>
+      
+      <div class="text-gray-300 text-[10px] font-medium opacity-70 mb-8 tracking-widest">
+        Connecting to game server
+      </div>
+
+      <!-- Glowing Bottom Line -->
+      <div class="w-[160px] h-[2px] bg-[#052e16] relative overflow-hidden rounded-full">
+        <div class="absolute inset-0 bg-[#10b981] shadow-[0_0_10px_#10b981] animate-lineLoad"></div>
+      </div>
+    </div>
+  </div>
+  } @else {
+
+  <div
+    class="casino-bg h-full w-full max-w-[430px] mx-auto flex flex-col shadow-2xl relative border-x border-white/5 !overflow-visible animate-fadeIn">
+    <!-- Header -->
+    <div class="header-bar shrink-0 flex items-center justify-between px-4 py-2 bg-[#0f172a] border-b border-gray-700">
+      <button (click)="goBack()" class="back-btn flex items-center gap-2 text-gray-400 hover:text-white">
+        <ion-icon name="arrow-back" class="text-xl"></ion-icon>
+      </button>
+
+      <div class="balance-display flex items-center gap-2">
+        <span class="text-yellow-500 font-bold">PTS</span>
+        <span class="text-white font-bold text-xl">{{ balance.toLocaleString() }}</span>
+      </div>
+    </div>
+
+    <!-- Top Section: Game Table (Cards) -->
+    <div class="game-table flex-1 relative bg-[#0a2615] flex flex-col items-center justify-center p-4 !overflow-visible">
+      <!-- Dealer Hand (Hidden/Unused for this variant) -->
+      <!-- <div class="dealer-section ..."></div> -->
+
+      <!-- Circular Timer (Top Right) -->
+      @if (timeLeft > 0) {
+      <div class="timer-container absolute top-[5px] right-[5px] z-40 flex items-center justify-center" style="width:52px;height:52px;overflow:visible;">
+        <!-- SVG Circle Graph -->
+        <svg viewBox="0 0 64 64" width="52" height="52" style="overflow:visible;display:block;" class="transform -rotate-90">
+          <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.15)" stroke-width="6" fill="transparent" />
+          <circle cx="32" cy="32" r="28" stroke="#eab308" stroke-width="6" fill="transparent" stroke-dasharray="175.9"
+            [attr.stroke-dashoffset]="175.9 - (175.9 * timeLeft / 15)"
+            class="transition-all duration-1000 ease-linear" />
+        </svg>
+        <!-- Text -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="text-white font-black text-lg leading-none">{{ timeLeft }}</span>
+          <span class="text-[8px] text-gray-300 font-bold leading-none">SEC</span>
+        </div>
+      </div>
+      }
+
+        <!-- 4 Hands Grid (Exact Match Design) -->
+        <div class="hands-container grid grid-cols-2 gap-x-6 gap-y-8 w-full max-w-[420px] mt-8 relative z-10">
+          @for (hand of hands; track $index) {
+          <div class="hand-display flex flex-col items-center">
+            
+            <!-- Player Label -->
+            <div class="player-label mb-2">
+              <span class="text-[#efc57a] text-[15px] font-bold tracking-tight">
+                Player {{ hand.name }}
+              </span>
+            </div>
+
+            <!-- Glass Box -->
+            <div class="glass-box relative w-full aspect-[1.8/1] flex items-center justify-center rounded-[18px] transition-all duration-300 border border-[#14532d]/50 bg-black/40">
+              
+              <!-- Cards Stack Container -->
+              <div class="flex items-center justify-center -space-x-8 relative z-10 scale-[0.85]">
+                @for (card of hand.cards; track $index) {
+                  <div class="card-wrapper transform transition-all duration-500" 
+                    [style.z-index]="$index"
+                    [class.translate-x-2]="$index > 0">
+                    <app-playing-card [rank]="card.value" [suit]="card.suit" 
+                      [revealed]="hand.cardRevealStates[$index]">
+                    </app-playing-card>
+                  </div>
+                }
+                @if (hand.cards.length === 0) {
+                  <div class="card-wrapper">
+                    <app-playing-card [rank]="'?'" [suit]="'spades'" [revealed]="false"></app-playing-card>
+                  </div>
+                }
+              </div>
+
+              <!-- WIN Badge Removed from cards per user request -->
+              @if (hand.isWinner && hand.highlight) {
+                <!-- Removed -->
+              }
+            </div>
+
+            <!-- Score Badge -->
+            <div class="score-badge mt-3 rounded-full">
+              <span class="uppercase">
+                @if (hand.cards.length > 1) {
+                  {{ hand.cards[0].value }} + {{ hand.cards[1].value }} = {{ hand.total }}
+                } @else {
+                  {{ hand.revealed ? (hand.cards[0]?.value || '0') + ' + 0 = ' + (hand.total || '0') : (hand.name) + ' + 0 = ' + (hand.name) }}
+                }
+              </span>
+            </div>
+          </div>
+          }
+        </div>
+
+      <!-- Progress Line -->
+      @if (gameInProgress) {
+      <div class="absolute bottom-0 left-0 w-full h-1 bg-gray-800">
+        <div class="h-full bg-green-500 animate-[progress_3s_linear]" style="width: 100%"></div>
+      </div>
+      }
+    </div>
+
+    <!-- Live Result Graph -->
+    <div class="live-result-graph px-4 py-2 bg-[#0a2615] border-t border-white/10">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Live Result (Last 20)</span>
+      </div>
+      <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        @for (res of roundHistory; track $index) {
+        <div
+          class="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg border border-white/20 animate-popIn"
+          [ngClass]="{
+                  'bg-blue-600 shadow-blue-500/50': res.label === '8',
+                  'bg-purple-600 shadow-purple-500/50': res.label === '9',
+                  'bg-orange-600 shadow-orange-500/50': res.label === '10',
+                  'bg-pink-600 shadow-pink-500/50': res.label === '11',
+                  'bg-gray-600': res.label === 'T'
+                }">
+          {{ res.label }}
+        </div>
+        }
+        @if (roundHistory.length === 0) {
+        <div class="text-xs text-gray-500 italic">No results yet...</div>
+        }
+      </div>
+    </div>
+
+    <!-- Bottom Section: Betting Interface (Exchange Style) -->
+    <div class="betting-interface bg-white text-black shrink-0 relative z-10">
+      <!-- Headers -->
+      <div
+        class="grid grid-cols-[1fr_auto_auto] gap-1 bg-[#1e293b] text-white p-1 text-xs font-bold uppercase tracking-wider">
+        <div class="px-2 flex items-center">Selection</div>
+        <div class="w-24 bg-[#2c5282] text-center py-1">Back</div>
+        <div class="w-24 bg-[#97266d] text-center py-1">Lay</div>
+      </div>
+
+      <!-- Rows -->
+      <div class="divide-y divide-gray-200">
+        @for (hand of hands; track $index) {
+        <div
+          class="bet-row grid grid-cols-[1fr_auto_auto] gap-1 p-1 bg-white hover:bg-gray-50 items-stretch transition-colors duration-500"
+          [class.winning-blink]="hand.isWinner">
+
+          <!-- Hand Info -->
+          <div class="flex flex-col px-2 min-w-0 justify-center">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-[13px] truncate">Player {{ hand.name }}</span>
+            </div>
+            <!-- Profit/Loss Indicator -->
+            @if (hand.profit !== 0) {
+            <span class="text-xs font-bold truncate" [class.text-green-600]="hand.profit > 0"
+              [class.text-red-600]="hand.profit < 0">
+              {{ hand.profit > 0 ? '+' : '' }}{{ hand.profit.toLocaleString() }}
+            </span>
+            } @else if (getHandStake($index) > 0) {
+            <span class="text-xs text-red-500 font-bold truncate">-{{ getHandStake($index).toLocaleString() }}</span>
+            }
+          </div>
+
+          <!-- BACK & LAY Container (with Suspended Overlay) -->
+            <div class="flex items-center gap-0.5 relative">
+              <!-- BACK Button -->
+              <button (click)="$event.stopPropagation(); openBetModal($index, 'back')"
+                class="w-[65px] h-[46px] bg-[#dbeafe] hover:bg-[#bfdbfe] transition-colors flex flex-col items-center justify-center rounded-sm relative overflow-hidden group">
+                <span class="font-black text-[15px] text-black truncate w-full text-center leading-tight">{{ hand.backOdds | number:'1.1-1'
+                  }}</span>
+                <span class="text-[9px] text-gray-500 font-medium truncate w-full">{{ hand.backVolume }}</span>
+              </button>
+
+              <!-- LAY Button -->
+              <button (click)="$event.stopPropagation(); openBetModal($index, 'lay')"
+                class="w-[65px] h-[46px] bg-[#fce7f3] hover:bg-[#fbcfe8] transition-colors flex flex-col items-center justify-center rounded-sm relative overflow-hidden group">
+                <span class="font-black text-[15px] text-black truncate w-full text-center leading-tight">{{ hand.layOdds | number:'1.1-1'
+                  }}</span>
+                <span class="text-[9px] text-gray-500 font-medium truncate w-full">{{ hand.layVolume }}</span>
+              </button>
+
+            <!-- SUSPENDED Overlay (Responsive Refinement) -->
+            @if (timeLeft === 0 || gameInProgress) {
+            <div class="absolute inset-0 z-20 bg-[#e8e8e8] flex items-center justify-center rounded-sm border-l border-white animate-fadeIn">
+              <span class="suspended-label">{{ suspendedText }}</span>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Bet Controls (Fixed Bottom) -->
+      <div class="p-2 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+        <span class="text-xs font-bold text-gray-500">BALANCE: {{ balance.toLocaleString() }}</span>
+        <div class="flex items-center gap-2">
+          <!-- Button trigger handled by modal now -->
+          <span class="font-bold text-gray-400 text-xs">Tap odds to bet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Betting Modal -->
+  @if (isModalOpen && hands.length > 0) {
+  <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+    (click)="closeBetModal()">
+    <div (click)="$event.stopPropagation()"
+      class="betting-modal-container bg-[#e0f2fe] w-full max-w-sm rounded-xl shadow-2xl overflow-hidden animate-popIn border-2 border-[#b0e0e6]">
+
+      <!-- Modal Header -->
+      <div class="bg-[#d1e9ff] p-2 flex justify-between items-center border-b border-[#aaccff]">
+        <h3 class="font-black text-lg text-gray-800">Hand {{ hands[modalHandIndex].name }}</h3>
+        <button (click)="closeBetModal()" class="text-gray-500 hover:text-gray-700">
+          <ion-icon name="close" size="large"></ion-icon>
+        </button>
+      </div>
+
+      <div class="p-3 space-y-2.5">
+        <!-- Odds Input -->
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-gray-600 w-16">ODDS</span>
+          <div class="flex items-center flex-1 border border-gray-400 bg-white rounded">
+            <button (click)="modalOdds = modalOdds - 0.01"
+              class="px-3 py-2 bg-gray-200 hover:bg-gray-300 font-bold text-gray-700">-</button>
+            <input type="number" [(ngModel)]="modalOdds"
+              class="w-full text-center font-bold text-lg bg-transparent border-none focus:ring-0 p-1 text-slate-800" step="0.01">
+            <button (click)="modalOdds = modalOdds + 0.01"
+              class="px-3 py-2 bg-gray-200 hover:bg-gray-300 font-bold text-gray-700">+</button>
+          </div>
+        </div>
+
+        <!-- Amount Input -->
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-gray-600 w-16">Amount</span>
+          <input type="number" [(ngModel)]="modalStake"
+            class="flex-1 border border-gray-400 bg-white rounded p-2 font-bold text-lg text-slate-800 focus:bg-indigo-50 transition-colors">
+        </div>
+
+        <!-- Preset Buttons Row 1 -->
+        <div class="grid grid-cols-4 gap-2">
+          <button (click)="updateStake(20, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">20</button>
+          <button (click)="updateStake(100, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">100</button>
+          <button (click)="updateStake(200, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">200</button>
+          <button (click)="updateStake(500, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">500</button>
+        </div>
+
+        <!-- Preset Buttons Row 2 -->
+        <div class="grid grid-cols-4 gap-2">
+          <button (click)="updateStake(1000, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">1,000</button>
+          <button (click)="updateStake(1500, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">1,500</button>
+          <button (click)="updateStake(2000, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">2,000</button>
+          <button (click)="updateStake(5000, 'set')"
+            class="bg-[#64748b] hover:bg-[#475569] text-white font-bold py-1.5 rounded shadow text-xs">5,000</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2 pt-1">
+          <button (click)="closeBetModal()"
+            class="flex-1 bg-red-500 hover:bg-red-600 text-white font-black py-2 rounded shadow text-base uppercase tracking-wide">
+            Close
+          </button>
+          <button (click)="submitBet()"
+            class="flex-1 bg-[#1e4620] hover:bg-[#153316] text-white font-black py-2 rounded shadow text-base uppercase tracking-wide flex flex-col items-center leading-tight">
+            <span>Submit</span>
+            <span class="text-[9px] font-normal opacity-80">
+              {{ modalBetType === 'back' ? (modalStake * (modalOdds - 1) | number:'1.0-0') : (modalStake |
+              number:'1.0-0') }} P&L
+            </span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Custom Exit Modal (Game Level Design) -->
+  @if (isExitModalOpen) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div
+      class="exit-modal-card bg-gradient-to-b from-[#1e293b] to-[#0f172a] w-full max-w-[280px] rounded-xl shadow-2xl border border-white/10 p-5 animate-popIn text-center relative overflow-hidden">
+
+      <div class="relative z-10">
+        <div
+          class="mb-3 inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20">
+          <ion-icon name="help" class="text-2xl text-red-500"></ion-icon>
+        </div>
+
+        <h2 class="text-xl font-black text-white mb-1 uppercase tracking-tight">Exit Game?</h2>
+        <p class="text-gray-400 text-xs mb-6 leading-tight">Do you really want to leave the table? Progress will be
+          lost.</p>
+
+        <div class="flex flex-col gap-2">
+          <button (click)="confirmExit()"
+            class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 rounded-lg shadow-lg active:scale-95 uppercase tracking-wider text-xs">
+            Yes, Exit
+          </button>
+          <button (click)="cancelExit()"
+            class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-2.5 rounded-lg active:scale-95 text-xs">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+  }
+</ion-content>

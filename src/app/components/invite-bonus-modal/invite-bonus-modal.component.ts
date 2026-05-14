@@ -41,7 +41,7 @@ export class InviteBonusModalComponent {
 
   share(platform: string) {
     const text = encodeURIComponent('Join me on bp999 and get amazing rewards!');
-    const url = encodeURIComponent('https://bp999.online/?id=126406886');
+    const url = encodeURIComponent('https://bp999.site/?id=126406886');
     
     let shareUrl = '';
     
@@ -61,7 +61,7 @@ export class InviteBonusModalComponent {
         break;
       default:
         if (navigator.share) {
-          navigator.share({ title: 'bp999', text: 'Join me!', url: 'https://bp999.online/?id=126406886' });
+          navigator.share({ title: 'bp999', text: 'Join me!', url: 'https://bp999.site/?id=126406886' });
           return;
         }
     }
@@ -75,3 +75,4 @@ export class InviteBonusModalComponent {
     this.modalClose.emit();
   }
 }
+

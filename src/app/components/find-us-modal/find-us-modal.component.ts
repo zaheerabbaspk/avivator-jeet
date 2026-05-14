@@ -19,8 +19,8 @@ export class FindUsModalComponent implements OnInit {
   dontShowToday = false;
 
   private readonly allUrls = [
-    'bp999.online', 'bp999.me', 'bp999.org',
-    'www.bp999.online', 'www.bp999.me', 'www.bp999.org'
+    'bp999.site', 'bp999.me', 'bp999.org',
+    'www.bp999.site', 'www.bp999.me', 'www.bp999.org'
   ];
 
   constructor() {
@@ -57,3 +57,4 @@ export class FindUsModalComponent implements OnInit {
     this.copyToClipboard(this.allUrls.join('\n'));
   }
 }
+

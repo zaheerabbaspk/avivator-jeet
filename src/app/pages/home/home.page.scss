@@ -108,7 +108,7 @@ ion-content {
   margin: 10px 12px 12px;
   border-radius: 12px;
   overflow: hidden;
-  height: 90px;
+  height: 65px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 
@@ -121,7 +121,7 @@ ion-content {
 
   .jackpot-amount {
     position: absolute;
-    top: 55%;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
@@ -139,7 +139,7 @@ ion-content {
 
 .floating-icons {
   position: fixed;
-  bottom: 90px;
+  bottom: 70px;
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -159,8 +159,8 @@ ion-content {
   .float-widget {
     position: relative;
     pointer-events: auto;
-    width: 38px;
-    /* Further reduced from 45px */
+    width: 48px;
+    margin-top: 8px;
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     /* Smoother transition */
@@ -360,6 +360,10 @@ ion-content {
     color: #9ca3af;
     margin: 0 0 20px 0;
     text-align: justify;
+
+    @media (max-width: 380px) {
+      font-size: 9.5px; /* Smaller for S9 */
+    }
   }
 
   .footer-bottom-flex {
@@ -371,9 +375,29 @@ ion-content {
     color: #9ca3af;
     margin-bottom: 20px;
 
+    @media (max-width: 380px) {
+      font-size: 8.5px;
+    }
+
     .sep {
       color: #059669;
       /* subtle green separator */
     }
+  }
+
+  /* S9/Compact Mobile Optimization */
+  @media (max-width: 380px) {
+    .footer-links .footer-col {
+      h3 { font-size: 12px; }
+      a { font-size: 11px; }
+    }
+    .footer-license-header h3 { font-size: 12px; }
+    .footer-license-header img { height: 28px; } /* Smaller 18+ icon */
+    .footer-contact h3 { font-size: 12px; }
+    .footer-contact .social-icons .icon-circle { 
+      width: 28px; 
+      height: 28px; 
+      font-size: 16px; 
+    } /* Smaller social circles */
   }
 }

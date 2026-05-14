@@ -103,10 +103,11 @@ export class LuckyDrawModalComponent implements OnInit {
       navigator.share({
         title: 'Join bp999!',
         text: 'Special invitation reward waiting for you!',
-        url: 'https://bp999.online/?id=9999999' // Dynamic link should go here later
+        url: 'https://bp999.site/?id=9999999' // Dynamic link should go here later
       }).catch(console.error);
     } else {
       console.log('Share API not supported. Would share to:', platform);
     }
   }
 }
+

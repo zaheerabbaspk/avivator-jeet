@@ -48,6 +48,11 @@ export const routes: Routes = [
     path: 'records',
     loadComponent: () => import('./pages/records/records.page').then((m) => m.RecordsPage),
   },
+  {
+    path: 'card-bet',
+    loadComponent: () => import('./pages/card-bet/card-bet.page').then((m) => m.CardBetPage),
+    canActivate: [authGuard]
+  },
 
   {
     path: '',

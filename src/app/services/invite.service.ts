@@ -237,7 +237,7 @@ export class InviteService {
   }
 
   getReferralLink(account: string) {
-    return `https://bp999.online/?id=${account}`;
+    return `https://bp999.site/?id=${account}`;
   }
 
   async fetchMyDataStats(): Promise<MyDataStats> {
@@ -276,3 +276,4 @@ export class InviteService {
     return stats;
   }
 }
+

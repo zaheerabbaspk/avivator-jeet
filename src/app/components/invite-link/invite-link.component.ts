@@ -1,6 +1,16 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { 
+  shareOutline, 
+  paperPlane, 
+  logoFacebook, 
+  logoInstagram, 
+  logoWhatsapp, 
+  chevronDownOutline, 
+  copyOutline 
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-invite-link',
@@ -149,4 +159,16 @@ export class InviteLinkComponent {
   
   @Output() copy = new EventEmitter<string>();
   @Output() share = new EventEmitter<string>();
+
+  constructor() {
+    addIcons({ 
+      shareOutline, 
+      paperPlane, 
+      logoFacebook, 
+      logoInstagram, 
+      logoWhatsapp, 
+      chevronDownOutline, 
+      copyOutline 
+    });
+  }
 }
