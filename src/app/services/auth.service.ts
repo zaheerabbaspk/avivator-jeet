@@ -133,30 +133,14 @@ export class AuthService {
 
   // ── Balance Operations ─────────────────────────────────────────────────────────
 
-  async claimBonus(amount: number) {
+  async updateBalance(amount: number) {
     const user = this.userSubject.value;
-    if (!user) throw new Error('Login required to claim bonus');
+    if (!user) throw new Error('Login required');
 
-    // 1. Get latest balance to be safe
-    const { data: current, error: fetchErr } = await this.supabase
-      .from('profiles')
-      .select('balance')
-      .eq('id', user.id)
-      .single();
+    // Optimistically update local state
+    const currentBalance = this.balanceSub.value;
+    const newBalance = currentBalance + amount;
     
-    if (fetchErr) throw fetchErr;
-
-    const newBalance = (current?.balance || 0) + amount;
-
-    // 2. Update DB
-    const { error: updateErr } = await this.supabase
-      .from('profiles')
-      .update({ balance: newBalance })
-      .eq('id', user.id);
-    
-    if (updateErr) throw updateErr;
-
-    // 3. Emit new value and update cache
     this.balanceSub.next(newBalance);
     const cached = this.profileSub.value;
     if (cached) {
@@ -164,11 +148,29 @@ export class AuthService {
       this.profileSub.next(updated);
       this.saveToCache(updated);
     }
-    return newBalance;
+
+    // Perform DB update in background (or wait if critical, but we want speed)
+    try {
+      const { error: updateErr } = await this.supabase
+        .from('profiles')
+        .update({ balance: newBalance })
+        .eq('id', user.id);
+      
+      if (updateErr) throw updateErr;
+      return newBalance;
+    } catch (err) {
+      // Rollback on error
+      this.balanceSub.next(currentBalance);
+      if (cached) {
+        this.profileSub.next(cached);
+        this.saveToCache(cached);
+      }
+      throw err;
+    }
   }
 
-  async updateBalance(amount: number) {
-    return this.claimBonus(amount);
+  async claimBonus(amount: number) {
+    return this.updateBalance(amount);
   }
 
   // ── Auth Guards ────────────────────────────────────────────────────────────────

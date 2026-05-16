@@ -1,10 +1,12 @@
-<ion-content [fullscreen]="true" class="ion-no-padding" style="--padding-top: 0; --padding-bottom: 0; --padding-start: 0; --padding-end: 0; --background: #000;">
+<ion-content [fullscreen]="true" class="ion-no-padding"
+  style="--padding-top: 0; --padding-bottom: 0; --padding-start: 0; --padding-end: 0; --background: #000;">
   <!-- Premium Game Loading Screen -->
   @if (isLoading) {
   <div class="fixed inset-0 z-[200] bg-[#0a0a0a]">
     <!-- Centered Hero Image with reduced width -->
     <div class="absolute inset-0 overflow-hidden flex items-center justify-center p-6">
-      <img src="assets/casino.png" alt="Casino Game" class="w-[90%] max-w-[400px] h-auto rounded-3xl shadow-[0_0_60px_rgba(34,197,94,0.2)] scale-105 animate-pulse-slow">
+      <img src="assets/casino.png" alt="Casino Game"
+        class="w-[90%] max-w-[400px] h-auto rounded-3xl shadow-[0_0_60px_rgba(34,197,94,0.2)] scale-105 animate-pulse-slow">
       <!-- Dark Overlay to ensure loading text is readable -->
       <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
     </div>
@@ -15,11 +17,11 @@
       <div class="flex justify-center items-center mb-4 scale-50">
         <div class="circular-loader"></div>
       </div>
-      
+
       <div class="text-[#00ff88] text-lg font-bold tracking-[0.2em] mb-1 drop-shadow-[0_0_10px_rgba(0,255,136,0.5)]">
         LOADING...
       </div>
-      
+
       <div class="text-gray-300 text-[10px] font-medium opacity-70 mb-8 tracking-widest">
         Connecting to game server
       </div>
@@ -47,15 +49,18 @@
     </div>
 
     <!-- Top Section: Game Table (Cards) -->
-    <div class="game-table flex-1 relative bg-[#0a2615] flex flex-col items-center justify-center p-4 !overflow-visible">
+    <div
+      class="game-table flex-1 relative bg-[#0a2615] flex flex-col items-center justify-center p-4 !overflow-visible">
       <!-- Dealer Hand (Hidden/Unused for this variant) -->
       <!-- <div class="dealer-section ..."></div> -->
 
       <!-- Circular Timer (Top Right) -->
       @if (timeLeft > 0) {
-      <div class="timer-container absolute top-[5px] right-[5px] z-40 flex items-center justify-center" style="width:52px;height:52px;overflow:visible;">
+      <div class="timer-container absolute top-[5px] right-[5px] z-40 flex items-center justify-center"
+        style="width:52px;height:52px;overflow:visible;">
         <!-- SVG Circle Graph -->
-        <svg viewBox="0 0 64 64" width="52" height="52" style="overflow:visible;display:block;" class="transform -rotate-90">
+        <svg viewBox="0 0 64 64" width="52" height="52" style="overflow:visible;display:block;"
+          class="transform -rotate-90">
           <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.15)" stroke-width="6" fill="transparent" />
           <circle cx="32" cy="32" r="28" stroke="#eab308" stroke-width="6" fill="transparent" stroke-dasharray="175.9"
             [attr.stroke-dashoffset]="175.9 - (175.9 * timeLeft / 15)"
@@ -69,58 +74,58 @@
       </div>
       }
 
-        <!-- 4 Hands Grid (Exact Match Design) -->
-        <div class="hands-container grid grid-cols-2 gap-x-6 gap-y-8 w-full max-w-[420px] mt-8 relative z-10">
-          @for (hand of hands; track $index) {
-          <div class="hand-display flex flex-col items-center">
-            
-            <!-- Player Label -->
-            <div class="player-label mb-2">
-              <span class="text-[#efc57a] text-[15px] font-bold tracking-tight">
-                Player {{ hand.name }}
-              </span>
-            </div>
+      <!-- 4 Hands Grid (Exact Match Design) -->
+      <div class="hands-container grid grid-cols-2 gap-x-6 gap-y-8 w-full max-w-[420px] mt-8 relative z-10">
+        @for (hand of hands; track $index) {
+        <div class="hand-display flex flex-col items-center">
 
-            <!-- Glass Box -->
-            <div class="glass-box relative w-full aspect-[1.8/1] flex items-center justify-center rounded-[18px] transition-all duration-300 border border-[#14532d]/50 bg-black/40">
-              
-              <!-- Cards Stack Container -->
-              <div class="flex items-center justify-center -space-x-8 relative z-10 scale-[0.85]">
-                @for (card of hand.cards; track $index) {
-                  <div class="card-wrapper transform transition-all duration-500" 
-                    [style.z-index]="$index"
-                    [class.translate-x-2]="$index > 0">
-                    <app-playing-card [rank]="card.value" [suit]="card.suit" 
-                      [revealed]="hand.cardRevealStates[$index]">
-                    </app-playing-card>
-                  </div>
-                }
-                @if (hand.cards.length === 0) {
-                  <div class="card-wrapper">
-                    <app-playing-card [rank]="'?'" [suit]="'spades'" [revealed]="false"></app-playing-card>
-                  </div>
-                }
+          <!-- Player Label -->
+          <div class="player-label mb-2">
+            <span class="text-[#efc57a] text-[15px] font-bold tracking-tight">
+              Player {{ hand.name }}
+            </span>
+          </div>
+
+          <!-- Glass Box -->
+          <div
+            class="glass-box relative w-full aspect-[1.8/1] flex items-center justify-center rounded-[18px] transition-all duration-300 border border-[#14532d]/50 bg-black/40">
+
+            <!-- Cards Stack Container -->
+            <div class="flex items-center justify-center -space-x-8 relative z-10 scale-[0.85]">
+              @for (card of hand.cards; track $index) {
+              <div class="card-wrapper transform transition-all duration-500" [style.z-index]="$index"
+                [class.translate-x-2]="$index > 0">
+                <app-playing-card [rank]="card.value" [suit]="card.suit" [revealed]="hand.cardRevealStates[$index]">
+                </app-playing-card>
               </div>
-
-              <!-- WIN Badge Removed from cards per user request -->
-              @if (hand.isWinner && hand.highlight) {
-                <!-- Removed -->
+              }
+              @if (hand.cards.length === 0) {
+              <div class="card-wrapper">
+                <app-playing-card [rank]="'?'" [suit]="'spades'" [revealed]="false"></app-playing-card>
+              </div>
               }
             </div>
 
-            <!-- Score Badge -->
-            <div class="score-badge mt-3 rounded-full">
-              <span class="uppercase">
-                @if (hand.cards.length > 1) {
-                  {{ hand.cards[0].value }} + {{ hand.cards[1].value }} = {{ hand.total }}
-                } @else {
-                  {{ hand.revealed ? (hand.cards[0]?.value || '0') + ' + 0 = ' + (hand.total || '0') : (hand.name) + ' + 0 = ' + (hand.name) }}
-                }
-              </span>
-            </div>
+            <!-- WIN Badge Removed from cards per user request -->
+            @if (hand.isWinner && hand.highlight) {
+            <!-- Removed -->
+            }
           </div>
-          }
+
+          <!-- Score Badge -->
+          <div class="score-badge mt-3 rounded-full">
+            <span class="uppercase">
+              @if (hand.cards.length > 1) {
+              {{ hand.cards[0].value }} + {{ hand.cards[1].value }} = {{ hand.total }}
+              } @else {
+              {{ hand.revealed ? (hand.cards[0]?.value || '0') + ' + 0 = ' + (hand.total || '0') : (hand.name) + ' + 0 =
+              ' + (hand.name) }}
+              }
+            </span>
+          </div>
         </div>
+        }
+      </div>
 
       <!-- Progress Line -->
       @if (gameInProgress) {
@@ -179,36 +184,40 @@
             </div>
             <!-- Profit/Loss Indicator -->
             @if (hand.profit !== 0) {
-            <span class="text-xs font-bold truncate" [class.text-green-600]="hand.profit > 0"
+            <span class="text-[12px] font-black truncate" [class.text-green-600]="hand.profit > 0"
               [class.text-red-600]="hand.profit < 0">
               {{ hand.profit > 0 ? '+' : '' }}{{ hand.profit.toLocaleString() }}
             </span>
             } @else if (getHandStake($index) > 0) {
-            <span class="text-xs text-red-500 font-bold truncate">-{{ getHandStake($index).toLocaleString() }}</span>
+            <span class="text-[12px] text-red-500 font-black truncate">-{{ getHandStake($index).toLocaleString()
+              }}</span>
             }
           </div>
 
           <!-- BACK & LAY Container (with Suspended Overlay) -->
-            <div class="flex items-center gap-0.5 relative">
-              <!-- BACK Button -->
-              <button (click)="$event.stopPropagation(); openBetModal($index, 'back')"
-                class="w-[65px] h-[46px] bg-[#dbeafe] hover:bg-[#bfdbfe] transition-colors flex flex-col items-center justify-center rounded-sm relative overflow-hidden group">
-                <span class="font-black text-[15px] text-black truncate w-full text-center leading-tight">{{ hand.backOdds | number:'1.1-1'
-                  }}</span>
-                <span class="text-[9px] text-gray-500 font-medium truncate w-full">{{ hand.backVolume }}</span>
-              </button>
+          <div class="flex items-center gap-0.5 relative">
+            <!-- BACK Button -->
+            <button (click)="$event.stopPropagation(); openBetModal($index, 'back')"
+              class="w-[65px] h-[46px] bg-[#dbeafe] hover:bg-[#bfdbfe] transition-colors flex flex-col items-center justify-center rounded-sm relative overflow-hidden group">
+              <span class="font-black text-[15px] text-black truncate w-full text-center leading-tight">{{ hand.backOdds
+                | number:'1.1-1'
+                }}</span>
+              <span class="text-[9px] text-gray-500 font-medium truncate w-full">{{ hand.backVolume }}</span>
+            </button>
 
-              <!-- LAY Button -->
-              <button (click)="$event.stopPropagation(); openBetModal($index, 'lay')"
-                class="w-[65px] h-[46px] bg-[#fce7f3] hover:bg-[#fbcfe8] transition-colors flex flex-col items-center justify-center rounded-sm relative overflow-hidden group">
-                <span class="font-black text-[15px] text-black truncate w-full text-center leading-tight">{{ hand.layOdds | number:'1.1-1'
-                  }}</span>
-                <span class="text-[9px] text-gray-500 font-medium truncate w-full">{{ hand.layVolume }}</span>
-              </button>
+            <!-- LAY Button -->
+            <button (click)="$event.stopPropagation(); openBetModal($index, 'lay')"
+              class="w-[65px] h-[46px] bg-[#fce7f3] hover:bg-[#fbcfe8] transition-colors flex flex-col items-center justify-center rounded-sm relative overflow-hidden group">
+              <span class="font-black text-[15px] text-black truncate w-full text-center leading-tight">{{ hand.layOdds
+                | number:'1.1-1'
+                }}</span>
+              <span class="text-[9px] text-gray-500 font-medium truncate w-full">{{ hand.layVolume }}</span>
+            </button>
 
             <!-- SUSPENDED Overlay (Responsive Refinement) -->
             @if (timeLeft === 0 || gameInProgress) {
-            <div class="absolute inset-0 z-20 bg-[#e8e8e8] flex items-center justify-center rounded-sm border-l border-white animate-fadeIn">
+            <div
+              class="absolute inset-0 z-20 bg-[#e8e8e8] flex items-center justify-center rounded-sm border-l border-white animate-fadeIn">
               <span class="suspended-label">{{ suspendedText }}</span>
             </div>
             }
@@ -251,7 +260,8 @@
             <button (click)="modalOdds = modalOdds - 0.01"
               class="px-3 py-2 bg-gray-200 hover:bg-gray-300 font-bold text-gray-700">-</button>
             <input type="number" [(ngModel)]="modalOdds"
-              class="w-full text-center font-bold text-lg bg-transparent border-none focus:ring-0 p-1 text-slate-800" step="0.01">
+              class="w-full text-center font-bold text-lg bg-transparent border-none focus:ring-0 p-1 text-slate-800"
+              step="0.01">
             <button (click)="modalOdds = modalOdds + 0.01"
               class="px-3 py-2 bg-gray-200 hover:bg-gray-300 font-bold text-gray-700">+</button>
           </div>

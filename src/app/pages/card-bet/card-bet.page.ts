@@ -63,7 +63,7 @@ export class CardBetPage implements OnInit, OnDestroy {
   private revealInProgress = false;
   private revealTimeouts: any[] = [];
   private suits: ('hearts' | 'diamonds' | 'clubs' | 'spades')[] = ['hearts', 'diamonds', 'clubs', 'spades'];
-  private values = ['6', '7', '8', '9', '10', 'J', 'Q', 'K']; 
+  private values = ['6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
   // Exit Modal State
   isExitModalOpen = false;
@@ -78,7 +78,17 @@ export class CardBetPage implements OnInit, OnDestroy {
     effect(() => {
       const state = this.cbSocket.gameState();
       const result = this.cbSocket.gameResult();
-      
+      const serverTime = this.cbSocket.timeLeft();
+
+      // Sync Timer with Server (Only during betting/active phases)
+      if (state !== 'WAITING' && serverTime >= 0) {
+        this.timeLeft = serverTime;
+        // If server is sending time, we stop our local interval to avoid fighting
+        if (serverTime > 0) {
+          clearInterval(this.localTimerInterval);
+        }
+      }
+
       if (state === 'REVEALING' && result && result.roundId !== this.lastProcessedRoundId) {
         if (this.timeLeft > 0) {
           this.pendingResult = result;
@@ -86,7 +96,7 @@ export class CardBetPage implements OnInit, OnDestroy {
           this.applyServerResult(result);
         }
       }
-      
+
       // If server moves to WAITING, reset for next round
       if (state === 'WAITING') {
         this.pendingResult = null;
@@ -96,7 +106,6 @@ export class CardBetPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.startNewRound();
-    this.startLocalTimer(15); // Start initial betting time
     this.balanceSub = this.authSvc.balance$.subscribe(bal => {
       this.balance = bal;
     });
@@ -218,11 +227,11 @@ export class CardBetPage implements OnInit, OnDestroy {
     clearInterval(this.localTimerInterval);
     this.timeLeft = 0;
     this.gameInProgress = true;
-    
+
     if (!this.hands || this.hands.length === 0) {
       this.startNewRound();
     }
-    
+
     result.hands.forEach((serverHand: any, idx: number) => {
       if (this.hands[idx]) {
         this.hands[idx].cards = serverHand.cards || [];
@@ -280,29 +289,37 @@ export class CardBetPage implements OnInit, OnDestroy {
       alert("Insufficient Balance");
       return;
     }
-    this.authSvc.updateBalance(-cost).then(() => {
-      this.placedBets.push({
-        handIndex: this.modalHandIndex,
-        type: this.modalBetType,
-        stake: this.modalStake,
-        payout: 0,
-        profit: 0
-      });
-      this.closeBetModal();
-    }).catch(err => console.error(err));
+
+    // 1. Optimistic UI Update: Add bet immediately
+    this.placedBets.push({
+      handIndex: this.modalHandIndex,
+      type: this.modalBetType,
+      stake: this.modalStake,
+      payout: 0,
+      profit: 0
+    });
+
+    // 2. Close modal immediately
+    this.closeBetModal();
+
+    // 3. Update balance (now optimistic in service)
+    this.authSvc.updateBalance(-cost).catch(err => {
+      console.error("Bet submission error:", err);
+      // Rollback logic could be added here if needed
+    });
   }
 
   runRevealSequence(winningHandIndex: number) {
     this.revealInProgress = true;
-    this.hands.forEach(h => { 
-      h.revealed = false; 
-      h.isWinner = false; 
-      h.highlight = false; 
-      (h as any).cardRevealStates = h.cards.map(() => false); 
+    this.hands.forEach(h => {
+      h.revealed = false;
+      h.isWinner = false;
+      h.highlight = false;
+      (h as any).cardRevealStates = h.cards.map(() => false);
     });
 
-    const stepDelay = 800; // Slower, more suspenseful first reveal
-    
+    const stepDelay = 1000; // 1 second gap as requested
+
     // 1. Reveal FIRST card of all 4 hands
     this.hands.forEach((hand, i) => {
       const t = setTimeout(() => {
@@ -310,10 +327,10 @@ export class CardBetPage implements OnInit, OnDestroy {
           this.hands[i].cardRevealStates[0] = true;
           this.hands[i].revealed = true;
         }
-        
+
         if (i === 3) {
           // 2. WAIT before checking for EXTRA cards (Suspense Phase)
-          const t2 = setTimeout(() => this.revealExtraCards(winningHandIndex), 4000);
+          const t2 = setTimeout(() => this.revealExtraCards(winningHandIndex), 1000); // Reduced to 1s
           this.revealTimeouts.push(t2);
         }
       }, i * stepDelay);
@@ -338,20 +355,20 @@ export class CardBetPage implements OnInit, OnDestroy {
 
       // Get hands that actually need this extra card revealed
       const handsToReveal = this.hands.filter(h => h.cards.length > currentExtraIndex);
-      
+
       handsToReveal.forEach((hand, i) => {
         const t = setTimeout(() => {
           (hand as any).cardRevealStates[currentExtraIndex] = true;
-          
+
           // If this is the last hand in this set of extras
           if (i === handsToReveal.length - 1) {
             const nextT = setTimeout(() => {
               currentExtraIndex++;
               revealNextSet();
-            }, 1200);
+            }, 800); // Reduced to 0.8s
             this.revealTimeouts.push(nextT);
           }
-        }, i * 1000); // 1 second gap between each player's extra card
+        }, i * 300); // Reduced to 0.3 second gap
         this.revealTimeouts.push(t);
       });
     };
@@ -393,21 +410,21 @@ export class CardBetPage implements OnInit, OnDestroy {
     const totalProfit = this.placedBets.reduce((sum, b) => sum + b.profit, 0);
     this.didUserWin = totalProfit > 0;
 
-    // DYNAMIC SUSPENSION PHASE (Delay ROUND OVER by 2s)
+    // DYNAMIC SUSPENSION PHASE (Delay ROUND OVER by 1s)
     setTimeout(() => {
       this.suspendedText = 'ROUND OVER !';
-      
+
       clearTimeout(this.nextRoundTimeout);
       this.nextRoundTimeout = setTimeout(() => {
         this.suspendedText = 'NEXT ROUND !';
-        
+
         this.nextRoundTimeout = setTimeout(() => {
           this.startNewRound();
           this.startLocalTimer(15);
-        }, 15000); // 15s for NEXT ROUND
-        
-      }, 15000); // 15s for ROUND OVER
-    }, 2000);
+        }, 5000); // Reduced to 5s for NEXT ROUND
+
+      }, 5000); // Reduced to 5s for ROUND OVER
+    }, 1000);
   }
 
   private startLocalTimer(seconds: number) {
