@@ -67,7 +67,8 @@
           display: block;
           width: 12px;
           height: 1.5px;
-          background: #fff; /* Crisp white like screenshot */
+          background: #fff;
+          /* Crisp white like screenshot */
           border-radius: 1px;
         }
       }
@@ -75,8 +76,9 @@
       .chevron {
         display: flex;
         align-items: center;
-        color: #fff; /* Crisp white like screenshot */
-        
+        color: #fff;
+        /* Crisp white like screenshot */
+
         svg {
           width: 9px;
           height: 9px;
@@ -86,7 +88,8 @@
   }
 
   .logo-aviator {
-    font-size: clamp(17px, 5vw, 20px); /* Fluid logo size */
+    font-size: clamp(17px, 5vw, 20px);
+    /* Fluid logo size */
     font-weight: 900;
     color: #fff;
     font-family: 'Inter', system-ui, sans-serif;
@@ -98,10 +101,16 @@
     color: #fff;
     font-weight: 700;
     font-size: 16px;
-    .logo-777 { color: #f5c518; }
+
+    .logo-777 {
+      color: #f5c518;
+    }
   }
 
-  .header-arrow { color: #84ccf7; font-weight: 900; }
+  .header-arrow {
+    color: #84ccf7;
+    font-weight: 900;
+  }
 }
 
 .header-right {
@@ -116,14 +125,17 @@
 
 .header-balance-wrap.v2 {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15); /* Matched subtle border from No777 */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  /* Matched subtle border from No777 */
   border-radius: 20px;
   padding: 1px 6px 1px 2px;
   margin-right: 4px;
   display: flex;
   align-items: center;
-  height: 26px; /* Matched height from No777 */
+  height: 20px;
+  /* Reduced from 26px */
   gap: 4px;
+
   &.loading-wrap {
     pointer-events: none;
   }
@@ -135,10 +147,12 @@
   }
 
   .flag-circle {
-    width: 15px; /* Reduced to match design */
+    width: 15px;
+    /* Reduced to match design */
     height: 15px;
     background: transparent;
-    border: 1px solid #ffcc00; /* Thinner border */
+    border: 1px solid #ffcc00;
+    /* Thinner border */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -147,7 +161,8 @@
     overflow: hidden;
 
     @media (max-width: 360px) {
-      width: 16px; /* Reduced from 18px */
+      width: 16px;
+      /* Reduced from 18px */
       height: 16px;
     }
 
@@ -160,8 +175,9 @@
 
   .balance-value-gold {
     color: #ffcc00;
-    font-size: clamp(11.5px, 3.2vw, 13px); /* Fluid balance text */
-    font-weight: 500; /* Lighter weight like No777 */
+    font-size: clamp(10px, 2.8vw, 11px);
+    /* Reduced from 13px */
+    font-weight: 500;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
@@ -171,7 +187,8 @@
   }
 
   .refresh-icon {
-    font-size: 13px; /* Reduced */
+    font-size: 13px;
+    /* Reduced */
     color: #31d7f1;
     margin-top: 1px;
     --ionicon-stroke-width: 50px;
@@ -180,7 +197,8 @@
     transition: all 0.3s ease;
 
     @media (max-width: 360px) {
-      font-size: 12px; /* Reduced from 13px */
+      font-size: 12px;
+      /* Reduced from 13px */
     }
 
     &:active {
@@ -195,8 +213,13 @@
 }
 
 @keyframes icon-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .deposit-btn-wrap {
@@ -205,13 +228,18 @@
   align-items: center;
 
   .header-deposit-btn-blue {
-    background: #31d7f1; /* Maintained original color */
+    background: #31d7f1;
+    /* Maintained original color */
     color: #fff;
     border: none;
-    border-radius: 4px; /* Slightly less rounded */
-    font-size: clamp(10.5px, 2.8vw, 12px); /* Fluid font size */
-    font-weight: 600; /* Lighter weight like No777 */
-    height: clamp(24px, 6.5vw, 26px); /* Fluid height */
+    border-radius: 4px;
+    /* Slightly less rounded */
+    font-size: clamp(10.5px, 2.8vw, 12px);
+    /* Fluid font size */
+    font-weight: 600;
+    /* Lighter weight like No777 */
+    height: clamp(24px, 6.5vw, 26px);
+    /* Fluid height */
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -219,27 +247,29 @@
 
     &.split-btn {
       padding: 0;
-      
+
       .deposit-text-part {
-        padding: 0 6px 0 8px; /* Tighter padding */
+        padding: 0 6px 0 8px;
+        /* Tighter padding */
         height: 100%;
         display: flex;
         align-items: center;
         flex: 1;
         white-space: nowrap;
-        
+
         &:active {
           background: rgba(255, 255, 255, 0.1);
         }
       }
 
       .caret-part {
-        padding: 0 6px 0 4px; /* Tighter padding */
+        padding: 0 6px 0 4px;
+        /* Tighter padding */
         height: 100%;
         display: flex;
         align-items: center;
         border-left: 1px solid rgba(255, 255, 255, 0.2);
-        
+
         &:active {
           background: rgba(255, 255, 255, 0.1);
         }
@@ -283,7 +313,8 @@
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    width: 100%; /* Match button width */
+    width: 100%;
+    /* Match button width */
     background: #0f1520;
     border: 1px solid #1e40af;
     border-radius: 8px;
@@ -295,7 +326,8 @@
     .dropdown-item {
       display: flex;
       align-items: center;
-      justify-content: center; /* Center content like the button */
+      justify-content: center;
+      /* Center content like the button */
       gap: 6px;
       padding: 10px 8px;
       color: #fff;
@@ -309,7 +341,8 @@
         color: #31d7f1;
       }
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         background: rgba(49, 215, 241, 0.1);
       }
 
@@ -327,8 +360,15 @@
 }
 
 @keyframes dropdown-fade {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .login-btn {
