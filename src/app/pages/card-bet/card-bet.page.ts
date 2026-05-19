@@ -232,12 +232,13 @@ export class CardBetPage implements OnInit, OnDestroy {
       this.startNewRound();
     }
 
+    const baseScores = [8, 9, 10, 11];
     result.hands.forEach((serverHand: any, idx: number) => {
       if (this.hands[idx]) {
         this.hands[idx].cards = serverHand.cards || [];
         this.hands[idx].revealed = false;
-        // Calculate initial total
-        this.hands[idx].total = this.hands[idx].cards.reduce((sum, c) => sum + this.getScore(c.value), 0);
+        // Calculate initial total including base score
+        this.hands[idx].total = baseScores[idx] + this.hands[idx].cards.reduce((sum, c) => sum + this.getScore(c.value), 0);
       }
     });
 
