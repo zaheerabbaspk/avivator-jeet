@@ -24,7 +24,7 @@ export class CrashGameEngineService implements OnDestroy {
 
     // UI State Signals (managed locally)
     balance = signal<number>(0);
-    history = signal<number[]>([]);
+    history = this.socketService.history;
 
     // Betting Signals (local UI state)
     betSlotA = signal<Bet>({ id: 'A', slot: 'A', amount: 0, status: 'IDLE' });

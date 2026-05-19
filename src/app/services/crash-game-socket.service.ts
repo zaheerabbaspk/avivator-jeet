@@ -8,6 +8,7 @@ export interface GameStateUpdate {
     state: GameState;
     timeLeft?: number;
     roundId?: string;
+    history?: number[];
 }
 
 export interface MultiplierUpdate {
@@ -45,6 +46,7 @@ export class CrashGameSocketService {
     crashMultiplier = signal<number>(0);
     timeLeft = signal<number>(0);
     roundId = signal<string>('');
+    history = signal<number[]>([]);
 
     constructor() {
         this.connect();
@@ -121,6 +123,9 @@ export class CrashGameSocketService {
             }
             if (data.roundId) {
                 this.roundId.set(data.roundId);
+            }
+            if (data.history) {
+                this.history.set(data.history);
             }
         });
 
