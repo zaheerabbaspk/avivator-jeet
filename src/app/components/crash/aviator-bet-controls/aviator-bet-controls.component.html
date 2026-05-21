@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="multiplier-input-wrap" [class.disabled]="!useAutoCashout()">
-                <input type="number" [(ngModel)]="autoCashoutValue" [disabled]="!useAutoCashout()" placeholder="1.1">
+                <input type="number" [ngModel]="autoCashoutValue()" (ngModelChange)="autoCashoutValue.set($event)" [disabled]="!useAutoCashout()" placeholder="1.1">
                 <span class="suffix">x</span>
             </div>
         </div>

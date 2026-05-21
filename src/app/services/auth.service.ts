@@ -24,6 +24,10 @@ export class AuthService {
   private profileSub = new BehaviorSubject<any>(null);
   profile$ = this.profileSub.asObservable();
 
+  // ── Balance Protection (prevents refreshProfile from overwriting in-game balance) ──
+  private _balanceOpsInProgress = 0;
+  private _balanceMutex: Promise<void> = Promise.resolve();
+
   constructor() {
     // ── Step 1: Load cached profile immediately so UI shows data before API responds ──
     this.loadFromCache();
@@ -41,12 +45,15 @@ export class AuthService {
     });
 
     // ── Step 3: Listen for auth state changes (login / logout / token refresh) ──
-    this.supabase.auth.onAuthStateChange((_event, session) => {
+    // IMPORTANT: Only refresh profile on actual sign-in or user update.
+    // TOKEN_REFRESHED fires periodically and would overwrite in-game balance changes.
+    this.supabase.auth.onAuthStateChange((event, session) => {
       const user = session?.user ?? null;
       this.userSubject.next(user);
       if (user) {
-        // Delay slightly so that profile upsert (done after signUp) has time to complete
-        setTimeout(() => this.refreshProfile(user.id), 800);
+        if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+          setTimeout(() => this.refreshProfile(user.id), 800);
+        }
       } else {
         this.balanceSub.next(0);
         this.profileSub.next(null);
@@ -119,7 +126,17 @@ export class AuthService {
 
           // Emit fresh data to all subscribers
           this.profileSub.next(profileData);
-          this.balanceSub.next(profileData.balance || 0);
+
+          // CRITICAL: Only update balance if NO balance operations are in progress.
+          // This prevents refreshProfile from overwriting in-game bet deductions/payouts.
+          if (this._balanceOpsInProgress === 0) {
+            this.balanceSub.next(profileData.balance || 0);
+          } else {
+            // Keep the current local balance (which reflects in-game operations)
+            console.warn('[AuthService] Skipping balance overwrite — game operations in progress');
+            profileData = { ...profileData, balance: this.balanceSub.value };
+          }
+
           // Persist to localStorage so next launch is instant
           this.saveToCache(profileData);
         }
@@ -137,36 +154,45 @@ export class AuthService {
     const user = this.userSubject.value;
     if (!user) throw new Error('Login required');
 
-    // Optimistically update local state
-    const currentBalance = this.balanceSub.value;
-    const newBalance = currentBalance + amount;
-    
-    this.balanceSub.next(newBalance);
-    const cached = this.profileSub.value;
-    if (cached) {
-      const updated = { ...cached, balance: newBalance };
-      this.profileSub.next(updated);
-      this.saveToCache(updated);
-    }
+    // Serialize all balance writes through a mutex to prevent concurrent DB corruption.
+    // Without this, two rapid calls (e.g. bet + cashout) can overwrite each other's DB writes.
+    return new Promise<number>((resolve, reject) => {
+      this._balanceMutex = this._balanceMutex.then(async () => {
+        this._balanceOpsInProgress++;
+        const currentBalance = this.balanceSub.value;
+        const newBalance = parseFloat((currentBalance + amount).toFixed(2));
 
-    // Perform DB update in background (or wait if critical, but we want speed)
-    try {
-      const { error: updateErr } = await this.supabase
-        .from('profiles')
-        .update({ balance: newBalance })
-        .eq('id', user.id);
-      
-      if (updateErr) throw updateErr;
-      return newBalance;
-    } catch (err) {
-      // Rollback on error
-      this.balanceSub.next(currentBalance);
-      if (cached) {
-        this.profileSub.next(cached);
-        this.saveToCache(cached);
-      }
-      throw err;
-    }
+        // Optimistically update local state
+        this.balanceSub.next(newBalance);
+        const cached = this.profileSub.value;
+        if (cached) {
+          const updated = { ...cached, balance: newBalance };
+          this.profileSub.next(updated);
+          this.saveToCache(updated);
+        }
+
+        try {
+          // DB update (serialized — no other write can interleave)
+          const { error: updateErr } = await this.supabase
+            .from('profiles')
+            .update({ balance: newBalance })
+            .eq('id', user.id);
+
+          if (updateErr) throw updateErr;
+          resolve(newBalance);
+        } catch (err) {
+          // Rollback on error
+          this.balanceSub.next(currentBalance);
+          if (cached) {
+            this.profileSub.next(cached);
+            this.saveToCache(cached);
+          }
+          reject(err);
+        } finally {
+          this._balanceOpsInProgress--;
+        }
+      });
+    });
   }
 
   async claimBonus(amount: number) {

@@ -103,7 +103,7 @@ export class CrashGameEngineService implements OnDestroy {
                     [this.betSlotA, this.betSlotB].forEach(betSignal => {
                         const bet = betSignal();
                         if (bet.status === 'PLACED' && bet.autoCashout && multiplier >= bet.autoCashout) {
-                            this.cashOut(bet.slot as 'A' | 'B');
+                            this.cashOut(bet.slot as 'A' | 'B', bet.autoCashout);
                         }
                     });
                 } else if (state === 'CRASHED' && multiplier > 1.0) {
@@ -225,13 +225,13 @@ export class CrashGameEngineService implements OnDestroy {
         if (myA.status === 'PLACED') {
             bots.unshift({
                 id: 'my_slot_A', name: 'You', avatarClass: 'bg-green-600', avatarLetter: 'U',
-                betAmount: myA.amount, cashoutTarget: 9999, status: 'PLAYING', isMe: true
+                betAmount: myA.amount, cashoutTarget: myA.autoCashout || 9999, status: 'PLAYING', isMe: true
             });
         }
         if (myB.status === 'PLACED') {
             bots.unshift({
                 id: 'my_slot_B', name: 'You', avatarClass: 'bg-green-600', avatarLetter: 'U',
-                betAmount: myB.amount, cashoutTarget: 9999, status: 'PLAYING', isMe: true
+                betAmount: myB.amount, cashoutTarget: myB.autoCashout || 9999, status: 'PLAYING', isMe: true
             });
         }
 
@@ -319,7 +319,7 @@ export class CrashGameEngineService implements OnDestroy {
         }
     }
 
-    async cashOut(slot: 'A' | 'B') {
+    async cashOut(slot: 'A' | 'B', targetMultiplier?: number | null) {
         // Validate state
         if (this.gameState() !== 'RUNNING') {
             console.warn('Cannot cashout: game is not running');
@@ -340,8 +340,8 @@ export class CrashGameEngineService implements OnDestroy {
         }
 
         // Calculate payout
-        const multiplier = this.currentMultiplier();
-        const payout = bet.amount * multiplier;
+        const multiplier = targetMultiplier || this.currentMultiplier();
+        const payout = parseFloat((bet.amount * multiplier).toFixed(2));
 
         // Update local state temporarily to avoid double tapping
         betSignal.set({
