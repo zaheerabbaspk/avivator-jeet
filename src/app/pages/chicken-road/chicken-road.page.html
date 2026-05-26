@@ -1,0 +1,129 @@
+<ion-content style="--background: #1E212D;">
+  <div class="game-wrapper flex flex-col h-full w-full">
+    
+    <!-- Top Bar -->
+    <div class="top-bar flex justify-between items-center px-4 py-2 bg-[#2A2E3D] border-b border-[#3A3F55]">
+      <div class="logo font-black text-2xl tracking-wider text-white">CHICKEN ROAD</div>
+      
+      <div class="live-stats flex gap-4 text-xs font-medium text-[#8892B0]">
+        <div class="live-wins flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          Live wins: <span class="text-white">1.2K</span>
+        </div>
+        <div class="online">Online: <span class="text-white">2819</span></div>
+      </div>
+
+      <div class="user-actions flex gap-3 items-center">
+        <button class="how-to-play px-3 py-1.5 rounded bg-[#3A3F55] text-[#8892B0] text-sm hover:text-white transition">
+          <ion-icon name="information-circle-outline" class="mr-1"></ion-icon> How to play?
+        </button>
+        <div class="balance px-4 py-1.5 rounded bg-[#171923] text-white font-bold border border-[#3A3F55]">
+          {{ balance | async | number:'1.2-2' }} Rs
+        </div>
+        <button class="menu-btn p-1.5 rounded hover:bg-[#3A3F55] text-white">
+          <ion-icon name="menu-outline" class="text-xl"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Game Area -->
+    <div class="game-area flex-1 relative flex justify-center items-center overflow-hidden">
+      <div #gameContainer class="phaser-container rounded-lg overflow-hidden shadow-2xl border border-[#3A3F55]"></div>
+      
+      <!-- Overlay Messages -->
+      <div *ngIf="gameState() === 'CRASHED'" class="absolute inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm z-10 animate-fade-in">
+        <div class="text-center">
+          <div class="text-red-500 text-6xl font-black mb-2 drop-shadow-lg">CRASHED!</div>
+          <div class="text-white text-xl">You hit a car.</div>
+        </div>
+      </div>
+
+      <div *ngIf="gameState() === 'CASHED_OUT'" class="absolute inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm z-10 animate-fade-in">
+        <div class="text-center">
+          <div class="text-green-400 text-5xl font-black mb-2 drop-shadow-lg">SUCCESS!</div>
+          <div class="text-white text-2xl font-bold">+{{ potentialWin() }} Rs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Controls Panel -->
+    <div class="controls-panel p-4 bg-[#2A2E3D] border-t border-[#3A3F55]">
+      <div class="max-w-5xl mx-auto glass-panel p-4 rounded-xl flex gap-6 items-center">
+        
+        <!-- Bet Amount -->
+        <div class="bet-section flex-1">
+          <div class="flex gap-2 mb-2">
+            <button class="flex-1 py-2 bg-[#3A3F55] rounded text-white text-sm font-bold hover:bg-[#4A506B] transition" (click)="setBetAmount(5)">MIN</button>
+            <div class="flex-[2] bg-[#171923] rounded flex items-center justify-center text-white font-bold text-lg border border-[#3A3F55]">
+              {{ betAmount() }}
+            </div>
+            <button class="flex-1 py-2 bg-[#3A3F55] rounded text-white text-sm font-bold hover:bg-[#4A506B] transition" (click)="setBetAmount(1000)">MAX</button>
+          </div>
+          <div class="flex gap-2">
+            <button class="flex-1 py-1.5 rounded-full border border-[#3A3F55] text-[#8892B0] text-xs hover:text-white hover:border-white transition" (click)="setBetAmount(5)">5 Rs</button>
+            <button class="flex-1 py-1.5 rounded-full border border-[#3A3F55] text-[#8892B0] text-xs hover:text-white hover:border-white transition" (click)="setBetAmount(10)">10 Rs</button>
+            <button class="flex-1 py-1.5 rounded-full border border-[#3A3F55] text-[#8892B0] text-xs hover:text-white hover:border-white transition" (click)="setBetAmount(15)">15 Rs</button>
+            <button class="flex-1 py-1.5 rounded-full border border-[#3A3F55] text-[#8892B0] text-xs hover:text-white hover:border-white transition" (click)="setBetAmount(20)">20 Rs</button>
+          </div>
+        </div>
+
+        <!-- Difficulty -->
+        <div class="difficulty-section flex-[1.5]">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-white text-sm font-medium">Difficulty</span>
+            <span class="text-[#8892B0] text-xs">Chance of collision</span>
+          </div>
+          <div class="flex bg-[#171923] p-1 rounded-lg border border-[#3A3F55]">
+            <button class="flex-1 py-2 rounded-md text-sm font-bold transition" 
+              [class.bg-[#3A3F55]]="difficulty() === 'Easy'" [class.text-white]="difficulty() === 'Easy'" [class.text-[#8892B0]]="difficulty() !== 'Easy'"
+              (click)="setDifficulty('Easy')">Easy</button>
+            <button class="flex-1 py-2 rounded-md text-sm font-bold transition" 
+              [class.bg-[#3A3F55]]="difficulty() === 'Medium'" [class.text-white]="difficulty() === 'Medium'" [class.text-[#8892B0]]="difficulty() !== 'Medium'"
+              (click)="setDifficulty('Medium')">Medium</button>
+            <button class="flex-1 py-2 rounded-md text-sm font-bold transition" 
+              [class.bg-[#3A3F55]]="difficulty() === 'Hard'" [class.text-white]="difficulty() === 'Hard'" [class.text-[#8892B0]]="difficulty() !== 'Hard'"
+              (click)="setDifficulty('Hard')">Hard</button>
+            <button class="flex-1 py-2 rounded-md text-sm font-bold transition" 
+              [class.bg-[#3A3F55]]="difficulty() === 'Hardcore'" [class.text-white]="difficulty() === 'Hardcore'" [class.text-[#8892B0]]="difficulty() !== 'Hardcore'"
+              (click)="setDifficulty('Hardcore')">Hardcore</button>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-section flex gap-3">
+          <button class="w-14 h-14 rounded-xl bg-[#3A3F55] flex items-center justify-center hover:bg-[#4A506B] transition border border-[#4A506B]">
+            <ion-icon name="sync-outline" class="text-white text-2xl"></ion-icon>
+          </button>
+
+          <!-- Play Button (IDLE/CRASHED/CASHED_OUT) -->
+          <button *ngIf="gameState() !== 'PLAYING'" 
+            class="h-14 px-12 rounded-xl bg-green-500 hover:bg-green-400 transition shadow-[0_0_15px_rgba(34,197,94,0.3)] text-white text-2xl font-black tracking-wide border-b-4 border-green-700 active:border-b-0 active:translate-y-1"
+            (click)="play()">
+            Play
+          </button>
+
+          <!-- In-Game Buttons -->
+          <div *ngIf="gameState() === 'PLAYING'" class="flex gap-2">
+            <!-- Cashout Button -->
+            <button 
+              class="h-14 px-6 rounded-xl bg-blue-500 hover:bg-blue-400 transition shadow-[0_0_15px_rgba(59,130,246,0.3)] text-white font-black flex flex-col items-center justify-center border-b-4 border-blue-700 active:border-b-0 active:translate-y-1"
+              [class.opacity-50]="currentLane() === 0" [disabled]="currentLane() === 0"
+              (click)="cashOut()">
+              <span class="text-xs uppercase tracking-wider mb-0.5">Cashout</span>
+              <span class="text-xl leading-none">{{ potentialWin() }} Rs</span>
+            </button>
+            
+            <!-- Move Next Button -->
+            <button 
+              class="h-14 px-8 rounded-xl bg-orange-500 hover:bg-orange-400 transition shadow-[0_0_15px_rgba(249,115,22,0.3)] text-white font-black flex flex-col items-center justify-center border-b-4 border-orange-700 active:border-b-0 active:translate-y-1"
+              (click)="moveNext()">
+              <span class="text-xs uppercase tracking-wider mb-0.5">Move</span>
+              <span class="text-xl leading-none">{{ multipliers()[currentLane()] }}x</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.game-wrapper {
+  background: radial-gradient(circle at center, #2A2E3D 0%, #1E212D 100%);
+}
+
+.glass-panel {
+  background: rgba(42, 46, 61, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.phaser-container {
+  width: 100%;
+  max-width: 1200px;
+  aspect-ratio: 2 / 1;
+  background-color: #2A2E3D;
+  position: relative;
+  
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

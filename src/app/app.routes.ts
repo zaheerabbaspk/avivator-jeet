@@ -55,6 +55,11 @@ export const routes: Routes = [
   },
 
   {
+    path: 'chicken-road',
+    loadComponent: () => import('./pages/chicken-road/chicken-road.page').then((m) => m.ChickenRoadPage),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: 'splash',
     pathMatch: 'full',
